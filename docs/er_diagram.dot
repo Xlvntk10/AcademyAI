@@ -1,0 +1,12 @@
+digraph ER {
+  graph [rankdir=LR, bgcolor="white", pad="0.3", nodesep="0.55", ranksep="1"];
+  node [shape=record, fontname="DejaVu Sans", fontsize=12, style="rounded,filled", fillcolor="#EFF6FF", color="#4375C5", margin="0.16"];
+  edge [color="#516479", fontname="DejaVu Sans", fontsize=11];
+  Skill [label="{Skill (Навыки IELTS)|PK id : int\lname : str\ldescription : str\l}"];
+  Lesson [label="{Lesson (Уроки)|PK id : int\lFK skill_id : int\ltitle : str\llevel : str\l}"];
+  Exercise [label="{Exercise (Упражнения)|PK id : int\lFK lesson_id : int\lquestion : str\lcorrect_answer : str\lpoints : int\l}"];
+  Attempt [label="{Attempt (Личные результаты)|PK id : int\lFK exercise_id : int\lanswer : str\lis_correct : bool\learned_points : int\lcreated_at : datetime\l}"];
+  Skill -> Lesson [label="1 : N"];
+  Lesson -> Exercise [label="1 : N"];
+  Exercise -> Attempt [label="1 : N"];
+}
