@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy import Column, JSON, UniqueConstraint
 
 
 class Skill(SQLModel, table=True):
@@ -40,3 +41,38 @@ class Attempt(SQLModel, table=True):
     earned_points: int = Field(default=0, ge=0)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     exercise: Optional[Exercise] = Relationship(back_populates="attempts")
+
+
+# V2 adds tables without changing the four original tables or their data.
+class LessonContent(SQLModel, table=True):
+    lesson_id: int = Field(primary_key=True, foreign_key="lesson.id")
+    slug: str = Field(unique=True, index=True)
+    summary: str
+    duration_minutes: int
+    version: int = 1
+    theory: list[dict] = Field(sa_column=Column(JSON, nullable=False))
+
+
+class ExerciseContent(SQLModel, table=True):
+    exercise_id: int = Field(primary_key=True, foreign_key="exercise.id")
+    position: int
+    kind: str
+    options: list[str] = Field(sa_column=Column(JSON, nullable=False))
+    explanation: str
+    accepted_answers: list[str] = Field(sa_column=Column(JSON, nullable=False))
+
+
+class LessonRun(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    lesson_id: int = Field(foreign_key="lesson.id", index=True)
+    content_version: int
+    started_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    completed_at: Optional[datetime] = None
+
+
+class RunAnswer(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint("run_id", "exercise_id", name="uq_run_exercise"),)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    run_id: str = Field(foreign_key="lessonrun.id", index=True)
+    exercise_id: int = Field(foreign_key="exercise.id")
+    attempt_id: int = Field(foreign_key="attempt.id", unique=True)

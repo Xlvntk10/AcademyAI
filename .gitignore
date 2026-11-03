@@ -12,3 +12,9 @@ __pycache__/
 .uv-cache/
 .vscode/
 .DS_Store
+backups/
+node_modules/
+frontend/dist/
+.npm-cache/
+.test-artifacts/
+*.tsbuildinfo

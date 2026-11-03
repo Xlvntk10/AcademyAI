@@ -1,0 +1,21 @@
+{
+  "slug": "a2-daily-routine",
+  "title": "A little every day",
+  "summary": "Расскажи о своём дне на английском. Present Simple, привычки и маленькие шаги к большой цели.",
+  "theory": [
+    {"title": "Твой обычный день", "body": "После урока ты сможешь описать привычки, рассказать о распорядке дня и задать простой вопрос. Для повторяющихся действий используем Present Simple — настоящее простое время.", "examples": ["I study English every day. — Я учу английский каждый день.", "We have breakfast at eight. — Мы завтракаем в восемь."]},
+    {"title": "I study → She studies", "body": "После I, you, we, they используем начальную форму глагола. После he, she, it добавляем -s. Если глагол заканчивается на согласную + y, меняем y на -ies: study → studies. У go форма goes, у have — has.", "examples": ["I work from home. → She works from home.", "They study Python. → He studies Python.", "I go to university. → She goes to university."]},
+    {"title": "Когда чего-то не делаем", "body": "Для отрицания используем do not (don't), а после he, she, it — does not (doesn't). После don't и doesn't глагол остаётся в начальной форме, без -s.", "examples": ["I don't work on Sundays. — Я не работаю по воскресеньям.", "She doesn't drink coffee. — Она не пьёт кофе."]},
+    {"title": "Как задать вопрос", "body": "Поставь Do или Does в начало вопроса. После he, she, it выбирай Does. Основной глагол снова без -s. What time означает «во сколько».", "examples": ["Do you study every day? — Ты занимаешься каждый день?", "Does he work here? — Он работает здесь?", "What time do you get up? — Во сколько ты встаёшь?"]},
+    {"title": "Слова для твоего дня", "body": "get up — вставать; have breakfast — завтракать; go to university — ходить в университет; study — учиться; go to bed — ложиться спать. Always — всегда, usually — обычно, sometimes — иногда. Эти слова часто стоят перед смысловым глаголом.", "examples": ["I usually get up at seven.", "She sometimes studies in the evening.", "I go to bed at eleven."]},
+    {"title": "Прочитай: Maya’s day", "body": "Maya is a student. She gets up at seven and has breakfast at half past seven. She goes to university at eight. In the evening, she studies English for twenty minutes. She doesn't study on Sundays. Small steps help her learn every week.", "examples": ["half past seven — половина восьмого (7:30)", "for twenty minutes — в течение двадцати минут", "Проверь себя: во сколько Maya завтракает? В какой день она не занимается?"]}
+  ],
+  "exercises": [
+    {"kind": "choice", "question": "Выбери верную форму: She ___ English every evening.", "options": ["study", "studies", "studying"], "correct_answer": "studies", "explanation": "После she в Present Simple нужна форма studies: согласная + y превращается в -ies."},
+    {"kind": "choice", "question": "Выбери правильное отрицание: He ___ coffee.", "options": ["don't drink", "doesn't drinks", "doesn't drink"], "correct_answer": "doesn't drink", "explanation": "После he используем doesn't, а основной глагол drink — без окончания -s."},
+    {"kind": "text", "question": "Вставь одно слово: ___ you get up at seven?", "correct_answer": "Do", "explanation": "Вопрос с you начинается с Do. Does нужен для he, she и it."},
+    {"kind": "choice", "question": "По тексту Maya’s day: What time does Maya have breakfast?", "options": ["At seven.", "At half past seven.", "At eight."], "correct_answer": "At half past seven.", "explanation": "В тексте: She gets up at seven and has breakfast at half past seven. Она встаёт в 7:00, а завтракает в 7:30."},
+    {"kind": "text", "question": "Переведи: «Я учу английский каждый день». Используй study и every day.", "correct_answer": "I study English every day.", "explanation": "После I используется study без -s. Every day обычно ставится в конце: I study English every day."},
+    {"kind": "choice", "question": "По тексту: Does Maya study on Sundays?", "options": ["Yes, she does.", "No, she doesn't.", "No, she don't."], "correct_answer": "No, she doesn't.", "explanation": "Maya doesn't study on Sundays. Краткий отрицательный ответ на вопрос с Does: No, she doesn't."}
+  ]
+}
