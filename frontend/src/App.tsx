@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2, ChevronRight, Circle, Clock3, Code2, GraduationCap, Leaf, LoaderCircle, Moon, RefreshCw, Sparkles, Sun, Target, TrendingUp, Trophy, X, Zap } from 'lucide-react'
 import { api, newRequestId, type Lesson, type LessonDetail, type Progress, type Run } from './api'
+import Planner, { DailyTasks } from './Planner'
 
 type Section = 'today' | 'learn' | 'plan' | 'progress'
 const sections = [
@@ -44,7 +45,7 @@ function ProgressCards({ progress }: { progress: Progress }) {
   </div>
 }
 
-function Today({ lessons, progress }: { lessons: Lesson[]; progress: Progress }) {
+function Today({ lessons, progress, onSaved }: { lessons: Lesson[]; progress: Progress; onSaved: () => void }) {
   const first = lessons[0]
   const complete = first && progress.lessons.find(s => s.slug === first.slug)?.completed_runs
   return <div className="dashboard-grid"><div className="main-column">
@@ -54,6 +55,7 @@ function Today({ lessons, progress }: { lessons: Lesson[]; progress: Progress })
     </section>
     <div className="section-heading"><h2>Продолжим учиться</h2><button className="text-button" onClick={() => navigate('learn')}>Все уроки<ArrowRight size={16} /></button></div>
     {first ? <LessonCard lesson={first} progress={progress} onOpen={() => navigate(`lesson/${first.slug}`)} /> : <div className="panel">Уроки ещё не добавлены.</div>}
+    <DailyTasks onSaved={onSaved} />
     <div className="note-strip"><span className="note-icon"><Leaf size={19} /></span><div><strong>В своём ритме</strong><p>Не нужно знать всё сразу. Достаточно возвращаться и пробовать.</p></div></div>
   </div><aside className="right-column">
     <section className="panel focus-panel"><div className="section-heading"><h3>Фокус на сегодня</h3><Sun size={19} className="muted" /></div><p className="small-note">Предложение для следующего шага</p>
@@ -202,7 +204,7 @@ export default function App() {
     <div className="workspace"><header className="topbar"><div className="breadcrumbs">Моё пространство<ChevronRight size={14} /><strong>{lessonSlug ? 'Урок английского' : sections.find(s => s.id === section)?.label}</strong></div><div className="topbar-actions"><span className="xp-pill"><Zap size={16} />{progress?.total_xp ?? '—'} XP</span><button className="theme-button" onClick={toggleTheme} aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}>{theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}</button><span className="avatar">Я</span></div></header>
       <main id="main-content" tabIndex={-1}><div className="page-heading"><div><p className="date-label">{today}</p><h1>{lessonSlug ? 'Время для английского' : titles[section]}</h1></div><span className="local-badge"><span />Личное обучение</span></div>
         {error && <ErrorBox message={error} retry={refresh} />}
-        {loading ? <Loading /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} /> : section === 'learn' ? <Learning lessons={lessons} progress={progress} /> : section === 'plan' ? <Plan /> : <ProgressPage lessons={lessons} progress={progress} /> : null}
+        {loading ? <Loading /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} onSaved={refresh} /> : section === 'learn' ? <Learning lessons={lessons} progress={progress} /> : section === 'plan' ? <Planner onSaved={refresh} /> : <ProgressPage lessons={lessons} progress={progress} /> : null}
         <footer><span>Academy AI</span><span>Твоё пространство для роста <Leaf size={13} /></span></footer>
       </main>
     </div>

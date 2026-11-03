@@ -10,7 +10,6 @@ from alembic import command
 from alembic.config import Config
 
 ROOT = Path(__file__).resolve().parents[1]
-LEGACY = ("skill", "lesson", "exercise", "attempt")
 
 
 def connect_readonly(path):
@@ -28,7 +27,9 @@ def verify(path):
 def snapshot(path):
     with connect_readonly(path) as db:
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        return {t: db.execute(f'SELECT * FROM "{t}" ORDER BY id').fetchall() for t in LEGACY if t in tables}
+        # Preserve every existing application table, including planner and learning runs.
+        return {t: db.execute('SELECT * FROM "' + t.replace('"', '""') + '" ORDER BY 1').fetchall()
+            for t in tables if t not in {"alembic_version", "sqlite_sequence"}}
 
 
 def assert_preserved(before, path):

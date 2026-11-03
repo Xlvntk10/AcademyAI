@@ -1,5 +1,5 @@
 """Модели персонального IELTS-тренажёра. Аккаунты пока не нужны."""
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Optional
 from sqlmodel import Field, Relationship, SQLModel
 from sqlalchemy import Column, JSON, UniqueConstraint
@@ -76,3 +76,52 @@ class RunAnswer(SQLModel, table=True):
     run_id: str = Field(foreign_key="lessonrun.id", index=True)
     exercise_id: int = Field(foreign_key="exercise.id")
     attempt_id: int = Field(foreign_key="attempt.id", unique=True)
+
+
+class LessonMeta(SQLModel, table=True):
+    lesson_id: int = Field(primary_key=True, foreign_key="lesson.id")
+    subject: str = Field(index=True)
+    topic: str
+    position: int
+
+
+class StudySettings(SQLModel, table=True):
+    id: int = Field(default=1, primary_key=True)
+    available_minutes: list[int] = Field(default_factory=lambda: [90, 90, 90, 90, 90, 180, 180], sa_column=Column(JSON, nullable=False))
+    daily_goal_minutes: int = 30
+    weekly_goal_minutes: int = 210
+    reminder_enabled: bool = False
+    reminder_time: str = "19:00"
+    timezone: str = "Asia/Almaty"
+
+
+class PlanWeek(SQLModel, table=True):
+    week_start: date = Field(primary_key=True)
+    revision: int = 1
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class StudyTask(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    plan_week: date = Field(foreign_key="planweek.week_start", index=True)
+    scheduled_date: date = Field(index=True)
+    original_date: date
+    subject: str
+    kind: str
+    title: str
+    instructions: str
+    planned_minutes: int
+    lesson_id: Optional[int] = Field(default=None, foreign_key="lesson.id")
+    status: str = "pending"
+    actual_minutes: Optional[int] = None
+    completed_at: Optional[datetime] = None
+    completed_run_id: Optional[str] = Field(default=None, foreign_key="lessonrun.id")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class TaskMove(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    task_id: str = Field(foreign_key="studytask.id", index=True)
+    from_date: date
+    to_date: date
+    moved_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

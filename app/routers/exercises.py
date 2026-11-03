@@ -27,7 +27,7 @@ def health(session: DB):
         revision = session.exec(text("SELECT version_num FROM alembic_version")).scalar_one()
     except Exception as exc:
         raise HTTPException(503, "База не подготовлена. Запустите python -m scripts.prepare_db") from exc
-    if revision != "0002_learning":
+    if revision != "0003_planner":
         raise HTTPException(503, "Требуется миграция базы")
     return {"status": "ok", "schema": revision}
 

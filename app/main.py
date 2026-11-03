@@ -2,12 +2,14 @@
 from fastapi import FastAPI
 from app.database.db import engine
 from app.routers.exercises import router
+from app.routers.planner import router as planner_router
 
 
 def create_app(database_engine=None):
     application = FastAPI(title="Academy AI", version="2.0.0")
     application.state.engine = database_engine if database_engine is not None else engine
     application.include_router(router)
+    application.include_router(planner_router)
 
     @application.get("/")
     def home():
