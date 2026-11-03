@@ -71,3 +71,13 @@ test('an unfinished lesson is resumed from the server', async () => {
   expect(await screen.findByRole('heading', { name: 'She ___ English.' })).toBeVisible()
   expect(screen.queryByRole('button', { name: /Начать практику/ })).not.toBeInTheDocument()
 })
+
+test('Python has its own label and disables phone autocapitalization for exact answers', async () => {
+  const python: LessonDetail = { ...lesson, slug: 'python-types', subject: 'python', level: 'Beginner', exercises: [{ ...lesson.exercises[0], kind: 'text', options: [] }] }
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => ({ ok: true, json: async () => url.endsWith('/progress') ? { lessons: [] } : url.endsWith('/runs') ? initial : python })))
+  render(<LessonPlayer slug={python.slug} onSaved={vi.fn()} onExit={vi.fn()} />)
+  expect(await screen.findByText('Python · Beginner')).toBeVisible()
+  await userEvent.setup().click(screen.getByRole('button', { name: /Начать практику/ }))
+  expect(await screen.findByRole('textbox')).toHaveAttribute('autocapitalize', 'none')
+  expect(screen.getByRole('textbox')).toHaveAttribute('spellcheck', 'false')
+})

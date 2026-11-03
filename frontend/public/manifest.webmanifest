@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Academy AI — твоё пространство знаний",
+  "short_name": "Academy AI",
+  "description": "Английский и Python, учебный план и личный прогресс.",
+  "lang": "ru",
+  "start_url": "/#today",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#456c43",
+  "icons": [
+    {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

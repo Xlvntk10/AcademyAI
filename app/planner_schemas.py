@@ -31,6 +31,12 @@ class GenerateWeek(BaseModel):
     replace_pending: bool = False
 
 
+class ReminderInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    reminder_enabled: bool
+    reminder_time: str = Field(pattern=r"^(?:[01]\d|2[0-3]):[0-5]\d$")
+
+
 class CompleteTask(BaseModel):
     model_config = ConfigDict(extra="forbid")
     actual_minutes: int = Field(ge=1, le=480)

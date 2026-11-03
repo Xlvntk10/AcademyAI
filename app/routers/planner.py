@@ -4,7 +4,7 @@ from fastapi import APIRouter, Query
 from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import StudyTask
-from app.planner_schemas import SettingsInput, SettingsRead, GenerateWeek, CompleteTask, RescheduleTask, WeekRead, TaskRead
+from app.planner_schemas import SettingsInput, SettingsRead, GenerateWeek, CompleteTask, RescheduleTask, WeekRead, TaskRead, ReminderInput
 from app.routers.exercises import DB
 from app.services import planner, clock
 
@@ -31,6 +31,18 @@ def save_settings(payload: SettingsInput, session: DB):
 @router.get("/week", response_model=WeekRead)
 def week(session: DB, start: date | None = None):
     return planner.week_read(session, start or clock.local_day())
+
+
+@router.post("/reminder", response_model=SettingsRead)
+def save_reminder(payload: ReminderInput, session: DB):
+    session.exec(text("BEGIN IMMEDIATE"))
+    prefs = planner.settings(session)
+    prefs.reminder_enabled = payload.reminder_enabled
+    prefs.reminder_time = payload.reminder_time
+    session.add(prefs)
+    session.commit()
+    session.refresh(prefs)
+    return {**prefs.model_dump(exclude={"id"}), "english_percent": 65}
 
 
 @router.post("/generate", response_model=WeekRead)

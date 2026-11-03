@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import { academyPwa } from './pwa-plugin'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), academyPwa()],
   server: {
     port: 5173,
     strictPort: true,
