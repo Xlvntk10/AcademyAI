@@ -1,0 +1,968 @@
+[
+  {
+    "slug": "a2-present-simple",
+    "title": "Everyday facts",
+    "topic": "Present Simple",
+    "position": 2,
+    "summary": "Привычки, факты и вопросы: научись выбирать do, does и форму глагола.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Когда нужен Present Simple",
+        "body": "Present Simple описывает привычки и факты. Маркеры: every day, usually, often. После I, you, we, they используем начальную форму глагола.",
+        "examples": [
+          "I live in Almaty. — Я живу в Алматы.",
+          "They often read in the library. — Они часто читают в библиотеке."
+        ]
+      },
+      {
+        "title": "He, she, it: маленькое окончание",
+        "body": "После he, she, it добавляем -s. После -ch, -sh, -ss, -x, -o обычно добавляем -es. Согласная + y меняется на -ies. Исключение: have → has.",
+        "examples": [
+          "He teaches English. — Он преподаёт английский.",
+          "She studies at university.",
+          "My laptop has a camera."
+        ]
+      },
+      {
+        "title": "Отрицания и вопросы",
+        "body": "Используем do/does. В отрицании добавляем not. В вопросе do/does стоит перед подлежащим. После does и doesn’t основной глагол остаётся без -s.",
+        "examples": [
+          "Does your brother work here?",
+          "She doesn't watch TV in the morning.",
+          "What do you study? — Что ты изучаешь?"
+        ]
+      },
+      {
+        "title": "Частота и глагол be",
+        "body": "Usually и often стоят перед обычным глаголом, но после am/is/are. Для be не используем do/does: Is she a student? She isn’t late.",
+        "examples": [
+          "I usually walk to class.",
+          "He is often busy.",
+          "Are they ready? — Они готовы?"
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "My sister ___ at a school.",
+        "options": [
+          "teach",
+          "teaches",
+          "teaching"
+        ],
+        "correct_answer": "teaches",
+        "explanation": "После my sister (= she) нужен teaches: teach заканчивается на -ch."
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильный вопрос.",
+        "options": [
+          "Does he lives here?",
+          "Do he live here?",
+          "Does he live here?"
+        ],
+        "correct_answer": "Does he live here?",
+        "explanation": "После Does используется начальная форма live, без -s."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь одно слово: They ___ not work on Saturdays.",
+        "correct_answer": "do",
+        "explanation": "После they используем do not.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильное положение usually.",
+        "options": [
+          "I usually have lunch at one.",
+          "I have usually lunch at one.",
+          "Usually I lunch have at one."
+        ],
+        "correct_answer": "I usually have lunch at one.",
+        "explanation": "Usually обычно стоит перед смысловым глаголом have."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь форму have: She ___ two English books.",
+        "correct_answer": "has",
+        "explanation": "Для she форма have меняется на has.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Как спросить «Он студент?»",
+        "options": [
+          "Does he be a student?",
+          "Is he a student?",
+          "Do he a student?"
+        ],
+        "correct_answer": "Is he a student?",
+        "explanation": "Be сам образует вопрос: Is he...? Do/does не нужны."
+      }
+    ]
+  },
+  {
+    "slug": "a2-present-continuous",
+    "title": "Right here, right now",
+    "topic": "Present Continuous",
+    "position": 3,
+    "summary": "Опиши происходящее сейчас и отличи действие от привычки.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Действие сейчас",
+        "body": "Present Continuous состоит из am/is/are + глагол с -ing. Он описывает действие в данный момент: now, right now, at the moment.",
+        "examples": [
+          "I am reading now. — Я сейчас читаю.",
+          "She is writing an email.",
+          "We are learning English."
+        ]
+      },
+      {
+        "title": "Как добавить -ing",
+        "body": "Обычно добавляем -ing: read → reading. Конечная немая e исчезает: write → writing. В некоторых коротких словах удваиваем последнюю согласную: sit → sitting, run → running.",
+        "examples": [
+          "He is sitting near the window.",
+          "They are running in the park."
+        ]
+      },
+      {
+        "title": "Вопрос и отрицание",
+        "body": "Для отрицания добавляем not после am/is/are. Для вопроса переносим am/is/are перед подлежащим. Do/does здесь не нужны.",
+        "examples": [
+          "I'm not sleeping.",
+          "Are you listening? — Ты слушаешь?",
+          "What is she doing? — Что она делает?"
+        ]
+      },
+      {
+        "title": "Обычно или сейчас?",
+        "body": "Present Simple обозначает привычку, Present Continuous — действие сейчас. Глаголы состояния, например know и like, обычно не используются в Continuous на этом уровне.",
+        "examples": [
+          "I study every evening, but now I am cooking.",
+          "I know the answer. — Я знаю ответ."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Look! The students ___ in the library.",
+        "options": [
+          "are studying",
+          "study now are",
+          "is studying"
+        ],
+        "correct_answer": "are studying",
+        "explanation": "Students — множественное число: are + studying."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь am/is/are: I ___ writing a message.",
+        "correct_answer": "am",
+        "explanation": "С I используем am: I am writing.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери верную форму: He is ___.",
+        "options": [
+          "runing",
+          "running",
+          "runs"
+        ],
+        "correct_answer": "running",
+        "explanation": "В run удваиваем n перед -ing: running."
+      },
+      {
+        "kind": "choice",
+        "question": "Как спросить «Ты слушаешь?»",
+        "options": [
+          "Do you listening?",
+          "Are you listening?",
+          "You are listen?"
+        ],
+        "correct_answer": "Are you listening?",
+        "explanation": "Порядок слов: Are + you + listening?"
+      },
+      {
+        "kind": "text",
+        "question": "Вставь форму write: She is ___ an essay now.",
+        "correct_answer": "writing",
+        "explanation": "Конечная немая e исчезает: write → writing.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери предложение о привычке.",
+        "options": [
+          "I am reading at the moment.",
+          "I read every evening.",
+          "I am reading right now."
+        ],
+        "correct_answer": "I read every evening.",
+        "explanation": "Every evening обозначает регулярность, поэтому нужен Present Simple."
+      }
+    ]
+  },
+  {
+    "slug": "a2-past-simple",
+    "title": "Yesterday’s story",
+    "topic": "Past Simple",
+    "position": 4,
+    "summary": "Расскажи о завершённом событии и задай вопрос с did.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Завершённое прошлое",
+        "body": "Past Simple нужен для событий в завершённое время: yesterday, last week, two days ago. У правильных глаголов добавляем -ed. После e добавляем только -d.",
+        "examples": [
+          "I watched a lecture yesterday.",
+          "She visited a museum last week.",
+          "We lived in a small town."
+        ]
+      },
+      {
+        "title": "Неправильные глаголы",
+        "body": "Некоторые формы нужно запомнить: go → went, have → had, see → saw, buy → bought. Прошедшая форма одинакова для I, he и they.",
+        "examples": [
+          "They went to university by bus.",
+          "He had an exam on Monday.",
+          "I saw my friend yesterday."
+        ]
+      },
+      {
+        "title": "Did возвращает начальную форму",
+        "body": "В отрицании используем did not (didn’t), в вопросе — Did перед подлежащим. После did/didn’t основной глагол в начальной форме.",
+        "examples": [
+          "I didn't watch TV yesterday.",
+          "Did she go to class?",
+          "What did you learn?"
+        ]
+      },
+      {
+        "title": "Was и were",
+        "body": "Прошедшее be: I/he/she/it was; you/we/they were. Вопрос и отрицание образуются без did: переносим was/were или добавляем not.",
+        "examples": [
+          "She was tired after the exam.",
+          "Were you at home yesterday?",
+          "They weren't late."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Yesterday I ___ to the library.",
+        "options": [
+          "go",
+          "went",
+          "goed"
+        ],
+        "correct_answer": "went",
+        "explanation": "Go — неправильный глагол. Его Past Simple: went."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь прошедшую форму visit: We ___ a museum last Sunday.",
+        "correct_answer": "visited",
+        "explanation": "Visit — правильный глагол: visit + ed.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильное отрицание.",
+        "options": [
+          "She didn’t went to class.",
+          "She doesn’t went to class.",
+          "She didn’t go to class."
+        ],
+        "correct_answer": "She didn’t go to class.",
+        "explanation": "После didn’t нужен go, а не went."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь одно слово: ___ you finish your homework yesterday?",
+        "correct_answer": "Did",
+        "explanation": "Вопрос о завершённом прошлом начинается с Did.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "They ___ at home last night.",
+        "options": [
+          "was",
+          "were",
+          "are"
+        ],
+        "correct_answer": "were",
+        "explanation": "С they в прошлом используем were."
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери предложение с правильным временем.",
+        "options": [
+          "I buy a book yesterday.",
+          "I bought a book yesterday.",
+          "I buying a book yesterday."
+        ],
+        "correct_answer": "I bought a book yesterday.",
+        "explanation": "Yesterday указывает на прошлое. Buy → bought."
+      }
+    ]
+  },
+  {
+    "slug": "a2-future-forms",
+    "title": "Plans for tomorrow",
+    "topic": "Future Forms",
+    "position": 5,
+    "summary": "Намерения, договорённости и решения на будущее.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Be going to: намерение",
+        "body": "Am/is/are going to + начальная форма глагола обозначает заранее принятое намерение. Не пропускай am/is/are перед going to.",
+        "examples": [
+          "I am going to study tonight.",
+          "She is going to apply next year. — Она собирается подать заявление в следующем году."
+        ]
+      },
+      {
+        "title": "Will: решение и обещание",
+        "body": "Will + начальная форма используется для решения в момент речи и обещания. Отрицание: will not = won’t. Окончание -s не добавляется.",
+        "examples": [
+          "I'm tired. — I'll help you.",
+          "I will call you tomorrow.",
+          "She will not be late."
+        ]
+      },
+      {
+        "title": "Договорённость: Present Continuous",
+        "body": "Для уже согласованного будущего события можно использовать Present Continuous с будущим временем. Контекст показывает, что действие не происходит сейчас.",
+        "examples": [
+          "We are meeting our tutor at three tomorrow.",
+          "I am taking the train on Friday."
+        ]
+      },
+      {
+        "title": "Вопросы о планах",
+        "body": "В вопросе с going to переставляем am/is/are перед подлежащим. В вопросе с will ставим will перед подлежащим. После will основной глагол без to.",
+        "examples": [
+          "Are you going to take the exam?",
+          "Will you help me?",
+          "What are you going to study?"
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "У тебя уже есть план на вечер. I ___ study English tonight.",
+        "options": [
+          "am going to",
+          "will to",
+          "going"
+        ],
+        "correct_answer": "am going to",
+        "explanation": "Заранее принятое намерение выражается am going to + study."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь be: She ___ going to take an exam.",
+        "correct_answer": "is",
+        "explanation": "С she нужна форма is.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Как правильно обещать помощь?",
+        "options": [
+          "I will to help you.",
+          "I will help you.",
+          "I will helps you."
+        ],
+        "correct_answer": "I will help you.",
+        "explanation": "После will начальная форма без to и -s."
+      },
+      {
+        "kind": "choice",
+        "question": "We are meeting our teacher tomorrow at ten. Что это означает?",
+        "options": [
+          "Согласованная встреча в будущем",
+          "Привычка каждый день",
+          "Встреча закончилась вчера"
+        ],
+        "correct_answer": "Согласованная встреча в будущем",
+        "explanation": "Present Continuous с tomorrow может обозначать будущую договорённость."
+      },
+      {
+        "kind": "text",
+        "question": "Напиши сокращение will not.",
+        "correct_answer": "won't",
+        "explanation": "Will not сокращается до won’t.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильный вопрос о намерении.",
+        "options": [
+          "Do you going to apply?",
+          "Are you going to apply?",
+          "Will you going apply?"
+        ],
+        "correct_answer": "Are you going to apply?",
+        "explanation": "Are ставится перед you: Are you going to apply?"
+      }
+    ]
+  },
+  {
+    "slug": "a2-articles",
+    "title": "A, an or the?",
+    "topic": "Articles",
+    "position": 6,
+    "summary": "Говори о предмете впервые, уточняй известное и выбирай a/an по звуку.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Один предмет впервые",
+        "body": "A/an употребляется с исчисляемым существительным в единственном числе, когда предмет ещё не определён. Во множественном числе a/an не ставится.",
+        "examples": [
+          "I have a laptop. — У меня есть ноутбук.",
+          "She is a student.",
+          "They have books."
+        ]
+      },
+      {
+        "title": "Слушай первый звук",
+        "body": "A ставится перед согласным звуком, an — перед гласным. Важно произношение, а не буква: a university (звук /j/), an hour (h не произносится).",
+        "examples": [
+          "an apple, an email, an old book",
+          "a university, a useful app",
+          "an hour"
+        ]
+      },
+      {
+        "title": "The: мы знаем, о чём речь",
+        "body": "The используем, когда предмет уже упоминался или понятен обоим собеседникам. The подходит и для единственного, и для множественного числа.",
+        "examples": [
+          "I bought a book. The book is about computers.",
+          "Please close the door. — Закрой дверь."
+        ]
+      },
+      {
+        "title": "Общее значение",
+        "body": "Говоря в целом о множественных или неисчисляемых существительных, обычно обходимся без артикля. English как название языка также употребляется без артикля.",
+        "examples": [
+          "Students need practice.",
+          "Water is important.",
+          "I study English."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "I received ___ email this morning.",
+        "options": [
+          "a",
+          "an",
+          "the only"
+        ],
+        "correct_answer": "an",
+        "explanation": "Email начинается с гласного звука: an email."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь a или an: She studies at ___ university.",
+        "correct_answer": "a",
+        "explanation": "University начинается со звука /j/: a university.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "I bought a book. ___ book is interesting.",
+        "options": [
+          "A",
+          "An",
+          "The"
+        ],
+        "correct_answer": "The",
+        "explanation": "Теперь речь об уже упомянутой книге: the book."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь a или an: I waited for ___ hour.",
+        "correct_answer": "an",
+        "explanation": "В hour h не произносится. Первый звук гласный.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Как сказать «Я изучаю английский»?",
+        "options": [
+          "I study an English.",
+          "I study English.",
+          "I study a English."
+        ],
+        "correct_answer": "I study English.",
+        "explanation": "Перед названием языка English в таком предложении артикль не нужен."
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери предложение о студентах вообще.",
+        "options": [
+          "A students need practice.",
+          "Students need practice.",
+          "An students need practice."
+        ],
+        "correct_answer": "Students need practice.",
+        "explanation": "Для общего значения во множественном числе артикль не нужен."
+      }
+    ]
+  },
+  {
+    "slug": "a2-prepositions",
+    "title": "Time and place",
+    "topic": "Prepositions",
+    "position": 7,
+    "summary": "At, on и in: время занятий, даты и расположение предметов.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Время: at, on, in",
+        "body": "At — точное время; on — день недели или конкретная дата; in — месяц, год или часть дня. Запомни отдельное выражение at night.",
+        "examples": [
+          "at nine, at night",
+          "on Monday, on 5 May",
+          "in June, in 2028, in the morning"
+        ]
+      },
+      {
+        "title": "Место: in и on",
+        "body": "In показывает нахождение внутри пространства; on — на поверхности. Не путай in the room (в комнате) с on the table (на столе).",
+        "examples": [
+          "The book is in my bag.",
+          "The laptop is on the desk.",
+          "She lives in Almaty."
+        ]
+      },
+      {
+        "title": "At и направление to",
+        "body": "At может обозначать точку или место деятельности. To показывает направление движения. После go home предлог to не нужен.",
+        "examples": [
+          "Meet me at the entrance.",
+          "I go to university by bus.",
+          "I go home at six."
+        ]
+      },
+      {
+        "title": "Прочитай описание",
+        "body": "Our class starts at ten on Tuesday. There is a dictionary on the teacher’s desk. We study in a quiet classroom. After class, we go to the library.",
+        "examples": [
+          "starts — начинается",
+          "quiet — тихий",
+          "dictionary — словарь"
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "The lesson starts ___ 9:30.",
+        "options": [
+          "in",
+          "on",
+          "at"
+        ],
+        "correct_answer": "at",
+        "explanation": "Перед точным временем используем at."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь at/on/in: My exam is ___ Friday.",
+        "correct_answer": "on",
+        "explanation": "Перед днём недели ставим on.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "I want to start university ___ 2028.",
+        "options": [
+          "at",
+          "in",
+          "on"
+        ],
+        "correct_answer": "in",
+        "explanation": "Перед годом используем in."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь in или on: The laptop is ___ the desk.",
+        "correct_answer": "on",
+        "explanation": "На поверхности стола: on the desk.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильное предложение.",
+        "options": [
+          "I go to home at six.",
+          "I go home at six.",
+          "I go at home to six."
+        ],
+        "correct_answer": "I go home at six.",
+        "explanation": "После go home нет to; перед точным временем — at."
+      },
+      {
+        "kind": "choice",
+        "question": "По тексту: Where do the students go after class?",
+        "options": [
+          "To the library.",
+          "To the entrance.",
+          "To the teacher’s desk."
+        ],
+        "correct_answer": "To the library.",
+        "explanation": "Последняя строка: After class, we go to the library."
+      }
+    ]
+  },
+  {
+    "slug": "a2-university",
+    "title": "Life on campus",
+    "topic": "Education and University",
+    "position": 8,
+    "summary": "Слова об учёбе и небольшой текст о жизни студента.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Люди и места",
+        "body": "A student — студент; a lecturer — преподаватель, читающий лекции; a library — библиотека; a campus — территория университета; a classroom — аудитория.",
+        "examples": [
+          "Our lecturer explains difficult ideas clearly.",
+          "I study in the library after class."
+        ]
+      },
+      {
+        "title": "Учебные задачи",
+        "body": "A course — учебный курс; a lecture — лекция; an assignment — учебное задание; a deadline — крайний срок; an exam — экзамен; a degree — степень или программа высшего образования.",
+        "examples": [
+          "The deadline for this assignment is Friday.",
+          "I am taking a course in computer science."
+        ]
+      },
+      {
+        "title": "Говорим о своей учёбе",
+        "body": "Study означает изучать или учиться, learn — осваивать новое. Для специальности можно сказать I study information systems. Для будущей цели — I want to do a master’s degree.",
+        "examples": [
+          "I study information systems.",
+          "I want to do a master’s degree in computer science.",
+          "I need to improve my English."
+        ]
+      },
+      {
+        "title": "Прочитай: Lina’s week",
+        "body": "Lina studies information systems. She has lectures on Monday and Wednesday. On Tuesday, she works on a group assignment in the library. The deadline is Friday. She wants to do a master’s degree in computer science after graduation.",
+        "examples": [
+          "group assignment — групповое задание",
+          "after graduation — после окончания университета",
+          "Ответы на вопросы находятся в этом тексте."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Что означает deadline?",
+        "options": [
+          "Крайний срок",
+          "Начало лекции",
+          "Учебный корпус"
+        ],
+        "correct_answer": "Крайний срок",
+        "explanation": "Deadline — срок, к которому нужно завершить работу."
+      },
+      {
+        "kind": "text",
+        "question": "Переведи одним словом: «библиотека».",
+        "correct_answer": "library",
+        "explanation": "Library — библиотека. Bookshop — книжный магазин.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "По тексту: What does Lina study?",
+        "options": [
+          "Medicine",
+          "Information systems",
+          "History"
+        ],
+        "correct_answer": "Information systems",
+        "explanation": "Первая строка: Lina studies information systems."
+      },
+      {
+        "kind": "choice",
+        "question": "When is the deadline for Lina’s assignment?",
+        "options": [
+          "On Tuesday.",
+          "On Wednesday.",
+          "On Friday."
+        ],
+        "correct_answer": "On Friday.",
+        "explanation": "В тексте: The deadline is Friday."
+      },
+      {
+        "kind": "choice",
+        "question": "Выбери правильную фразу.",
+        "options": [
+          "I study information systems.",
+          "I learning information systems every day.",
+          "I am study information systems."
+        ],
+        "correct_answer": "I study information systems.",
+        "explanation": "Для постоянного обучения используем Present Simple: I study..."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь слово: I want to ___ my English. («улучшить»)",
+        "correct_answer": "improve",
+        "explanation": "Improve означает улучшать.",
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "a2-technology",
+    "title": "Your digital world",
+    "topic": "Technology Vocabulary",
+    "position": 9,
+    "summary": "Описывай действия с компьютером и понимай простые инструкции.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Устройство и программы",
+        "body": "Hardware — физические части компьютера, software — программы. A keyboard — клавиатура, a screen — экран, a file — файл, a folder — папка.",
+        "examples": [
+          "The keyboard is connected to the computer.",
+          "Save the file in this folder."
+        ]
+      },
+      {
+        "title": "Полезные действия",
+        "body": "Download — загрузить к себе; upload — отправить файл на сервер; save — сохранить; delete — удалить; install — установить. Направление передачи различает download и upload.",
+        "examples": [
+          "Download the lesson to your laptop.",
+          "Upload your assignment to the website.",
+          "Save your work before you close the app."
+        ]
+      },
+      {
+        "title": "Простые инструкции",
+        "body": "Для инструкции используем начальную форму глагола без подлежащего: Open the file. Отрицательная инструкция: Don’t + начальная форма глагола.",
+        "examples": [
+          "Click the green button.",
+          "Don't share your password.",
+          "Connect to the internet."
+        ]
+      },
+      {
+        "title": "Прочитай: A useful habit",
+        "body": "Before an online class, Amir checks his internet connection. He opens the course website and downloads a worksheet. After the class, he saves his answers and uploads the file. He never shares his password with classmates.",
+        "examples": [
+          "worksheet — лист с заданиями",
+          "connection — соединение",
+          "classmate — однокурсник"
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Ты отправляешь файл с компьютера на учебный сайт. Это…",
+        "options": [
+          "download",
+          "upload",
+          "delete"
+        ],
+        "correct_answer": "upload",
+        "explanation": "Upload — передать файл со своего устройства на сервер."
+      },
+      {
+        "kind": "text",
+        "question": "Переведи одним словом: «клавиатура».",
+        "correct_answer": "keyboard",
+        "explanation": "Keyboard — клавиатура.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Как правильно дать инструкцию «Сохрани файл»?",
+        "options": [
+          "Saves the file.",
+          "Save the file.",
+          "Saving the file."
+        ],
+        "correct_answer": "Save the file.",
+        "explanation": "Для инструкции используем начальную форму Save."
+      },
+      {
+        "kind": "choice",
+        "question": "Что относится к hardware?",
+        "options": [
+          "A keyboard",
+          "A web browser",
+          "An app"
+        ],
+        "correct_answer": "A keyboard",
+        "explanation": "Клавиатура — физическая часть оборудования. Браузер и приложение — software."
+      },
+      {
+        "kind": "text",
+        "question": "Вставь слово: ___ the file before you close the app. («сохрани»)",
+        "correct_answer": "Save",
+        "explanation": "Save означает сохранить.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "По тексту: What does Amir never share?",
+        "options": [
+          "His worksheet.",
+          "His password.",
+          "His answers."
+        ],
+        "correct_answer": "His password.",
+        "explanation": "Последняя строка: He never shares his password with classmates."
+      }
+    ]
+  },
+  {
+    "slug": "a2-reading",
+    "title": "A small study group",
+    "topic": "Reading Comprehension",
+    "position": 10,
+    "summary": "Найди главную мысль, детали и подтверждение ответа в коротком тексте.",
+    "subject": "english",
+    "level": "A2",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Сначала смысл, затем детали",
+        "body": "Прочитай текст целиком без перевода каждого слова. Определи, кто действует, где и зачем. Затем вернись к конкретной строке, чтобы проверить ответ.",
+        "examples": [
+          "Who? — Кто?",
+          "Where? — Где?",
+          "Why? — Почему?"
+        ]
+      },
+      {
+        "title": "Текст: A small study group",
+        "body": "Nora and her friends meet at the library every Thursday at five. They study English for forty minutes and then practise Python for twenty minutes. Each student brings one question. Nora likes the group because everyone explains ideas in simple words. Last week, the library was closed, so they met online. Next Thursday, they are going to practise reading together.",
+        "examples": [
+          "brings — приносит",
+          "closed — закрыта",
+          "together — вместе"
+        ]
+      },
+      {
+        "title": "Как найти доказательство",
+        "body": "Не выбирай ответ только потому, что он правдоподобен. English занимает forty minutes, Python — twenty. Причина онлайн-встречи — закрытая библиотека, а не погода.",
+        "examples": [
+          "because — потому что; вводит причину",
+          "so — поэтому; вводит результат",
+          "Last week — прошлое; Next Thursday — будущее"
+        ]
+      },
+      {
+        "title": "Чего текст не сообщает",
+        "body": "Если информации нет, не додумывай её. Здесь не названы возраст Норы, страна и результаты экзаменов. Эта привычка полезна для IELTS Reading, но урок не измеряет балл IELTS.",
+        "examples": [
+          "Подчеркни фразу, подтверждающую каждый ответ.",
+          "Перескажи текст в двух предложениях."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "What is the text mainly about?",
+        "options": [
+          "A study group and its activities.",
+          "A university exam result.",
+          "A new computer shop."
+        ],
+        "correct_answer": "A study group and its activities.",
+        "explanation": "Текст описывает встречи и занятия небольшой учебной группы."
+      },
+      {
+        "kind": "choice",
+        "question": "When do the friends usually meet?",
+        "options": [
+          "On Tuesday at five.",
+          "On Thursday at five.",
+          "On Thursday at four."
+        ],
+        "correct_answer": "On Thursday at five.",
+        "explanation": "Первая строка: every Thursday at five."
+      },
+      {
+        "kind": "text",
+        "question": "How many minutes do they practise Python? Напиши число.",
+        "correct_answer": "20",
+        "explanation": "В тексте: then practise Python for twenty minutes.",
+        "accepted_answers": []
+      },
+      {
+        "kind": "choice",
+        "question": "Why did they meet online last week?",
+        "options": [
+          "The library was closed.",
+          "Nora was on holiday.",
+          "They had no questions."
+        ],
+        "correct_answer": "The library was closed.",
+        "explanation": "The library was closed, so they met online: закрытие стало причиной."
+      },
+      {
+        "kind": "choice",
+        "question": "What are they going to practise next Thursday?",
+        "options": [
+          "Writing essays.",
+          "Reading.",
+          "Speaking only."
+        ],
+        "correct_answer": "Reading.",
+        "explanation": "Последняя строка: they are going to practise reading together."
+      },
+      {
+        "kind": "choice",
+        "question": "Что о Норе НЕ сообщается?",
+        "options": [
+          "Почему ей нравится группа",
+          "Когда группа встречается",
+          "Сколько ей лет"
+        ],
+        "correct_answer": "Сколько ей лет",
+        "explanation": "Возраст Норы отсутствует. Не нужно придумывать ответ."
+      }
+    ]
+  }
+]

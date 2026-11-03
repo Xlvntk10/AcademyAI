@@ -20,6 +20,7 @@ class TheoryBlock(BaseModel):
     title: str
     body: str
     examples: list[str]
+    code: str | None = None
 
 
 class ExerciseRead(BaseModel):
@@ -41,6 +42,9 @@ class LessonRead(BaseModel):
     version: int
     exercise_count: int
     max_score: int
+    subject: str
+    topic: str
+    position: int
 
 
 class LessonDetail(LessonRead):

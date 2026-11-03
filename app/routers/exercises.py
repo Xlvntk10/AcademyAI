@@ -28,7 +28,7 @@ def health(session: DB):
         revision = session.exec(text("SELECT version_num FROM alembic_version")).scalar_one()
     except Exception as exc:
         raise HTTPException(503, "База не подготовлена. Запустите python -m scripts.prepare_db") from exc
-    if revision != "0003_planner":
+    if revision != "0004_academies":
         raise HTTPException(503, "Требуется миграция базы")
     return {"status": "ok", "schema": revision}
 
@@ -94,7 +94,7 @@ def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
         RunAnswer.exercise_id == exercise.id)).first()
     if previous:
         attempt = session.get(Attempt, previous.attempt_id)
-        if normalize(attempt.answer) != normalize(payload.answer):
+        if normalize(attempt.answer, content.case_sensitive) != normalize(payload.answer, content.case_sensitive):
             raise HTTPException(409, "Ответ уже сохранён. Начните новое прохождение после завершения урока.")
         return run_result(session, run)
     if run.completed_at:
@@ -102,9 +102,9 @@ def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
     lesson_content = session.get(LessonContent, run.lesson_id)
     if lesson_content.version != run.content_version:
         raise HTTPException(409, "Версия урока изменилась")
-    if content.kind == "choice" and normalize(payload.answer) not in {normalize(o) for o in content.options}:
+    if content.kind == "choice" and normalize(payload.answer, content.case_sensitive) not in {normalize(o, content.case_sensitive) for o in content.options}:
         raise HTTPException(422, "Выберите один из предложенных вариантов")
-    correct = normalize(payload.answer) in {normalize(a) for a in [exercise.correct_answer, *content.accepted_answers]}
+    correct = normalize(payload.answer, content.case_sensitive) in {normalize(a, content.case_sensitive) for a in [exercise.correct_answer, *content.accepted_answers]}
     attempt = Attempt(exercise_id=exercise.id, answer=payload.answer, is_correct=correct,
         earned_points=exercise.points if correct else 0, created_at=clock.now())
     session.add(attempt)

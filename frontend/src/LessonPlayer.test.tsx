@@ -5,7 +5,7 @@ import { LessonPlayer } from './App'
 import type { LessonDetail, Run } from './api'
 
 const lesson: LessonDetail = {
-  id: 5, slug: 'a2-daily-routine', title: 'A little every day', level: 'A2', summary: 'Present Simple',
+  id: 5, slug: 'a2-daily-routine', title: 'A little every day', level: 'A2', summary: 'Present Simple', subject: 'english', topic: 'Daily Routines', position: 1,
   duration_minutes: 12, version: 1, exercise_count: 1, max_score: 10,
   theory: [{ title: 'Теория', body: 'После she добавляем -s.', examples: ['She studies.'] }],
   exercises: [{ id: 6, question: 'She ___ English.', points: 10, kind: 'choice', position: 1, options: ['study', 'studies'] }],

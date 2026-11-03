@@ -28,15 +28,21 @@ def snapshot(path):
     with connect_readonly(path) as db:
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         # Preserve every existing application table, including planner and learning runs.
-        return {t: db.execute('SELECT * FROM "' + t.replace('"', '""') + '" ORDER BY 1').fetchall()
-            for t in tables if t not in {"alembic_version", "sqlite_sequence"}}
+        result = {}
+        for table in tables - {"alembic_version", "sqlite_sequence"}:
+            cursor = db.execute('SELECT * FROM "' + table.replace('"', '""') + '" ORDER BY 1')
+            result[table] = {"columns": [c[0] for c in cursor.description], "rows": cursor.fetchall()}
+        return result
 
 
 def assert_preserved(before, path):
     after = snapshot(path)
-    for table, rows in before.items():
-        actual = {row[0]: row for row in after.get(table, [])}
-        if any(actual.get(row[0]) != row for row in rows):
+    for table, data in before.items():
+        if table not in after or not set(data["columns"]) <= set(after[table]["columns"]):
+            raise RuntimeError(f"Original columns removed: {table}")
+        positions = [after[table]["columns"].index(c) for c in data["columns"]]
+        actual = {row[positions[0]]: tuple(row[i] for i in positions) for row in after[table]["rows"]}
+        if any(actual.get(row[0]) != row for row in data["rows"]):
             raise RuntimeError(f"Original records changed: {table}")
 
 

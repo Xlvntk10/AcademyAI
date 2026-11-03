@@ -1,0 +1,992 @@
+[
+  {
+    "slug": "python-introduction",
+    "title": "Знакомство с Python",
+    "topic": "Что такое Python",
+    "position": 1,
+    "summary": "Прочитай первую программу и пойми, как компьютер следует инструкциям.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Язык инструкций",
+        "body": "Python — язык программирования. Программа состоит из инструкций, выполняемых по порядку. Его используют для автоматизации, анализа данных, веб-сервисов и AI. Здесь мы читаем код и предсказываем результат без выполнения пользовательских программ.",
+        "code": "print(\"Hello, world!\")",
+        "examples": [
+          "print — встроенная функция вывода.",
+          "Текст в кавычках называется строкой."
+        ]
+      },
+      {
+        "title": "Строка за строкой",
+        "body": "Обычно инструкции выполняются сверху вниз. Каждый print выводит значение на новой строке. Символ # начинает комментарий, который не выполняется.",
+        "code": "# My first program\nprint(\"Hello\")\nprint(\"Academy\")",
+        "examples": [
+          "Сначала Hello, затем Academy на новой строке."
+        ]
+      },
+      {
+        "title": "Синтаксис имеет значение",
+        "body": "Имена различают регистр: print и Print — разные имена. Кавычки должны быть парными, а у вызова функции нужны скобки. Для строк подходят одиночные и двойные кавычки.",
+        "code": "print(\"Python\")\nprint(2 + 3)",
+        "examples": [
+          "Первый вызов выводит Python, второй — 5.",
+          "Кавычки вокруг строки не выводятся."
+        ]
+      },
+      {
+        "title": "Ошибка — часть обучения",
+        "body": "SyntaxError сообщает об ошибке структуры кода. NameError часто возникает при обращении к неизвестному имени. Проверь строку ошибки и написание. Текст в кавычках не вычисляется как выражение.",
+        "code": "print(\"Keep learning\")",
+        "examples": [
+          "Текст \"2 + 3\" и выражение 2 + 3 имеют разный смысл."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Для чего используется print()?",
+        "options": [
+          "Для вывода значения",
+          "Для удаления переменной",
+          "Только для сложения"
+        ],
+        "correct_answer": "Для вывода значения",
+        "explanation": "Print — функция вывода. В Python её имя пишется строчными буквами: print."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(2 + 3)?",
+        "correct_answer": "5",
+        "explanation": "Сначала вычисляется 2 + 3, затем выводится 5."
+      },
+      {
+        "kind": "choice",
+        "question": "Какая запись корректна?",
+        "options": [
+          "Print(\"Hi\")",
+          "print(\"Hi\")",
+          "print \"Hi\""
+        ],
+        "correct_answer": "print(\"Hi\")",
+        "explanation": "В Python 3 нужны строчная p и круглые скобки."
+      },
+      {
+        "kind": "choice",
+        "question": "Какой символ начинает комментарий?",
+        "options": [
+          "#",
+          "//",
+          "<!--"
+        ],
+        "correct_answer": "#",
+        "explanation": "Однострочный комментарий начинается с #."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"Python\")? Не добавляй кавычки.",
+        "correct_answer": "Python",
+        "explanation": "Print выводит содержимое строки, без кавычек."
+      },
+      {
+        "kind": "choice",
+        "question": "Что выведет print(\"2 + 3\")?",
+        "options": [
+          "5",
+          "2 + 3",
+          "Ошибка"
+        ],
+        "correct_answer": "2 + 3",
+        "explanation": "Выражение в кавычках — текст и не вычисляется."
+      }
+    ]
+  },
+  {
+    "slug": "python-variables",
+    "title": "Имена для данных",
+    "topic": "Переменные",
+    "position": 2,
+    "summary": "Сохраняй значения и отслеживай изменения пошагово.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Присваивание",
+        "body": "Переменная — имя, связанное со значением. Знак = присваивает значение справа имени слева. Сначала вычисляется правая часть выражения.",
+        "code": "score = 10\nname = \"Maya\"\nprint(score)",
+        "examples": [
+          "Score связан с числом 10, name — со строкой Maya."
+        ]
+      },
+      {
+        "title": "Обновление значения",
+        "body": "При score = score + 5 сначала берётся прежнее значение score, к нему прибавляется 5 и результат сохраняется под тем же именем.",
+        "code": "score = 10\nscore = score + 5\nprint(score)",
+        "examples": [
+          "Результат: 15."
+        ]
+      },
+      {
+        "title": "Правила имён",
+        "body": "Имя может содержать буквы, цифры и подчёркивание, но не начинаться с цифры. Пробелы недопустимы. Обычно используют snake_case. Регистр различается.",
+        "code": "study_minutes = 30\nuser_name = \"Ali\"",
+        "examples": [
+          "2score и user name — недопустимые имена.",
+          "score и Score — разные имена."
+        ]
+      },
+      {
+        "title": "Связь с текущим значением",
+        "body": "Для чисел присваивание b = a связывает b с текущим значением a. Если затем изменить a, сохранённое число в b автоматически не изменится.",
+        "code": "a = 4\nb = a\na = 7\nprint(b)",
+        "examples": [
+          "Результат: 4.",
+          "Изменяемые объекты, например списки, имеют дополнительные особенности."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Что делает знак = ?",
+        "options": [
+          "Сравнивает значения",
+          "Присваивает значение",
+          "Всегда складывает числа"
+        ],
+        "correct_answer": "Присваивает значение",
+        "explanation": "= — присваивание. Для сравнения равенства используется ==."
+      },
+      {
+        "kind": "text",
+        "question": "score = 8; score = score + 2. Чему равен score?",
+        "correct_answer": "10",
+        "explanation": "8 + 2 = 10, затем score получает это значение."
+      },
+      {
+        "kind": "choice",
+        "question": "Какое имя допустимо?",
+        "options": [
+          "2score",
+          "study_minutes",
+          "study minutes"
+        ],
+        "correct_answer": "study_minutes",
+        "explanation": "Подчёркивание допустимо. Пробелы и цифра в начале — нет."
+      },
+      {
+        "kind": "choice",
+        "question": "score и Score — это…",
+        "options": [
+          "Одно и то же имя",
+          "Разные имена",
+          "Оба недопустимы"
+        ],
+        "correct_answer": "Разные имена",
+        "explanation": "Python различает регистр символов."
+      },
+      {
+        "kind": "text",
+        "question": "a = 4; b = a; a = 7. Что выведет print(b)?",
+        "correct_answer": "4",
+        "explanation": "Изменение a не меняет уже сохранённое числовое значение b."
+      },
+      {
+        "kind": "text",
+        "question": "x = 3; x = x * 4. Чему равен x?",
+        "correct_answer": "12",
+        "explanation": "* означает умножение: 3 * 4 = 12."
+      }
+    ]
+  },
+  {
+    "slug": "python-data-types",
+    "title": "Какие бывают данные",
+    "topic": "Типы данных",
+    "position": 3,
+    "summary": "Различай числа, строки и логические значения.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Числа",
+        "body": "Int — целое число, float — число с дробной частью. Дробная часть записывается через точку. Операции +, -, * и / выполняют арифметику.",
+        "code": "age = 20\nprice = 12.5\nprint(6 / 2)",
+        "examples": [
+          "Обычное деление / возвращает float: 3.0."
+        ]
+      },
+      {
+        "title": "Строки",
+        "body": "Str — текст в кавычках. \"5\" — строка, 5 — целое число. Плюс между строками соединяет их, а не складывает как числа.",
+        "code": "print(\"5\" + \"2\")\nprint(5 + 2)",
+        "examples": [
+          "Первый результат: 52. Второй: 7."
+        ]
+      },
+      {
+        "title": "Логические значения",
+        "body": "Bool имеет два значения: True и False. Первая буква обязательно заглавная. Сравнение чисел возвращает логическое значение.",
+        "code": "is_ready = True\nprint(5 > 2)",
+        "examples": [
+          "Результат сравнения: True.",
+          "true не является встроенным логическим значением."
+        ]
+      },
+      {
+        "title": "Преобразование типа",
+        "body": "Функция type(value) показывает тип. int(\"12\") преобразует подходящую строку в целое число, str(12) превращает число в строку. Не любой текст можно преобразовать в число.",
+        "code": "number = int(\"12\")\nprint(number + 1)",
+        "examples": [
+          "Результат: 13.",
+          "int(\"hello\") вызовет ValueError."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Какой тип у 3.5?",
+        "options": [
+          "int",
+          "float",
+          "str"
+        ],
+        "correct_answer": "float",
+        "explanation": "Число с дробной частью — float."
+      },
+      {
+        "kind": "choice",
+        "question": "Какой тип у \"42\"?",
+        "options": [
+          "int",
+          "bool",
+          "str"
+        ],
+        "correct_answer": "str",
+        "explanation": "Кавычки делают значение строкой."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"5\" + \"2\")?",
+        "correct_answer": "52",
+        "explanation": "Строки соединяются: \"5\" + \"2\" → \"52\"."
+      },
+      {
+        "kind": "choice",
+        "question": "Как правильно записать логическую истину?",
+        "options": [
+          "true",
+          "True",
+          "TRUE"
+        ],
+        "correct_answer": "True",
+        "explanation": "В Python пишется True с заглавной T."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(int(\"12\") + 1)?",
+        "correct_answer": "13",
+        "explanation": "После преобразования получаем 12; 12 + 1 = 13."
+      },
+      {
+        "kind": "choice",
+        "question": "Что произойдёт при int(\"hello\")?",
+        "options": [
+          "Получится 0",
+          "Получится строка hello",
+          "Возникнет ValueError"
+        ],
+        "correct_answer": "Возникнет ValueError",
+        "explanation": "Hello не является записью целого числа."
+      }
+    ]
+  },
+  {
+    "slug": "python-input-output",
+    "title": "Диалог с программой",
+    "topic": "Ввод и вывод",
+    "position": 4,
+    "summary": "Пойми input, print и преобразование введённого текста в число.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Ввод начинается со строки",
+        "body": "Функция input() читает строку. Подсказка в скобках объясняет, что ввести. Даже если человек вводит цифры, результат input — str.",
+        "code": "name = input(\"Your name: \")\nprint(\"Hello,\", name)",
+        "examples": [
+          "При вводе Maya получится Hello, Maya.",
+          "Здесь нет интерактивного запуска: изучаем поведение обычного Python."
+        ]
+      },
+      {
+        "title": "Числа нужно преобразовать",
+        "body": "Для арифметики с введённым целым числом используем int(). Неподходящий ввод в реальной программе нужно обрабатывать; пока предполагаем корректное число.",
+        "code": "age = int(input(\"Age: \"))\nprint(age + 1)",
+        "examples": [
+          "Если введено 20, результат будет 21."
+        ]
+      },
+      {
+        "title": "Несколько значений",
+        "body": "Аргументы print разделяются запятыми. По умолчанию между значениями появляется пробел. Его можно заменить параметром sep.",
+        "code": "print(\"A\", \"B\")\nprint(\"A\", \"B\", sep=\"-\")",
+        "examples": [
+          "Результаты: A B и A-B."
+        ]
+      },
+      {
+        "title": "Форматированные строки",
+        "body": "Буква f перед кавычками позволяет подставлять значения в фигурных скобках. Остальной текст сохраняется. Это удобный способ составить сообщение.",
+        "code": "name = \"Maya\"\nscore = 10\nprint(f\"{name}: {score}\")",
+        "examples": [
+          "Результат: Maya: 10."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Какой тип возвращает input()?",
+        "options": [
+          "str",
+          "int",
+          "float"
+        ],
+        "correct_answer": "str",
+        "explanation": "Input возвращает строку, даже если она похожа на число."
+      },
+      {
+        "kind": "text",
+        "question": "age = int(\"20\"). Что выведет print(age + 1)?",
+        "correct_answer": "21",
+        "explanation": "Int преобразует \"20\" в число 20."
+      },
+      {
+        "kind": "choice",
+        "question": "Как превратить введённое значение в целое число?",
+        "options": [
+          "str(input())",
+          "int(input())",
+          "print(input())"
+        ],
+        "correct_answer": "int(input())",
+        "explanation": "Сначала читается строка, затем int преобразует её."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"A\", \"B\", sep=\"-\")?",
+        "correct_answer": "A-B",
+        "explanation": "Sep задаёт разделитель между аргументами."
+      },
+      {
+        "kind": "text",
+        "question": "name = \"Maya\"; score = 10. Что выведет print(f\"{name}: {score}\")?",
+        "correct_answer": "Maya: 10",
+        "explanation": "Значения подставляются вместо {name} и {score}."
+      },
+      {
+        "kind": "choice",
+        "question": "Пользователь ввёл 5. Что хранится в x после x = input()?",
+        "options": [
+          "Число 5",
+          "Строка \"5\"",
+          "Логическое True"
+        ],
+        "correct_answer": "Строка \"5\"",
+        "explanation": "Без int значение остаётся строкой."
+      }
+    ]
+  },
+  {
+    "slug": "python-conditions",
+    "title": "Если — то",
+    "topic": "Условия if/else",
+    "position": 5,
+    "summary": "Выбирай действие в зависимости от условия.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Ветвление",
+        "body": "If проверяет условие. Если оно истинно, выполняется блок с отступом. После условия ставится двоеточие. Обычно отступ — четыре пробела.",
+        "code": "score = 75\nif score >= 60:\n    print(\"Pass\")",
+        "examples": [
+          ">= означает «больше или равно»."
+        ]
+      },
+      {
+        "title": "Два пути",
+        "body": "Else выполняется, когда условие if ложно. У else своего условия нет. Оно стоит на одном уровне отступа с if и заканчивается двоеточием.",
+        "code": "age = 16\nif age >= 18:\n    print(\"Adult\")\nelse:\n    print(\"Under 18\")",
+        "examples": [
+          "Результат: Under 18."
+        ]
+      },
+      {
+        "title": "Несколько вариантов",
+        "body": "== проверяет равенство, != — неравенство. Elif добавляет ещё одно условие. В цепочке if/elif/else выполняется первая подходящая ветка.",
+        "code": "score = 85\nif score >= 90:\n    print(\"Excellent\")\nelif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Try again\")",
+        "examples": [
+          "Результат: Pass."
+        ]
+      },
+      {
+        "title": "Логические связки",
+        "body": "And требует истинности обеих частей; or — хотя бы одной; not меняет истинность на противоположную. Сначала проверь каждую часть отдельно.",
+        "code": "age = 20\nis_student = True\nprint(age >= 18 and is_student)",
+        "examples": [
+          "Результат: True."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Какой оператор проверяет равенство?",
+        "options": [
+          "=",
+          "==",
+          "!="
+        ],
+        "correct_answer": "==",
+        "explanation": "== сравнивает. = присваивает, != проверяет неравенство."
+      },
+      {
+        "kind": "text",
+        "question": "score = 75. Что выведет if score >= 60: print(\"Pass\")?",
+        "correct_answer": "Pass",
+        "explanation": "75 >= 60 истинно, выполняется print(\"Pass\")."
+      },
+      {
+        "kind": "choice",
+        "question": "Какой символ нужен после условия if?",
+        "options": [
+          ";",
+          ".",
+          ":"
+        ],
+        "correct_answer": ":",
+        "explanation": "После условия ставится двоеточие."
+      },
+      {
+        "kind": "choice",
+        "question": "Когда выполняется else?",
+        "options": [
+          "Когда условие if ложно",
+          "Перед if",
+          "Всегда после if"
+        ],
+        "correct_answer": "Когда условие if ложно",
+        "explanation": "Else — альтернативная ветка."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(True and False)?",
+        "correct_answer": "False",
+        "explanation": "And истинно, только если обе части истинны."
+      },
+      {
+        "kind": "choice",
+        "question": "score = 85 в примере if/elif из теории. Что выведется?",
+        "options": [
+          "Excellent",
+          "Pass",
+          "Try again"
+        ],
+        "correct_answer": "Pass",
+        "explanation": "85 >= 90 ложно, но 85 >= 60 истинно."
+      }
+    ]
+  },
+  {
+    "slug": "python-loops",
+    "title": "Повторяем без копирования",
+    "topic": "Циклы for и while",
+    "position": 6,
+    "summary": "Читай циклы пошагово и следи за условием остановки.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "For перебирает значения",
+        "body": "Цикл for выполняет блок для каждого элемента последовательности. Переменная цикла получает очередное значение и используется в теле с отступом.",
+        "code": "for name in [\"Ali\", \"Maya\"]:\n    print(name)",
+        "examples": [
+          "Вывод: Ali, затем Maya на новой строке."
+        ]
+      },
+      {
+        "title": "Правая граница не входит",
+        "body": "Вызов range(3) даёт 0, 1, 2. Вызов range(1, 4) даёт 1, 2, 3. Правая граница не включается в последовательность.",
+        "code": "for number in range(1, 4):\n    print(number)",
+        "examples": [
+          "Три повторения: для 1, 2 и 3."
+        ]
+      },
+      {
+        "title": "While зависит от условия",
+        "body": "While повторяет блок, пока условие истинно. Значения нужно менять так, чтобы условие стало ложным. Иначе цикл может быть бесконечным.",
+        "code": "count = 0\nwhile count < 3:\n    count = count + 1\nprint(count)",
+        "examples": [
+          "После цикла count равен 3. Print без отступа выполнится один раз после цикла."
+        ]
+      },
+      {
+        "title": "Накапливаем результат",
+        "body": "На каждом шаге можно добавлять число к общей сумме. До цикла задаём начальное значение. Ключевое слово break прерывает ближайший цикл.",
+        "code": "total = 0\nfor n in [1, 2, 3]:\n    total = total + n\nprint(total)",
+        "examples": [
+          "Промежуточные суммы: 1, 3, 6."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Какие числа даёт range(3)?",
+        "options": [
+          "1, 2, 3",
+          "0, 1, 2",
+          "0, 1, 2, 3"
+        ],
+        "correct_answer": "0, 1, 2",
+        "explanation": "Начало по умолчанию 0, граница 3 не включается."
+      },
+      {
+        "kind": "text",
+        "question": "Сколько раз выполнится тело for n in range(1, 4)?",
+        "correct_answer": "3",
+        "explanation": "Перебираются 1, 2 и 3."
+      },
+      {
+        "kind": "text",
+        "question": "Чему равен total после суммирования [1, 2, 3] в примере?",
+        "correct_answer": "6",
+        "explanation": "0 + 1 + 2 + 3 = 6."
+      },
+      {
+        "kind": "choice",
+        "question": "Что важно проверить в while?",
+        "options": [
+          "Есть ли путь к завершению",
+          "Написан ли он без отступа",
+          "Есть ли input обязательно"
+        ],
+        "correct_answer": "Есть ли путь к завершению",
+        "explanation": "Если условие не станет ложным и нет break, цикл не завершится."
+      },
+      {
+        "kind": "text",
+        "question": "count = 0; пока count < 3, прибавляем 1. Чему равен count после цикла?",
+        "correct_answer": "3",
+        "explanation": "При count = 3 условие 3 < 3 ложно."
+      },
+      {
+        "kind": "choice",
+        "question": "Какое слово прерывает ближайший цикл?",
+        "options": [
+          "stop",
+          "break",
+          "exit_loop"
+        ],
+        "correct_answer": "break",
+        "explanation": "Break завершает ближайший охватывающий цикл."
+      }
+    ]
+  },
+  {
+    "slug": "python-lists",
+    "title": "Коллекция по порядку",
+    "topic": "Списки",
+    "position": 7,
+    "summary": "Храни значения, получай элементы по индексу и изменяй список.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Что такое список",
+        "body": "List — упорядоченная изменяемая коллекция. Элементы записываются в квадратных скобках через запятую. Порядок элементов сохраняется.",
+        "code": "scores = [10, 20, 30]\nprint(scores)",
+        "examples": [
+          "В списке можно хранить несколько значений."
+        ]
+      },
+      {
+        "title": "Индекс начинается с нуля",
+        "body": "Первый элемент имеет индекс 0. Отрицательный индекс -1 выбирает последний элемент. Индекс вне границ вызывает IndexError.",
+        "code": "scores = [10, 20, 30]\nprint(scores[0])\nprint(scores[-1])",
+        "examples": [
+          "Результаты: 10 и 30."
+        ]
+      },
+      {
+        "title": "Добавление и изменение",
+        "body": "Append добавляет элемент в конец. Присваивание по индексу заменяет существующий элемент. Len возвращает количество элементов в списке.",
+        "code": "scores = [10, 20]\nscores.append(30)\nscores[0] = 15\nprint(len(scores))",
+        "examples": [
+          "Список: [15, 20, 30]. Его длина: 3."
+        ]
+      },
+      {
+        "title": "Срез и наличие",
+        "body": "Срез items[start:stop] берёт элементы от start включительно до stop не включительно. Оператор in проверяет наличие значения в списке.",
+        "code": "items = [10, 20, 30, 40]\nprint(items[1:3])\nprint(20 in items)",
+        "examples": [
+          "Результаты: [20, 30] и True."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "text",
+        "question": "items = [10, 20, 30]. Чему равен items[0]?",
+        "correct_answer": "10",
+        "explanation": "Первый элемент имеет индекс 0."
+      },
+      {
+        "kind": "text",
+        "question": "items = [10, 20, 30]. Чему равен items[-1]?",
+        "correct_answer": "30",
+        "explanation": "-1 выбирает последний элемент."
+      },
+      {
+        "kind": "choice",
+        "question": "Что делает items.append(5)?",
+        "options": [
+          "Добавляет 5 в конец",
+          "Удаляет пятый элемент",
+          "Заменяет первый элемент"
+        ],
+        "correct_answer": "Добавляет 5 в конец",
+        "explanation": "Append добавляет один объект в конец списка."
+      },
+      {
+        "kind": "text",
+        "question": "items = [1, 2]; items.append(3). Чему равен len(items)?",
+        "correct_answer": "3",
+        "explanation": "После добавления элементов стало три."
+      },
+      {
+        "kind": "choice",
+        "question": "items = [10, 20, 30, 40]. Чему равен items[1:3]?",
+        "options": [
+          "[10, 20, 30]",
+          "[20, 30]",
+          "[20, 30, 40]"
+        ],
+        "correct_answer": "[20, 30]",
+        "explanation": "Срез включает индексы 1 и 2, но не 3."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(20 in [10, 20, 30])?",
+        "correct_answer": "True",
+        "explanation": "20 присутствует в списке."
+      }
+    ]
+  },
+  {
+    "slug": "python-dictionaries",
+    "title": "Данные по ключу",
+    "topic": "Словари",
+    "position": 8,
+    "summary": "Объедини связанные данные и получай значения по понятным именам.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Ключ и значение",
+        "body": "Dict хранит пары ключ: значение. Для создания используем фигурные скобки. В примере ключи — строки name и age, каждое связано со своим значением.",
+        "code": "student = {\"name\": \"Maya\", \"age\": 20}\nprint(student[\"name\"])",
+        "examples": [
+          "Результат: Maya."
+        ]
+      },
+      {
+        "title": "Обновление и добавление",
+        "body": "Присваивание по существующему ключу заменяет значение, по новому — добавляет пару. Один ключ не хранит два отдельных значения одновременно.",
+        "code": "student = {\"name\": \"Maya\"}\nstudent[\"age\"] = 20\nstudent[\"age\"] = 21",
+        "examples": [
+          "Теперь age связан с числом 21."
+        ]
+      },
+      {
+        "title": "Отсутствующий ключ",
+        "body": "Обращение через [] к отсутствующему ключу вызывает KeyError. Метод get позволяет указать значение по умолчанию и избежать этой ошибки при чтении.",
+        "code": "student = {\"name\": \"Maya\"}\nprint(student.get(\"city\", \"Unknown\"))",
+        "examples": [
+          "Результат: Unknown."
+        ]
+      },
+      {
+        "title": "Наличие и перебор",
+        "body": "Оператор in для словаря проверяет ключи. Метод items() даёт пары ключ/значение для перебора. Len возвращает число пар, а не длину строк внутри.",
+        "code": "student = {\"name\": \"Maya\", \"age\": 20}\nprint(\"name\" in student)\nfor key, value in student.items():\n    print(key, value)",
+        "examples": [
+          "Maya — значение, а name — ключ."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "text",
+        "question": "student = {\"name\": \"Maya\", \"age\": 20}. Чему равен student[\"age\"]?",
+        "correct_answer": "20",
+        "explanation": "Ключ age связан с числом 20."
+      },
+      {
+        "kind": "choice",
+        "question": "Что проверяет \"name\" in student?",
+        "options": [
+          "Наличие ключа name",
+          "Наличие любого значения name",
+          "Длину словаря"
+        ],
+        "correct_answer": "Наличие ключа name",
+        "explanation": "In для словаря проверяет ключи."
+      },
+      {
+        "kind": "choice",
+        "question": "Как получить отсутствующий city со значением Unknown?",
+        "options": [
+          "student[\"city\"]",
+          "student.get(\"city\", \"Unknown\")",
+          "student.city(\"Unknown\")"
+        ],
+        "correct_answer": "student.get(\"city\", \"Unknown\")",
+        "explanation": "Get возвращает значение по умолчанию, если ключ отсутствует."
+      },
+      {
+        "kind": "text",
+        "question": "d = {\"a\": 1, \"b\": 2}. Чему равен len(d)?",
+        "correct_answer": "2",
+        "explanation": "В словаре две пары ключ/значение."
+      },
+      {
+        "kind": "text",
+        "question": "d = {\"age\": 20}; d[\"age\"] = 21. Чему равен d[\"age\"]?",
+        "correct_answer": "21",
+        "explanation": "Новое присваивание заменяет значение."
+      },
+      {
+        "kind": "choice",
+        "question": "Что произойдёт при d[\"missing\"], если ключа нет?",
+        "options": [
+          "Вернётся 0",
+          "Возникнет KeyError",
+          "Добавится новый ключ"
+        ],
+        "correct_answer": "Возникнет KeyError",
+        "explanation": "Чтение отсутствующего ключа через [] вызывает KeyError."
+      }
+    ]
+  },
+  {
+    "slug": "python-functions",
+    "title": "Один раз описать — много раз использовать",
+    "topic": "Функции",
+    "position": 9,
+    "summary": "Раздели программу на действия и отличи return от print.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Определение функции",
+        "body": "Def начинает определение функции: имя, скобки, двоеточие, тело с отступом. Само определение не выполняет тело — нужен отдельный вызов функции.",
+        "code": "def greet():\n    print(\"Hello\")\n\ngreet()",
+        "examples": [
+          "После вызова greet() появляется Hello."
+        ]
+      },
+      {
+        "title": "Параметры",
+        "body": "Параметр — имя для входного значения внутри функции. При вызове передаём аргумент. Это позволяет использовать действие с разными данными.",
+        "code": "def greet(name):\n    print(\"Hello,\", name)\n\ngreet(\"Maya\")",
+        "examples": [
+          "Name — параметр, \"Maya\" — аргумент вызова."
+        ]
+      },
+      {
+        "title": "Возврат результата",
+        "body": "Return возвращает значение вызывающему коду и завершает функцию. Print только выводит сообщение. Результат return можно сохранить в переменную.",
+        "code": "def add(a, b):\n    return a + b\n\nresult = add(2, 3)\nprint(result)",
+        "examples": [
+          "Результат: 5.",
+          "Без явного return со значением функция возвращает None."
+        ]
+      },
+      {
+        "title": "Область видимости",
+        "body": "Имя, созданное внутри функции, обычно локально. Не рассчитывай, что оно доступно снаружи. Возвращай нужный результат через return.",
+        "code": "def double(number):\n    answer = number * 2\n    return answer\n\nvalue = double(4)",
+        "examples": [
+          "Value получает 8. Локальная answer не нужна внешнему коду."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "choice",
+        "question": "Какое слово начинает определение функции?",
+        "options": [
+          "function",
+          "def",
+          "func"
+        ],
+        "correct_answer": "def",
+        "explanation": "Используется ключевое слово def."
+      },
+      {
+        "kind": "text",
+        "question": "def add(a, b): return a + b. Чему равен add(2, 3)?",
+        "correct_answer": "5",
+        "explanation": "Параметры получают 2 и 3; возвращается сумма 5."
+      },
+      {
+        "kind": "choice",
+        "question": "Что делает return?",
+        "options": [
+          "Возвращает значение и завершает функцию",
+          "Всегда печатает текст",
+          "Запускает цикл"
+        ],
+        "correct_answer": "Возвращает значение и завершает функцию",
+        "explanation": "Return передаёт результат вызывающему коду и завершает текущий вызов."
+      },
+      {
+        "kind": "choice",
+        "question": "В greet(\"Maya\") значение \"Maya\" — это…",
+        "options": [
+          "Аргумент",
+          "Имя функции",
+          "Ключевое слово"
+        ],
+        "correct_answer": "Аргумент",
+        "explanation": "Значение при вызове — аргумент."
+      },
+      {
+        "kind": "text",
+        "question": "def double(number): return number * 2. Чему равен double(4)?",
+        "correct_answer": "8",
+        "explanation": "4 * 2 = 8."
+      },
+      {
+        "kind": "choice",
+        "question": "Что возвращает функция без явного return?",
+        "options": [
+          "0",
+          "None",
+          "Пустую строку всегда"
+        ],
+        "correct_answer": "None",
+        "explanation": "При достижении конца без return со значением результат — None."
+      }
+    ]
+  },
+  {
+    "slug": "python-strings",
+    "title": "Работаем с текстом",
+    "topic": "Работа со строками",
+    "position": 10,
+    "summary": "Измеряй, очищай, разделяй и собирай строки.",
+    "subject": "python",
+    "level": "Beginner",
+    "duration_minutes": 25,
+    "theory": [
+      {
+        "title": "Строка — последовательность",
+        "body": "У строки есть длина, индексы и срезы. Индекс начинается с 0. Строки неизменяемы: нельзя заменить символ присваиванием по индексу.",
+        "code": "word = \"Python\"\nprint(len(word))\nprint(word[0])",
+        "examples": [
+          "Результаты: 6 и P. Регистр важен."
+        ]
+      },
+      {
+        "title": "Методы возвращают новую строку",
+        "body": "Lower и upper меняют регистр в возвращаемой строке. Strip убирает пробельные символы по краям. Исходная строка автоматически не меняется.",
+        "code": "name = \"  Maya  \"\nclean = name.strip()\nprint(clean.lower())",
+        "examples": [
+          "Результат: maya.",
+          "Name сохраняет пробелы, пока ему не присвоят новое значение."
+        ]
+      },
+      {
+        "title": "Разделение и соединение",
+        "body": "Split разделяет строку на список частей. Join соединяет строки из последовательности, используя выбранный разделитель между ними.",
+        "code": "words = \"learn Python\".split()\nprint(\"-\".join(words))",
+        "examples": [
+          "Результат: learn-Python.",
+          "Split без аргумента разделяет по пробельным символам."
+        ]
+      },
+      {
+        "title": "Поиск и замена",
+        "body": "In проверяет наличие подстроки с учётом регистра. Replace возвращает строку с заменой. Исходную строку эти операции на месте не изменяют.",
+        "code": "text = \"I like tea\"\nprint(text.replace(\"tea\", \"coffee\"))\nprint(\"Py\" in \"Python\")",
+        "examples": [
+          "Результаты: I like coffee и True."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "kind": "text",
+        "question": "Что вернёт len(\"Python\")?",
+        "correct_answer": "6",
+        "explanation": "В слове Python шесть символов."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"Python\"[0])?",
+        "correct_answer": "P",
+        "explanation": "Первый символ — заглавная P. Регистр учитывается."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"MAYA\".lower())?",
+        "correct_answer": "maya",
+        "explanation": "Lower возвращает строчные буквы."
+      },
+      {
+        "kind": "choice",
+        "question": "Что делает strip()?",
+        "options": [
+          "Удаляет пробелы по краям строки",
+          "Удаляет все пробелы внутри",
+          "Преобразует строку в число"
+        ],
+        "correct_answer": "Удаляет пробелы по краям строки",
+        "explanation": "Strip без аргумента убирает пробельные символы с обоих краёв."
+      },
+      {
+        "kind": "text",
+        "question": "Что выведет print(\"-\".join([\"learn\", \"Python\"]))?",
+        "correct_answer": "learn-Python",
+        "explanation": "Join вставляет разделитель - между строками."
+      },
+      {
+        "kind": "choice",
+        "question": "Можно ли выполнить word[0] = \"J\", если word — строка?",
+        "options": [
+          "Да, строка изменится",
+          "Нет, строки неизменяемы",
+          "Да, но только в цикле"
+        ],
+        "correct_answer": "Нет, строки неизменяемы",
+        "explanation": "Присваивание строке по индексу не поддерживается. Создай новую строку."
+      }
+    ]
+  }
+]

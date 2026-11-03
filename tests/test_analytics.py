@@ -39,11 +39,11 @@ def test_practice_xp_daily_cap_and_recorded_minutes(client, monkeypatch):
     week = client.post('/api/planner/generate', json={'week_start':'2026-11-02'}).json()
     tasks = [t for t in week['tasks'] if t['scheduled_date'] == '2026-11-02' and t['kind'] == 'practice']
     for task in tasks:
-        client.post(f"/api/planner/tasks/{task['id']}/complete", json={'actual_minutes':10})
-        client.post(f"/api/planner/tasks/{task['id']}/complete", json={'actual_minutes':10})
+        client.post(f"/api/planner/tasks/{task['id']}/complete", json={'actual_minutes':20})
+        client.post(f"/api/planner/tasks/{task['id']}/complete", json={'actual_minutes':20})
     data = client.get('/api/dashboard').json()
     assert data['practice_xp'] == 20
-    assert data['minutes'] == 10*len(tasks)
+    assert data['minutes'] == 20*len(tasks)
     assert data['daily_goal']['reached']
     assert data['current_streak'] == 1
     assert client.get('/api/progress').json()['total_xp'] == data['total_xp']

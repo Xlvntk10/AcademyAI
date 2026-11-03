@@ -60,6 +60,7 @@ class ExerciseContent(SQLModel, table=True):
     options: list[str] = Field(sa_column=Column(JSON, nullable=False))
     explanation: str
     accepted_answers: list[str] = Field(sa_column=Column(JSON, nullable=False))
+    case_sensitive: bool = False
 
 
 class LessonRun(SQLModel, table=True):

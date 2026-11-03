@@ -3,10 +3,12 @@ from datetime import timezone
 import unicodedata
 from fastapi import HTTPException
 from sqlmodel import Session, select
-from app.database.models import Attempt, Exercise, ExerciseContent, Lesson, LessonContent, LessonRun, RunAnswer
+from app.database.models import Attempt, Exercise, ExerciseContent, Lesson, LessonContent, LessonMeta, LessonRun, RunAnswer
 
 
-def normalize(answer: str) -> str:
+def normalize(answer: str, case_sensitive: bool = False) -> str:
+    if case_sensitive:
+        return answer.strip()
     answer = unicodedata.normalize("NFKC", answer).replace("’", "'").casefold()
     return " ".join(answer.split()).rstrip(".!? ")
 
@@ -29,9 +31,11 @@ def exercises_for(session: Session, lesson_id: int):
 
 def lesson_summary(session, lesson, content):
     exercises = exercises_for(session, lesson.id)
+    meta = session.get(LessonMeta, lesson.id)
     return dict(id=lesson.id, slug=content.slug, title=lesson.title, level=lesson.level,
         summary=content.summary, duration_minutes=content.duration_minutes, version=content.version,
-        exercise_count=len(exercises), max_score=sum(e.points for e, _ in exercises))
+        exercise_count=len(exercises), max_score=sum(e.points for e, _ in exercises),
+        subject=meta.subject if meta else "english", topic=meta.topic if meta else "English", position=meta.position if meta else 0)
 
 
 def exercise_public(exercise, content):
