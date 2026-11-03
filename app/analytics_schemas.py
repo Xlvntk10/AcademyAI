@@ -10,6 +10,7 @@ class DailyActivity(BaseModel):
     tasks: int
     minutes: int
     practice_xp: int
+    vocabulary_reviews: int
 
 
 class SubjectStats(BaseModel):

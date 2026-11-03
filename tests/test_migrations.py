@@ -60,3 +60,24 @@ def test_legacy_demo_attempts_are_not_counted_as_progress(tmp_path):
         assert result["completed_runs"] == 0
         assert result["completed_lessons"] == 0
     engine.dispose()
+
+
+def test_vocabulary_upgrade_preserves_existing_learning_and_planner_rows(tmp_path):
+    path = tmp_path / 'v4.db'
+    cfg = Config(str(ROOT / 'alembic.ini'))
+    cfg.attributes['database_url'] = 'sqlite:///' + path.as_posix()
+    command.upgrade(cfg, '0004_academies')
+    with sqlite3.connect(path) as db:
+        lesson_id = db.execute('SELECT lesson_id FROM lessoncontent ORDER BY lesson_id LIMIT 1').fetchone()[0]
+        exercise_id = db.execute('SELECT id FROM exercise WHERE lesson_id=? ORDER BY id LIMIT 1', (lesson_id,)).fetchone()[0]
+        db.execute("INSERT INTO lessonrun VALUES ('old-run', ?, 1, '2026-11-02 07:00:00', NULL)", (lesson_id,))
+        attempt_id = db.execute("INSERT INTO attempt (exercise_id,answer,is_correct,earned_points,created_at) VALUES (?, 'my old answer', 0, 0, '2026-11-02 07:01:00')", (exercise_id,)).lastrowid
+        db.execute("INSERT INTO runanswer (run_id,exercise_id,attempt_id) VALUES ('old-run',?,?)", (exercise_id,attempt_id))
+        db.execute("INSERT INTO planweek VALUES ('2026-11-02',1,'2026-11-02 07:00:00')")
+        db.execute("INSERT INTO studytask (id,plan_week,scheduled_date,original_date,subject,kind,title,instructions,planned_minutes,status,actual_minutes,completed_at,created_at) VALUES ('old-task','2026-11-02','2026-11-02','2026-11-02','english','practice','Keep this','My notes',20,'completed',23,'2026-11-02 07:30:00','2026-11-02 07:00:00')")
+    before = snapshot(path)
+    prepare(path, tmp_path / 'backups')
+    assert_preserved(before, path)
+    with sqlite3.connect(path) as db:
+        assert db.execute('SELECT count(*) FROM vocabularycard').fetchone()[0] == 20
+        assert db.execute('SELECT count(*) FROM vocabularyprogress').fetchone()[0] == 0

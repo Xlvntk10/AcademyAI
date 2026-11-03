@@ -126,3 +126,30 @@ class TaskMove(SQLModel, table=True):
     from_date: date
     to_date: date
     moved_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class VocabularyCard(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    lesson_id: int = Field(foreign_key="lesson.id", index=True)
+    term: str = Field(unique=True)
+    translation: str
+    example: str
+
+
+class VocabularyProgress(SQLModel, table=True):
+    card_id: int = Field(primary_key=True, foreign_key="vocabularycard.id")
+    box: int = 0
+    due_on: date
+    added_at: datetime
+    review_count: int = 0
+    correct_count: int = 0
+
+
+class VocabularyReview(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    card_id: int = Field(foreign_key="vocabularycard.id", index=True)
+    answer: str
+    is_correct: bool
+    reviewed_at: datetime
+    due_on: date
+    box: int

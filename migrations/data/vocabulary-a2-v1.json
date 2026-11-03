@@ -1,0 +1,22 @@
+[
+  {"slug":"a2-daily-routine","term":"breakfast","translation":"завтрак","example":"I have breakfast at seven."},
+  {"slug":"a2-daily-routine","term":"usually","translation":"обычно","example":"I usually walk to university."},
+  {"slug":"a2-present-simple","term":"often","translation":"часто","example":"They often read in the library."},
+  {"slug":"a2-present-simple","term":"busy","translation":"занятый","example":"He is often busy."},
+  {"slug":"a2-present-continuous","term":"now","translation":"сейчас","example":"I am reading now."},
+  {"slug":"a2-present-continuous","term":"message","translation":"сообщение","example":"I am writing a message."},
+  {"slug":"a2-past-simple","term":"yesterday","translation":"вчера","example":"I watched a lecture yesterday."},
+  {"slug":"a2-past-simple","term":"tired","translation":"уставший","example":"She was tired after the exam."},
+  {"slug":"a2-future-forms","term":"tomorrow","translation":"завтра","example":"I will call you tomorrow."},
+  {"slug":"a2-future-forms","term":"apply","translation":"подавать заявление (один глагол)","example":"She is going to apply next year."},
+  {"slug":"a2-articles","term":"useful","translation":"полезный","example":"This is a useful app."},
+  {"slug":"a2-articles","term":"hour","translation":"час","example":"I waited for an hour."},
+  {"slug":"a2-prepositions","term":"quiet","translation":"тихий","example":"We study in a quiet classroom."},
+  {"slug":"a2-prepositions","term":"dictionary","translation":"словарь","example":"There is a dictionary on the desk."},
+  {"slug":"a2-university","term":"deadline","translation":"крайний срок","example":"The deadline for this assignment is Friday."},
+  {"slug":"a2-university","term":"assignment","translation":"учебное задание","example":"She works on a group assignment."},
+  {"slug":"a2-technology","term":"download","translation":"скачать (загрузить к себе)","example":"Download the lesson to your laptop."},
+  {"slug":"a2-technology","term":"upload","translation":"загрузить на сервер","example":"Upload your assignment to the website."},
+  {"slug":"a2-reading","term":"together","translation":"вместе","example":"They are going to practise reading together."},
+  {"slug":"a2-reading","term":"because","translation":"потому что","example":"Nora likes the group because everyone explains ideas clearly."}
+]
