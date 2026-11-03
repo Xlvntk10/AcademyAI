@@ -9,6 +9,7 @@ from app.database.models import Attempt, Exercise, ExerciseContent, Lesson, Less
 from app.schemas import StartRun, SubmitAnswer, LessonRead, LessonDetail, ExerciseRead, RunRead, LessonStats, ProgressRead
 from app.services.learning import (normalize, lesson_by_slug, exercises_for, lesson_summary,
     exercise_public, get_run, run_result, lesson_stats)
+from app.services import clock
 
 router = APIRouter(prefix="/api")
 
@@ -70,7 +71,7 @@ def start_run(slug: str, payload: StartRun, session: DB):
         LessonRun.completed_at.is_(None))).first()
     if active:
         return run_result(session, active)
-    run = LessonRun(id=str(payload.request_id), lesson_id=lesson.id, content_version=content.version)
+    run = LessonRun(id=str(payload.request_id), lesson_id=lesson.id, content_version=content.version, started_at=clock.now())
     session.add(run)
     session.commit()
     return run_result(session, run)
@@ -105,14 +106,14 @@ def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
         raise HTTPException(422, "Выберите один из предложенных вариантов")
     correct = normalize(payload.answer) in {normalize(a) for a in [exercise.correct_answer, *content.accepted_answers]}
     attempt = Attempt(exercise_id=exercise.id, answer=payload.answer, is_correct=correct,
-        earned_points=exercise.points if correct else 0)
+        earned_points=exercise.points if correct else 0, created_at=clock.now())
     session.add(attempt)
     session.flush()
     session.add(RunAnswer(run_id=run.id, exercise_id=exercise.id, attempt_id=attempt.id))
     session.flush()
     count = len(session.exec(select(RunAnswer).where(RunAnswer.run_id == run.id)).all())
     if count == len(exercises_for(session, run.lesson_id)):
-        run.completed_at = datetime.now(timezone.utc)
+        run.completed_at = clock.now()
         session.add(run)
     session.commit()
     return run_result(session, run)
@@ -120,7 +121,8 @@ def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
 
 @router.get("/progress", response_model=ProgressRead)
 def progress(session: DB):
+    from app.services.analytics import dashboard
     items = [lesson_stats(session, lesson, content) for lesson, content in
         session.exec(select(Lesson, LessonContent).join(LessonContent).order_by(Lesson.id)).all()]
     return dict(completed_lessons=sum(i["completed_runs"] > 0 for i in items),
-        completed_runs=sum(i["completed_runs"] for i in items), total_xp=sum(i["best_score"] for i in items), lessons=items)
+        completed_runs=sum(i["completed_runs"] for i in items), total_xp=dashboard(session)["total_xp"], lessons=items)

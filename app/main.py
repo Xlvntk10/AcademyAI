@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.database.db import engine
 from app.routers.exercises import router
 from app.routers.planner import router as planner_router
+from app.routers.analytics import router as analytics_router
 
 
 def create_app(database_engine=None):
@@ -10,6 +11,7 @@ def create_app(database_engine=None):
     application.state.engine = database_engine if database_engine is not None else engine
     application.include_router(router)
     application.include_router(planner_router)
+    application.include_router(analytics_router)
 
     @application.get("/")
     def home():

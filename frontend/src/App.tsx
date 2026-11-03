@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2, ChevronRight, Circle, Clock3, Code2, GraduationCap, Leaf, LoaderCircle, Moon, RefreshCw, Sparkles, Sun, Target, TrendingUp, Trophy, X, Zap } from 'lucide-react'
 import { api, newRequestId, type Lesson, type LessonDetail, type Progress, type Run } from './api'
 import Planner, { DailyTasks } from './Planner'
+import Analytics, { Motivation } from './Analytics'
 
 type Section = 'today' | 'learn' | 'plan' | 'progress'
 const sections = [
@@ -58,12 +59,13 @@ function Today({ lessons, progress, onSaved }: { lessons: Lesson[]; progress: Pr
     <DailyTasks onSaved={onSaved} />
     <div className="note-strip"><span className="note-icon"><Leaf size={19} /></span><div><strong>В своём ритме</strong><p>Не нужно знать всё сразу. Достаточно возвращаться и пробовать.</p></div></div>
   </div><aside className="right-column">
+    <Motivation progress={progress} />
     <section className="panel focus-panel"><div className="section-heading"><h3>Фокус на сегодня</h3><Sun size={19} className="muted" /></div><p className="small-note">Предложение для следующего шага</p>
       <div className="focus-task"><span className={`task-check ${complete ? 'done' : ''}`}>{complete ? <Check size={16} /> : <Circle size={16} />}</span><div><strong>{complete ? 'Первый урок завершён' : 'Пройти первый урок'}</strong><p>Английский · A2 · 12 минут</p></div></div>
       <p className="focus-foot">{complete ? 'Можно повторить и улучшить результат.' : 'Одна небольшая практика — уже движение вперёд.'}</p>
     </section>
     <section className="panel journey-panel"><span className="stat-icon lilac"><GraduationCap size={22} /></span><span className="eyebrow">ТВОЙ ОРИЕНТИР</span><h3>Магистратура<br />в 2028</h3><p>Английский, программирование и уверенность в своих знаниях.</p><button className="text-button" onClick={() => navigate('plan')}>Посмотреть направление<ArrowRight size={16} /></button></section>
-    <section className="mini-progress"><div><Zap size={18} /><strong>{progress.total_xp} XP</strong></div><p>Из лучших результатов<br />завершённых уроков</p></section>
+    <section className="mini-progress"><div><Zap size={18} /><strong>{progress.total_xp} XP</strong></div><p>Уроки и регулярная<br />самостоятельная практика</p></section>
   </aside></div>
 }
 
@@ -199,12 +201,12 @@ export default function App() {
   }
   const lessonSlug = route.startsWith('lesson/') ? route.slice(7) : null
   const section: Section = sections.some(s => s.id === route) ? route as Section : 'learn'
-  const today = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long' })
+  const today = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long', timeZone: 'Asia/Almaty' })
   return <div className="app-shell"><a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus() }}>К содержимому</a><aside className="sidebar"><a className="brand" href="#today" aria-label="Academy AI — главная"><span className="brand-mark"><GraduationCap size={23} /></span><span>academy<span className="brand-ai">ai</span></span></a><span className="sidebar-label">ТВОЁ ПРОСТРАНСТВО</span><nav aria-label="Основная навигация">{sections.map(item => <a key={item.id} href={`#${item.id}`} className={section === item.id ? 'active' : ''} aria-current={section === item.id ? 'page' : undefined}><item.icon size={21} /><span>{item.label}</span>{section === item.id && <span className="nav-dot" />}</a>)}</nav><div className="sidebar-bottom"><div className="sidebar-quote"><Leaf size={23} /><p>Не спеши.<br />Просто продолжай.</p></div><div className="profile"><span>Я</span><div><strong>Моё обучение</strong><small>Личное пространство</small></div></div></div></aside>
     <div className="workspace"><header className="topbar"><div className="breadcrumbs">Моё пространство<ChevronRight size={14} /><strong>{lessonSlug ? 'Урок английского' : sections.find(s => s.id === section)?.label}</strong></div><div className="topbar-actions"><span className="xp-pill"><Zap size={16} />{progress?.total_xp ?? '—'} XP</span><button className="theme-button" onClick={toggleTheme} aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}>{theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}</button><span className="avatar">Я</span></div></header>
       <main id="main-content" tabIndex={-1}><div className="page-heading"><div><p className="date-label">{today}</p><h1>{lessonSlug ? 'Время для английского' : titles[section]}</h1></div><span className="local-badge"><span />Личное обучение</span></div>
         {error && <ErrorBox message={error} retry={refresh} />}
-        {loading ? <Loading /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} onSaved={refresh} /> : section === 'learn' ? <Learning lessons={lessons} progress={progress} /> : section === 'plan' ? <Planner onSaved={refresh} /> : <ProgressPage lessons={lessons} progress={progress} /> : null}
+        {loading ? <Loading /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} onSaved={refresh} /> : section === 'learn' ? <Learning lessons={lessons} progress={progress} /> : section === 'plan' ? <Planner onSaved={refresh} /> : <Analytics lessons={lessons} progress={progress} /> : null}
         <footer><span>Academy AI</span><span>Твоё пространство для роста <Leaf size={13} /></span></footer>
       </main>
     </div>
