@@ -11,6 +11,9 @@ class SettingsInput(BaseModel):
     weekly_goal_minutes: int = Field(ge=5, le=3360)
     reminder_enabled: bool = False
     reminder_time: str = Field(pattern=r"^(?:[01]\d|2[0-3]):[0-5]\d$")
+    english_percent: int = Field(default=65, ge=0, le=100, strict=True)
+    monthly_goal_minutes: int = Field(default=900, ge=5, le=14880, strict=True)
+    target_month: str | None = Field(default=None, pattern=r"^20\d{2}-(?:0[1-9]|1[0-2])$")
 
     @field_validator("available_minutes", mode="before")
     @classmethod
@@ -22,13 +25,17 @@ class SettingsInput(BaseModel):
 
 class SettingsRead(SettingsInput):
     timezone: str
-    english_percent: int = 65
 
 
 class GenerateWeek(BaseModel):
     model_config = ConfigDict(extra="forbid")
     week_start: date
     replace_pending: bool = False
+
+
+class AdaptWeek(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    week_start: date
 
 
 class ReminderInput(BaseModel):

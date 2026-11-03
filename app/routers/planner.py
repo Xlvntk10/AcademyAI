@@ -4,28 +4,31 @@ from fastapi import APIRouter, Query
 from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import StudyTask
-from app.planner_schemas import SettingsInput, SettingsRead, GenerateWeek, CompleteTask, RescheduleTask, WeekRead, TaskRead, ReminderInput
+from app.planner_schemas import SettingsInput, SettingsRead, GenerateWeek, CompleteTask, RescheduleTask, WeekRead, TaskRead, ReminderInput, AdaptWeek
 from app.routers.exercises import DB
-from app.services import planner, clock
+from app.services import planner, clock, horizon
+from fastapi import HTTPException
 
 router = APIRouter(prefix="/api/planner", tags=["planner"])
 
 
 @router.get("/settings", response_model=SettingsRead)
 def read_settings(session: DB):
-    return {**planner.settings(session).model_dump(exclude={"id"}), "english_percent": 65}
+    return planner.settings(session).model_dump(exclude={"id"})
 
 
 @router.post("/settings", response_model=SettingsRead)
 def save_settings(payload: SettingsInput, session: DB):
     session.exec(text("BEGIN IMMEDIATE"))
+    if payload.target_month and not clock.local_day().strftime('%Y-%m') <= payload.target_month <= '2028-12':
+        raise HTTPException(422, "Выбери месяц от текущего до декабря 2028 года")
     settings = planner.settings(session)
-    for key, value in payload.model_dump().items():
+    for key, value in payload.model_dump(exclude_unset=True).items():
         setattr(settings, key, value)
     session.add(settings)
     session.commit()
     session.refresh(settings)
-    return {**settings.model_dump(exclude={"id"}), "english_percent": 65}
+    return settings.model_dump(exclude={"id"})
 
 
 @router.get("/week", response_model=WeekRead)
@@ -42,7 +45,7 @@ def save_reminder(payload: ReminderInput, session: DB):
     session.add(prefs)
     session.commit()
     session.refresh(prefs)
-    return {**prefs.model_dump(exclude={"id"}), "english_percent": 65}
+    return prefs.model_dump(exclude={"id"})
 
 
 @router.post("/generate", response_model=WeekRead)
@@ -76,3 +79,16 @@ def history(session: DB, limit: int = Query(default=50, ge=1, le=200)):
     tasks = session.exec(select(StudyTask).where(StudyTask.status == "completed")
         .order_by(StudyTask.completed_at.desc()).limit(limit)).all()
     return [planner.task_read(session, task) for task in tasks]
+
+
+@router.get("/roadmap")
+def roadmap(session: DB):
+    return horizon.roadmap(session)
+
+
+@router.post("/adapt")
+def adapt(payload: AdaptWeek, session: DB):
+    session.exec(text("BEGIN IMMEDIATE"))
+    result = planner.adapt(session, payload.week_start)
+    session.commit()
+    return result

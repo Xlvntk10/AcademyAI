@@ -94,6 +94,9 @@ class StudySettings(SQLModel, table=True):
     reminder_enabled: bool = False
     reminder_time: str = "19:00"
     timezone: str = "Asia/Almaty"
+    english_percent: int = 65
+    monthly_goal_minutes: int = 900
+    target_month: Optional[str] = None
 
 
 class PlanWeek(SQLModel, table=True):

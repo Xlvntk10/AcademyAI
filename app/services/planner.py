@@ -49,24 +49,24 @@ def week_read(session, start):
     overdue = session.exec(select(StudyTask).where(StudyTask.scheduled_date < clock.local_day(),
         StudyTask.status == "pending").order_by(StudyTask.scheduled_date).limit(100)).all()
     return dict(week_start=start, today=clock.local_day(), generated=session.get(PlanWeek, start) is not None,
-        settings={**settings(session).model_dump(exclude={"id"}), "english_percent": 65},
+        settings=settings(session).model_dump(exclude={"id"}),
         tasks=[task_read(session, t) for t in tasks], overdue=[task_read(session, t) for t in overdue],
         planned_minutes=sum(t.planned_minutes for t in tasks),
         completed_minutes=sum(t.actual_minutes or 0 for t in tasks if t.status == "completed"))
 
 
-def generate(session, start, replace_pending=False):
+def generate(session, start, replace_pending=False, fill_existing=False):
     today = clock.local_day()
     if start != monday(start) or start < monday(today) or start > monday(today) + timedelta(weeks=52):
         raise HTTPException(422, "Выберите понедельник текущей или будущей недели, не далее года")
     plan = session.get(PlanWeek, start)
-    if plan and not replace_pending:
+    if plan and not replace_pending and not fill_existing:
         return
     if plan:
         # Preserve completed tasks, overdue tasks and rescheduling history.
         for task in session.exec(select(StudyTask).where(StudyTask.plan_week == start,
             StudyTask.status == "pending", StudyTask.scheduled_date >= today,
-            StudyTask.scheduled_date >= start, StudyTask.scheduled_date < start + timedelta(days=7))).all():
+            StudyTask.scheduled_date >= start, StudyTask.scheduled_date < start + timedelta(days=7))).all() if replace_pending else []:
             task.status = "cancelled"
             session.add(task)
         plan.revision += 1
@@ -86,7 +86,8 @@ def generate(session, start, replace_pending=False):
             continue
         existing = session.exec(select(StudyTask).where(StudyTask.scheduled_date == day, StudyTask.status != "cancelled")).all()
         available = max(0, prefs.available_minutes[offset] - sum(t.planned_minutes for t in existing))
-        english = round(available * .65)
+        english_target = round(prefs.available_minutes[offset] * prefs.english_percent / 100)
+        english = min(available, max(0, english_target - sum(t.planned_minutes for t in existing if t.subject == "english")))
         for subject, budget in (("english", english), ("python", available - english)):
             remaining = budget
             eligible = [(l, c, m) for l, c, m in catalogue if m.subject == subject and l.id not in completed | assigned and mastery[l.id]["unlocked"]]
@@ -108,7 +109,8 @@ def generate(session, start, replace_pending=False):
                 # Do not schedule tiny isolated tasks when rounding leaves a few minutes.
                 if remaining - minutes in range(1, 5):
                     minutes = remaining
-                review = next(((l, c, m) for l, c, m in catalogue if m.subject == subject and l.id in completed), None)
+                review = next(iter(sorted(((l, c, m) for l, c, m in catalogue if m.subject == subject and l.id in completed),
+                    key=lambda row: (mastery[row[0].id]["best_percent"], row[2].position))), None)
                 title, instructions = PRACTICE[subject][(offset + block) % len(PRACTICE[subject])]
                 session.add(StudyTask(id=str(uuid4()), plan_week=start, scheduled_date=day, original_date=day,
                     subject=subject, kind="review" if review and block == 0 else "practice",
@@ -161,3 +163,39 @@ def reschedule(session, task, day):
     session.add(TaskMove(task_id=task.id, from_date=task.scheduled_date, to_date=day, moved_at=clock.now()))
     task.scheduled_date = day
     session.add(task)
+
+
+def adapt(session, start):
+    """Reschedule missed work before adding new work; never rewrite completions."""
+    today = clock.local_day()
+    if start != monday(start) or not monday(today) <= start <= monday(today)+timedelta(weeks=52):
+        raise HTTPException(422, "Выбери текущую или будущую неделю в пределах года")
+    overdue = session.exec(select(StudyTask).where(StudyTask.status == "pending", StudyTask.scheduled_date < today)
+        .order_by(StudyTask.scheduled_date, StudyTask.created_at).limit(100)).all()
+    if not overdue:
+        return dict(week=week_read(session, start), moved=0, remaining_overdue=0)
+    active = set(session.exec(select(LessonRun.lesson_id).where(LessonRun.completed_at.is_(None))).all())
+    moved_before = set(session.exec(select(TaskMove.task_id)).all())
+    # Retain manual moves, incoming tasks, completed work, and lessons already started.
+    for task in session.exec(select(StudyTask).where(StudyTask.plan_week == start, StudyTask.status == "pending",
+            StudyTask.scheduled_date >= max(today,start), StudyTask.scheduled_date < start+timedelta(days=7))).all():
+        if task.id not in moved_before and task.lesson_id not in active:
+            task.status = "cancelled"
+            session.add(task)
+    session.flush()
+    prefs = settings(session)
+    moved = 0
+    for task in overdue:
+        for offset in range(7):
+            day = start + timedelta(days=offset)
+            if day < today:
+                continue
+            occupied = session.exec(select(StudyTask).where(StudyTask.scheduled_date == day, StudyTask.status != "cancelled")).all()
+            if sum(t.planned_minutes for t in occupied) + task.planned_minutes <= prefs.available_minutes[offset]:
+                reschedule(session, task, day)
+                session.flush()
+                moved += 1
+                break
+    generate(session, start, fill_existing=True)
+    remaining = len(session.exec(select(StudyTask).where(StudyTask.status == "pending", StudyTask.scheduled_date < today)).all())
+    return dict(week=week_read(session, start), moved=moved, remaining_overdue=remaining)
