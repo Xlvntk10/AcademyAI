@@ -7,7 +7,7 @@ export function ListeningAudio({ transcript, onMode }: { transcript: string; onM
   const [error, setError] = useState('')
   useEffect(() => {
     if (!('speechSynthesis' in window)) return
-    const load = () => setVoices(speechSynthesis.getVoices().filter(v => v.localService && /^en(?:-|_)/i.test(v.lang)))
+    const load = () => setVoices(speechSynthesis.getVoices().filter(v => v.localService && /^en(?:[-_]|$)/i.test(v.lang)))
     load(); speechSynthesis.addEventListener('voiceschanged', load)
     return () => { speechSynthesis.cancel(); speechSynthesis.removeEventListener('voiceschanged', load) }
   }, [])
@@ -44,7 +44,7 @@ export async function localClip(id: string, blob?: Blob): Promise<Blob | undefin
   } finally { db.close() }
 }
 
-export function SpeakingRecorder({ id, disabled, onMode, onRecording }: { id: string; disabled: boolean; onMode: (mode: 'audio') => void; onRecording: (value: boolean) => void }) {
+export function SpeakingRecorder({ id, disabled, onMode, onRecording, expectedAudio = false }: { id: string; disabled: boolean; onMode: (mode: 'audio') => void; onRecording: (value: boolean) => void; expectedAudio?: boolean }) {
   const [recording, setRecording] = useState(false)
   const [pending, setPending] = useState(false)
   const [clip, setClip] = useState<Blob | null>(null)
@@ -57,7 +57,11 @@ export function SpeakingRecorder({ id, disabled, onMode, onRecording }: { id: st
   const supported = window.isSecureContext && !!navigator.mediaDevices?.getUserMedia && 'MediaRecorder' in window
   useEffect(() => {
     live.current = true
-    if ('indexedDB' in window) void localClip(id).then(blob => { if (live.current && blob) setClip(blob) }).catch(() => {})
+    if ('indexedDB' in window) void localClip(id).then(blob => {
+      if (!live.current) return
+      if (blob) { setClip(blob); if (!disabled) onMode('audio') }
+      else if (expectedAudio) setError('Локальная запись на этом устройстве не найдена. Она могла остаться в другом браузере или быть удалена при очистке данных.')
+    }).catch(() => { if (live.current && expectedAudio) setError('Не удалось открыть локальную запись. Сохранённый текст остаётся доступным.') })
     return () => { live.current = false; window.clearTimeout(timer.current); if (recorder.current?.state === 'recording') recorder.current.stop(); stream.current?.getTracks().forEach(t => t.stop()) }
   }, [id])
   useEffect(() => { if (!clip) return; const address = URL.createObjectURL(clip); setUrl(address); return () => URL.revokeObjectURL(address) }, [clip])

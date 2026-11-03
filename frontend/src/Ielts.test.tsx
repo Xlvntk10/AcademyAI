@@ -77,3 +77,15 @@ test('microphone denied keeps text mode available and releases the recording loc
     else delete (navigator as any).mediaDevices
   }
 })
+
+test('a local English voice with a short language tag is supported',async()=>{
+  const voice={localService:true,lang:'en',name:'Local English'}
+  const speak=vi.fn()
+  vi.stubGlobal('speechSynthesis',{getVoices:()=>[voice],addEventListener:vi.fn(),removeEventListener:vi.fn(),cancel:vi.fn(),speak})
+  vi.stubGlobal('SpeechSynthesisUtterance',class {text:string;constructor(text:string){this.text=text}})
+  const mode=vi.fn()
+  render(<ListeningAudio transcript="Original practice audio." onMode={mode}/>)
+  await userEvent.setup().click(screen.getByRole('button',{name:'Слушать'}))
+  expect(speak.mock.calls[0][0].voice).toBe(voice)
+  expect(mode).toHaveBeenCalledWith('audio')
+})
