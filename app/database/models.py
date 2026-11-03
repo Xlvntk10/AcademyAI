@@ -153,3 +153,10 @@ class VocabularyReview(SQLModel, table=True):
     reviewed_at: datetime
     due_on: date
     box: int
+
+
+class LessonPrerequisite(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint("lesson_id", "prerequisite_id", name="uq_lesson_prerequisite"),)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    lesson_id: int = Field(foreign_key="lesson.id", index=True)
+    prerequisite_id: int = Field(foreign_key="lesson.id")

@@ -28,9 +28,9 @@ def test_authored_content_has_valid_examples_and_unambiguous_keys():
                 assert len(set(exercise['options'])) == len(exercise['options'])
 
 
-def test_all_twenty_lessons_complete_and_award_only_real_results(client, database):
+def test_all_forty_lessons_complete_and_award_only_real_results(client, database):
     catalogue = client.get('/api/lessons').json()
-    assert sum(l['subject'] == 'english' for l in catalogue) == 10
+    assert sum(l['subject'] == 'english' for l in catalogue) == 30
     assert sum(l['subject'] == 'python' for l in catalogue) == 10
     engine = make_engine('sqlite:///' + database.as_posix())
     with Session(engine) as session:
@@ -45,10 +45,10 @@ def test_all_twenty_lessons_complete_and_award_only_real_results(client, databas
         assert response.json()['score'] == 60
         assert response.json()['completed_at']
     dashboard = client.get('/api/dashboard').json()
-    assert dashboard['completed_lessons'] == 20
-    assert dashboard['total_xp'] == 1200
-    assert dashboard['answers'] == 120
-    assert dashboard['level'] == 13
+    assert dashboard['completed_lessons'] == 40
+    assert dashboard['total_xp'] == 2400
+    assert dashboard['answers'] == 240
+    assert dashboard['level'] == 25
     awards = {a['code']: a for a in dashboard['achievements']}
     assert awards['english_explorer']['unlocked_on']
     assert awards['python_beginner']['unlocked_on']

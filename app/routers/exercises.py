@@ -10,6 +10,7 @@ from app.schemas import StartRun, SubmitAnswer, LessonRead, LessonDetail, Exerci
 from app.services.learning import (normalize, lesson_by_slug, exercises_for, lesson_summary,
     exercise_public, get_run, run_result, lesson_stats)
 from app.services import clock
+from app.services.mastery import curriculum_state
 
 router = APIRouter(prefix="/api")
 
@@ -28,14 +29,15 @@ def health(session: DB):
         revision = session.exec(text("SELECT version_num FROM alembic_version")).scalar_one()
     except Exception as exc:
         raise HTTPException(503, "База не подготовлена. Запустите python -m scripts.prepare_db") from exc
-    if revision != "0005_vocabulary":
+    if revision != "0006_english_levels":
         raise HTTPException(503, "Требуется миграция базы")
     return {"status": "ok", "schema": revision}
 
 
 @router.get("/lessons", response_model=list[LessonRead])
 def lessons(session: DB):
-    return [lesson_summary(session, lesson, content) for lesson, content in
+    state = curriculum_state(session)
+    return [lesson_summary(session, lesson, content, state) for lesson, content in
         session.exec(select(Lesson, LessonContent).join(LessonContent).order_by(Lesson.id)).all()]
 
 
@@ -71,6 +73,8 @@ def start_run(slug: str, payload: StartRun, session: DB):
         LessonRun.completed_at.is_(None))).first()
     if active:
         return run_result(session, active)
+    if not curriculum_state(session)[lesson.id]["unlocked"]:
+        raise HTTPException(409, "Сначала освой предыдущие темы: не менее 80% за завершённый урок")
     run = LessonRun(id=str(payload.request_id), lesson_id=lesson.id, content_version=content.version, started_at=clock.now())
     session.add(run)
     session.commit()

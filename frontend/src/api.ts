@@ -1,6 +1,6 @@
 export type Exercise = { id: number; question: string; points: number; position: number; kind: 'choice' | 'text'; options: string[] }
 export type Theory = { title: string; body: string; examples: string[]; code?: string | null }
-export type Lesson = { id: number; slug: string; title: string; summary: string; level: string; duration_minutes: number; exercise_count: number; max_score: number; version: number; subject: 'english' | 'python'; topic: string; position: number }
+export type Lesson = { id: number; slug: string; title: string; summary: string; level: string; duration_minutes: number; exercise_count: number; max_score: number; version: number; subject: 'english' | 'python'; topic: string; position: number; unlocked?: boolean; mastered?: boolean; prerequisites?: string[]; best_percent?: number }
 export type LessonDetail = Lesson & { theory: Theory[]; exercises: Exercise[] }
 export type Answer = { exercise_id: number; answer: string; is_correct: boolean; earned_points: number; correct_answer: string; explanation: string }
 export type Run = { id: string; lesson_slug: string; started_at: string; completed_at: string | null; answered_count: number; exercise_count: number; correct_count: number; score: number; max_score: number; answers: Answer[] }

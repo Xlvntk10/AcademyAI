@@ -29,13 +29,16 @@ def exercises_for(session: Session, lesson_id: int):
         .where(Exercise.lesson_id == lesson_id).order_by(ExerciseContent.position)).all()
 
 
-def lesson_summary(session, lesson, content):
+def lesson_summary(session, lesson, content, state=None):
+    from app.services.mastery import curriculum_state
+    state = state if state is not None else curriculum_state(session)
     exercises = exercises_for(session, lesson.id)
     meta = session.get(LessonMeta, lesson.id)
     return dict(id=lesson.id, slug=content.slug, title=lesson.title, level=lesson.level,
         summary=content.summary, duration_minutes=content.duration_minutes, version=content.version,
         exercise_count=len(exercises), max_score=sum(e.points for e, _ in exercises),
-        subject=meta.subject if meta else "english", topic=meta.topic if meta else "English", position=meta.position if meta else 0)
+        subject=meta.subject if meta else "english", topic=meta.topic if meta else "English", position=meta.position if meta else 0,
+        **state[lesson.id])
 
 
 def exercise_public(exercise, content):

@@ -43,7 +43,7 @@ function LessonCard({ lesson, progress, onOpen }: { lesson: Lesson; progress: Pr
 }
 
 function Today({ lessons, progress, onSaved }: { lessons: Lesson[]; progress: Progress; onSaved: () => void }) {
-  const first = lessons.find(l => !progress.lessons.find(p => p.slug === l.slug)?.completed_runs) ?? lessons[0]
+  const first = lessons.find(l => l.unlocked !== false && !progress.lessons.find(p => p.slug === l.slug)?.completed_runs) ?? lessons[0]
   const complete = first && progress.lessons.find(s => s.slug === first.slug)?.completed_runs
   return <div className="dashboard-grid"><div className="main-column">
     <section className="welcome-card"><div><span className="eyebrow"><span className="tiny-dot" /> МЕСТО ДЛЯ ТВОЕГО РОСТА</span><h2>Большое начинается<br />с маленького.</h2><p>Немного английского сегодня.<br />Больше возможностей завтра.</p>
@@ -129,7 +129,7 @@ export function LessonPlayer({ slug, onSaved, onExit, catalogue = [] }: { slug: 
     {error && <ErrorBox message={error} />}
     {stage === 'theory' && <><div className="lesson-title"><span className="eyebrow green">МАЛЕНЬКИЕ ПРИВЫЧКИ, БОЛЬШИЕ ПЕРЕМЕНЫ</span><h2>{lesson.title}</h2><p>{lesson.summary}</p><div className="metadata"><span><Clock3 size={16} />{lesson.duration_minutes} минут</span><span><BookOpen size={16} />{lesson.exercise_count} упражнений</span><span><Zap size={16} />До {lesson.max_score} XP</span></div></div>
       <div className="theory-list">{lesson.theory.map((block, i) => <section className="theory-block" key={block.title}><span className="theory-number">{String(i + 1).padStart(2, '0')}</span><div><h3>{block.title}</h3><p>{block.body}</p>{block.code && <CodeBlock code={block.code} />}<div className="examples">{block.examples.map(example => <p key={example}>{example}</p>)}</div></div></section>)}</div>
-      <div className="practice-start"><div><h3>Попробуем на практике?</h3><p>После каждого ответа — объяснение. Ошибаться можно.</p></div><button className="primary" disabled={busy} onClick={begin}>{busy ? 'Открываем…' : run ? 'Продолжить практику' : 'Начать практику'}<ArrowRight size={18} /></button></div>
+      <div className="practice-start"><div>{lesson.unlocked === false && <p role="status">Практика откроется после освоения предыдущих тем (от 80%). Осталось: {lesson.prerequisites?.map(slug => <a className="text-button" key={slug} href={`#lesson/${slug}`}>{catalogue.find(l => l.slug === slug)?.title ?? slug}</a>)}</p>}<h3>Попробуем на практике?</h3><p>После каждого ответа — объяснение. Ошибаться можно.</p></div><button className="primary" disabled={busy || lesson.unlocked === false} onClick={begin}>{busy ? 'Открываем…' : run ? 'Продолжить практику' : 'Начать практику'}<ArrowRight size={18} /></button></div>
     </>}
     {stage === 'exercise' && exercise && <><div className="exercise-top"><span>Упражнение {index + 1} из {lesson.exercise_count}</span><span>{run?.score ?? 0} / {lesson.max_score} баллов</span></div><div className="progress-track" role="progressbar" aria-label="Выполненные упражнения" aria-valuenow={run?.answered_count ?? 0} aria-valuemin={0} aria-valuemax={lesson.exercise_count}><span style={{ width: `${(run?.answered_count ?? 0) / lesson.exercise_count * 100}%` }} /></div>
       <form className="exercise-panel" onSubmit={e => { e.preventDefault(); if (feedback) next(); else void submit() }}><span className="exercise-symbol"><BookOpen size={27} /></span><span className="eyebrow green">{exercise.kind === 'choice' ? 'ВЫБЕРИ ОДИН ОТВЕТ' : 'НАПИШИ СВОЙ ОТВЕТ'}</span><h2>{exercise.question}</h2>

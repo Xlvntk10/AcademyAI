@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from sqlmodel import select
 from app.database.models import Lesson, LessonContent, LessonMeta, LessonRun, PlanWeek, StudySettings, StudyTask, TaskMove
 from app.services import clock
+from app.services.mastery import curriculum_state
 
 PRACTICE = {
     "english": [
@@ -78,6 +79,7 @@ def generate(session, start, replace_pending=False):
         .join(LessonMeta, LessonMeta.lesson_id == Lesson.id).order_by(LessonMeta.position, Lesson.id)).all()
     completed = set(session.exec(select(LessonRun.lesson_id).where(LessonRun.completed_at.is_not(None))).all())
     assigned = set(session.exec(select(StudyTask.lesson_id).where(StudyTask.status == "pending", StudyTask.lesson_id.is_not(None))).all())
+    mastery = curriculum_state(session)
     for offset in range(7):
         day = start + timedelta(days=offset)
         if day < today:
@@ -87,7 +89,7 @@ def generate(session, start, replace_pending=False):
         english = round(available * .65)
         for subject, budget in (("english", english), ("python", available - english)):
             remaining = budget
-            eligible = [(l, c, m) for l, c, m in catalogue if m.subject == subject and l.id not in completed | assigned]
+            eligible = [(l, c, m) for l, c, m in catalogue if m.subject == subject and l.id not in completed | assigned and mastery[l.id]["unlocked"]]
             # At most two new lessons per subject/day; reserve time for retrieval practice.
             added = 0
             for lesson, content, meta in eligible:

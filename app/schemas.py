@@ -45,6 +45,10 @@ class LessonRead(BaseModel):
     subject: str
     topic: str
     position: int
+    unlocked: bool
+    mastered: bool
+    prerequisites: list[str]
+    best_percent: float
 
 
 class LessonDetail(LessonRead):

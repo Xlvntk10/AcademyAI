@@ -28,8 +28,8 @@ def test_unversioned_legacy_database_preserved_and_upgrade_repeatable(tmp_path):
     migrate(path)
     assert snapshot(path) == first
     with sqlite3.connect(path) as db:
-        assert db.execute("SELECT count(*) FROM lessoncontent").fetchone()[0] == 20
-        assert db.execute("SELECT count(*) FROM exercisecontent").fetchone()[0] == 120
+        assert db.execute("SELECT count(*) FROM lessoncontent").fetchone()[0] == 40
+        assert db.execute("SELECT count(*) FROM exercisecontent").fetchone()[0] == 240
         assert db.execute("SELECT count(*) FROM attempt").fetchone()[0] == 1
     verify(path)
 

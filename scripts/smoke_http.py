@@ -87,7 +87,7 @@ def run():
 
             health = get("/api/health")
             lessons = get("/api/lessons")
-            assert len(lessons) == 20
+            assert len(lessons) == 40
             before = get("/api/dashboard")
             from datetime import date, timedelta
             today = date.fromisoformat(before["today"])

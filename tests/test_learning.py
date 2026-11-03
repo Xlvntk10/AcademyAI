@@ -20,7 +20,7 @@ def exercises(client):
 def test_catalog_has_theory_but_no_answer_keys(client):
     assert client.get("/api/health").json()["status"] == "ok"
     lessons = client.get("/api/lessons").json()
-    assert len(lessons) == 20
+    assert len(lessons) == 40
     assert lessons[0]["max_score"] == 60
     lesson = client.get(f"/api/lessons/{SLUG}").json()
     assert len(lesson["theory"]) == 6

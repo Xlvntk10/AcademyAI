@@ -1,0 +1,1083 @@
+[
+  {
+    "slug": "b1-present-perfect",
+    "subject": "english",
+    "level": "B1",
+    "title": "Experience and unfinished time",
+    "topic": "Experience and unfinished time",
+    "position": 11,
+    "summary": "Present Perfect: have/has + третья форма глагола. Важно наличие опыта или результат сейчас, а не законченная дата в прошлом. Been часто описывает посещение и возвращение.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Опыт связан с настоящим",
+        "body": "Present Perfect: have/has + третья форма глагола. Важно наличие опыта или результат сейчас, а не законченная дата в прошлом. Been часто описывает посещение и возвращение.",
+        "examples": [
+          "I have visited two universities.",
+          "She has been to Beijing."
+        ]
+      },
+      {
+        "title": "Since, for, yet и already",
+        "body": "Since задаёт начало периода, for — длительность. Yet обычно стоит в конце вопроса или отрицания; already сообщает о более раннем выполнении.",
+        "examples": [
+          "I have lived here since 2022.",
+          "We have studied together for three years.",
+          "Have you submitted the form yet?"
+        ]
+      },
+      {
+        "title": "Когда нужен Past Simple",
+        "body": "Yesterday, in 2023 и last month обозначают законченное время. При этих обстоятельствах выбирай Past Simple. This week может обозначать ещё не закончившийся период.",
+        "examples": [
+          "I sent the application yesterday.",
+          "I have sent three applications this week."
+        ]
+      },
+      {
+        "title": "Read: a new opportunity",
+        "body": "Mira has worked in a library since September. She has already organised two workshops, but she has not led an online session yet. Last Friday, she helped a visitor find a course. This week, she has learned how to use the library database. She feels more confident now.",
+        "examples": [
+          "The finished event is marked by Last Friday.",
+          "The new confidence is a present result."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Mira started in September and still works there. Complete: She has worked there ___ September.",
+        "correct_answer": "since",
+        "explanation": "Since вводит точку начала, а не длину периода.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the sentence with a finished past time.",
+        "correct_answer": "I sent the form yesterday.",
+        "explanation": "Yesterday требует Past Simple.",
+        "kind": "choice",
+        "options": [
+          "I have sent the form yesterday.",
+          "I sent the form yesterday.",
+          "I send the form yesterday."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Use the past participle of write: I have ___ three emails today.",
+        "correct_answer": "written",
+        "explanation": "Write — wrote — written; после have нужна третья форма.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "The application is not finished. Complete: I haven’t finished it ___.",
+        "correct_answer": "yet",
+        "explanation": "Yet в отрицании означает «пока ещё не».",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "According to the text, what has Mira NOT done yet?",
+        "correct_answer": "Led an online session",
+        "explanation": "Текст прямо говорит, что онлайн-сессию она ещё не проводила.",
+        "kind": "choice",
+        "options": [
+          "Organised a workshop",
+          "Used the database",
+          "Led an online session"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "How many workshops has Mira organised? Write a number.",
+        "correct_answer": "2",
+        "explanation": "В тексте: two workshops.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "two"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b1-past-narratives",
+    "subject": "english",
+    "level": "B1",
+    "title": "Telling a clear story",
+    "topic": "Telling a clear story",
+    "position": 12,
+    "summary": "Past Continuous: was/were + -ing — действие в процессе в прошлом. Past Simple — завершённое событие, которое может его прервать.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Фон и событие",
+        "body": "Past Continuous: was/were + -ing — действие в процессе в прошлом. Past Simple — завершённое событие, которое может его прервать.",
+        "examples": [
+          "I was reading when the lights went out.",
+          "While they were travelling, it started to snow."
+        ]
+      },
+      {
+        "title": "Более раннее прошлое",
+        "body": "Past Perfect: had + третья форма показывает событие раньше другого прошлого события. Оно помогает объяснить, что уже было сделано.",
+        "examples": [
+          "The lecture had started before we arrived.",
+          "I couldn’t log in because I had forgotten my password."
+        ]
+      },
+      {
+        "title": "Последовательность",
+        "body": "First, then, after that и finally связывают события. When обозначает момент, while подчёркивает процесс. Не ставь Past Perfect в каждое предложение истории.",
+        "examples": [
+          "First, I checked the address. Then I called the office.",
+          "While I was waiting, I checked my notes."
+        ]
+      },
+      {
+        "title": "Read: the missed bus",
+        "body": "At eight, Sam was walking to the bus stop when he noticed his folder was missing. He returned home, but his sister had already taken the folder to college. Sam missed the bus. He called his sister and then took a train. They met outside the station at nine.",
+        "examples": [
+          "His sister’s action happened before he returned.",
+          "The train was his second travel plan."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "I ___ my notes when the teacher called my name.",
+        "correct_answer": "was checking",
+        "explanation": "Процесс прерван коротким событием.",
+        "kind": "choice",
+        "options": [
+          "checked always",
+          "was checking",
+          "had check"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete with the past participle of forget: I had ___ my password.",
+        "correct_answer": "forgotten",
+        "explanation": "Forget — forgot — forgotten.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which event happened first: “The lecture had started when we arrived”?",
+        "correct_answer": "The lecture started",
+        "explanation": "Past Perfect обозначает более раннее событие.",
+        "kind": "choice",
+        "options": [
+          "We arrived",
+          "The lecture started",
+          "Both started at the same moment"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the link for a process: ___ I was waiting, I checked my notes.",
+        "correct_answer": "While",
+        "explanation": "While вводит продолжающееся действие.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "while"
+        ]
+      },
+      {
+        "question": "In the story, who had taken Sam’s folder?",
+        "correct_answer": "His sister",
+        "explanation": "Это прямо указано во втором предложении.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "his sister",
+          "Sam’s sister",
+          "Sam's sister"
+        ]
+      },
+      {
+        "question": "How did Sam travel after missing the bus?",
+        "correct_answer": "By train",
+        "explanation": "После звонка он took a train.",
+        "kind": "choice",
+        "options": [
+          "By taxi",
+          "By train",
+          "On a bus"
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b1-future-plans",
+    "subject": "english",
+    "level": "B1",
+    "title": "Plans, arrangements and predictions",
+    "topic": "Plans, arrangements and predictions",
+    "position": 13,
+    "summary": "Be going to подходит для намерения. Present Continuous подчёркивает договорённость с конкретными участниками или временем. Одно событие иногда можно описать обоими способами, меняя акцент.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Намерение и договорённость",
+        "body": "Be going to подходит для намерения. Present Continuous подчёркивает договорённость с конкретными участниками или временем. Одно событие иногда можно описать обоими способами, меняя акцент.",
+        "examples": [
+          "I’m going to learn Python.",
+          "I’m meeting my tutor at two on Thursday."
+        ]
+      },
+      {
+        "title": "Расписание и прогноз",
+        "body": "Present Simple используется для расписаний. Will часто выражает прогноз или решение в момент речи. Если уже есть видимые признаки, going to подчёркивает их.",
+        "examples": [
+          "The train leaves at 7:15.",
+          "I think online courses will become more common.",
+          "Look at those clouds. It’s going to rain."
+        ]
+      },
+      {
+        "title": "После when и as soon as",
+        "body": "В придаточном будущего времени после when, until и as soon as обычно нужен Present Simple, а не will. Главное предложение может содержать will.",
+        "examples": [
+          "I’ll call you when I arrive.",
+          "We’ll start as soon as the teacher comes."
+        ]
+      },
+      {
+        "title": "Read: the campus visit",
+        "body": "Leila has booked a campus tour for Tuesday at eleven. Her train leaves at 8:40. She plans to ask about scholarships, but she has not arranged a meeting with the finance team. She will send her parents a message as soon as she arrives. If the tour is useful, she may visit again.",
+        "examples": [
+          "A booked tour is an arrangement.",
+          "The finance meeting is not confirmed."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Choose the sentence that follows a published timetable.",
+        "correct_answer": "The train leaves at 8:40.",
+        "explanation": "Для расписания употребляется Present Simple.",
+        "kind": "choice",
+        "options": [
+          "The train leaving at 8:40.",
+          "The train leaves at 8:40.",
+          "The train has leave at 8:40."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: I’ll call when I ___ (arrive).",
+        "correct_answer": "arrive",
+        "explanation": "После when в придаточном будущего времени используем Present Simple.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Leila’s tour has been booked. Which wording stresses an arrangement?",
+        "correct_answer": "She is visiting the campus on Tuesday.",
+        "explanation": "Present Continuous с будущей датой подчёркивает договорённость.",
+        "kind": "choice",
+        "options": [
+          "She visited the campus yesterday.",
+          "She is visiting the campus on Tuesday.",
+          "She visits the campus every Tuesday."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the phrase: as ___ as she arrives.",
+        "correct_answer": "soon",
+        "explanation": "As soon as — как только.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Is a meeting with the finance team confirmed in the text?",
+        "correct_answer": "No",
+        "explanation": "Встреча не организована.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no",
+          "No, it is not",
+          "No, it isn’t",
+          "No, it isn't"
+        ]
+      },
+      {
+        "question": "What does Leila plan to ask about?",
+        "correct_answer": "Scholarships",
+        "explanation": "В тексте: ask about scholarships.",
+        "kind": "choice",
+        "options": [
+          "Accommodation repairs",
+          "Scholarships",
+          "Train tickets"
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b1-modals",
+    "subject": "english",
+    "level": "B1",
+    "title": "Rules, advice and permission",
+    "topic": "Rules, advice and permission",
+    "position": 14,
+    "summary": "Must и have to выражают необходимость. Have to легко образует разные времена. Mustn’t — запрет; don’t have to — отсутствие необходимости. Это разные смыслы.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Обязанность",
+        "body": "Must и have to выражают необходимость. Have to легко образует разные времена. Mustn’t — запрет; don’t have to — отсутствие необходимости. Это разные смыслы.",
+        "examples": [
+          "You mustn’t share your password.",
+          "You don’t have to print the form; a digital copy is fine."
+        ]
+      },
+      {
+        "title": "Совет и возможность",
+        "body": "Should/shouldn’t дают совет. Can/could выражают возможность или просьбу. После модального глагола используем начальную форму без to.",
+        "examples": [
+          "You should check the deadline.",
+          "Could you explain this question?"
+        ]
+      },
+      {
+        "title": "Прошлые и будущие обязанности",
+        "body": "Had to обозначает необходимость в прошлом, will have to — в будущем. Didn’t have to означает, что обязанности не было; действие всё равно могло произойти.",
+        "examples": [
+          "Yesterday we had to move rooms.",
+          "You’ll have to bring identification."
+        ]
+      },
+      {
+        "title": "Read: library rules",
+        "body": "Students can borrow six books at a time. They must return them within three weeks. Food is not allowed near the computers, but sealed water bottles are permitted. Students do not have to book a desk in the quiet area. Staff recommend taking a short break every hour.",
+        "examples": [
+          "Not required does not mean forbidden.",
+          "A recommendation is weaker than a rule."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Printing is optional. Choose the correct meaning.",
+        "correct_answer": "You don’t have to print it.",
+        "explanation": "Отсутствие необходимости выражается don’t have to.",
+        "kind": "choice",
+        "options": [
+          "You mustn’t print it.",
+          "You don’t have to print it.",
+          "You must print it."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: You ___ check your spelling before submitting. (advice)",
+        "correct_answer": "should",
+        "explanation": "Should выражает совет.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the past obligation: Yesterday I ___ to bring my passport.",
+        "correct_answer": "had",
+        "explanation": "Had to — необходимость в прошлом.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Are sealed water bottles allowed near the library computers?",
+        "correct_answer": "Yes",
+        "explanation": "Исключение для закрытых бутылок прямо разрешено.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "yes",
+          "Yes, they are"
+        ]
+      },
+      {
+        "question": "How long can students keep books?",
+        "correct_answer": "Three weeks",
+        "explanation": "В тексте: within three weeks.",
+        "kind": "choice",
+        "options": [
+          "Six weeks",
+          "One week",
+          "Three weeks"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "“You mustn’t eat here” means…",
+        "correct_answer": "Eating here is forbidden",
+        "explanation": "Mustn’t означает запрет, а не совет.",
+        "kind": "choice",
+        "options": [
+          "Eating here is optional",
+          "Eating here is forbidden",
+          "Eating here is recommended"
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b1-conditionals",
+    "subject": "english",
+    "level": "B1",
+    "title": "Real and imagined situations",
+    "topic": "Real and imagined situations",
+    "position": 15,
+    "summary": "First Conditional: if + Present Simple, will + начальная форма. Условие возможно, но результат ещё не наступил. If может стоять в начале или середине.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Реальная будущая возможность",
+        "body": "First Conditional: if + Present Simple, will + начальная форма. Условие возможно, но результат ещё не наступил. If может стоять в начале или середине.",
+        "examples": [
+          "If I finish early, I will review my notes.",
+          "We’ll walk if it doesn’t rain."
+        ]
+      },
+      {
+        "title": "Воображаемая ситуация",
+        "body": "Second Conditional: if + Past Simple, would + начальная форма. Прошедшая форма здесь обозначает дистанцию от реальности, а не обязательно прошлое время.",
+        "examples": [
+          "If I had more time, I would take another course.",
+          "If I were you, I would ask for feedback."
+        ]
+      },
+      {
+        "title": "Unless и общие закономерности",
+        "body": "Unless означает if not. Не добавляй лишнее отрицание. Zero Conditional использует Present Simple в обеих частях для регулярной зависимости.",
+        "examples": [
+          "Unless you save the file, you may lose your work.",
+          "If you heat ice, it melts."
+        ]
+      },
+      {
+        "title": "Read: a study choice",
+        "body": "Omar has two free evenings each week. If his work schedule stays the same, he will join a local course. If he had more free time, he would study abroad, but that is not possible now. Unless the course offers evening classes, he will choose an online option instead.",
+        "examples": [
+          "One plan is realistic; the other is imagined.",
+          "Unless introduces the condition that changes his choice."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "If the course offers evening classes, Omar ___ join it.",
+        "correct_answer": "will",
+        "explanation": "Для реального будущего следствия используем will.",
+        "kind": "choice",
+        "options": [
+          "would have",
+          "will",
+          "did"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: If I ___ (have) more time, I would study abroad.",
+        "correct_answer": "had",
+        "explanation": "Second Conditional: if + Past Simple.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Unless you save your work means…",
+        "correct_answer": "If you do not save your work",
+        "explanation": "Unless = if not.",
+        "kind": "choice",
+        "options": [
+          "If you already saved your work",
+          "If you do not save your work",
+          "Because you saved your work"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the advice: If I ___ you, I would ask for help.",
+        "correct_answer": "were",
+        "explanation": "В устойчивом совете используем If I were you.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Is studying abroad a realistic current plan for Omar?",
+        "correct_answer": "No",
+        "explanation": "Он говорит, что сейчас это невозможно.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "What will Omar choose if there are no evening classes?",
+        "correct_answer": "An online option",
+        "explanation": "Последняя строка описывает альтернативу.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "an online course",
+          "online",
+          "online option"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b1-relative-clauses",
+    "subject": "english",
+    "level": "B1",
+    "title": "Defining people and things",
+    "topic": "Defining people and things",
+    "position": 16,
+    "summary": "Defining relative clause объясняет, какого человека или предмет мы имеем в виду. Who относится к людям, which — к предметам, that может заменить оба в таких придаточных.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Уточняем существительное",
+        "body": "Defining relative clause объясняет, какого человека или предмет мы имеем в виду. Who относится к людям, which — к предметам, that может заменить оба в таких придаточных.",
+        "examples": [
+          "The student who sits near me studies physics.",
+          "The app that I use is free."
+        ]
+      },
+      {
+        "title": "Whose и where",
+        "body": "Whose обозначает принадлежность, where — место. После whose обычно идёт существительное. Where заменяет выражение места, но не всегда слово which.",
+        "examples": [
+          "I met a student whose project won a prize.",
+          "This is the room where we practise."
+        ]
+      },
+      {
+        "title": "Когда местоимение можно опустить",
+        "body": "Если относительное местоимение является дополнением, его часто опускают. Если это подлежащее, опускать его нельзя.",
+        "examples": [
+          "The book (that) I borrowed is useful.",
+          "The teacher who helped me was patient."
+        ]
+      },
+      {
+        "title": "Read: a community project",
+        "body": "The students who joined Green Campus built a website that lists repair events. Lina, whose brother repairs bicycles, invited local volunteers. The workshop where they met had tools for everyone. The organiser thanked the people who had donated old computers.",
+        "examples": [
+          "The website lists events; it does not repair objects itself.",
+          "Whose links Lina with her brother."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Choose a relative word for possession: a student ___ project won.",
+        "correct_answer": "whose",
+        "explanation": "Whose показывает, кому принадлежит project.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which sentence allows removal of “that”?",
+        "correct_answer": "The book that I borrowed is useful.",
+        "explanation": "I — подлежащее; that — дополнение borrowed.",
+        "kind": "choice",
+        "options": [
+          "The app that crashes is old.",
+          "The book that I borrowed is useful.",
+          "The bus that stops here is late."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: This is the room ___ we practise.",
+        "correct_answer": "where",
+        "explanation": "Where связывает место и происходящее в нём действие.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Who repairs bicycles in the text?",
+        "correct_answer": "Lina’s brother",
+        "explanation": "Слова whose brother относятся к Лине.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "Lina's brother",
+          "her brother"
+        ]
+      },
+      {
+        "question": "What does the Green Campus website list?",
+        "correct_answer": "Repair events",
+        "explanation": "В тексте: a website that lists repair events.",
+        "kind": "choice",
+        "options": [
+          "Exam results",
+          "Repair events",
+          "Volunteer salaries"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Can “who” be removed from “the people who donated computers”?",
+        "correct_answer": "No",
+        "explanation": "Who — подлежащее donated; без него связь нарушится.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b1-passive",
+    "subject": "english",
+    "level": "B1",
+    "title": "Processes and the passive voice",
+    "topic": "Processes and the passive voice",
+    "position": 17,
+    "summary": "Passive: be + третья форма. Выбираем его, когда исполнитель неизвестен, очевиден или менее важен, чем объект. Время выражает be.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "В центре — действие над объектом",
+        "body": "Passive: be + третья форма. Выбираем его, когда исполнитель неизвестен, очевиден или менее важен, чем объект. Время выражает be.",
+        "examples": [
+          "Applications are checked every Monday.",
+          "The building was opened in 1998."
+        ]
+      },
+      {
+        "title": "Времена и исполнитель",
+        "body": "Is/are done — настоящее; was/were done — прошлое; will be done — будущее. By указывает исполнителя, когда он нужен.",
+        "examples": [
+          "The report was written by two students.",
+          "The results will be published next week."
+        ]
+      },
+      {
+        "title": "Порядок процесса",
+        "body": "First, next, after that и finally помогают описать процесс. Следи за единственным и множественным числом: water is heated, documents are checked.",
+        "examples": [
+          "First, the forms are collected.",
+          "Finally, each applicant is contacted."
+        ]
+      },
+      {
+        "title": "Read: repairing a laptop",
+        "body": "At the repair centre, each laptop is labelled when it arrives. The problem is recorded, and the battery is checked. Parts are replaced only after the owner agrees to the cost. Last month, the centre repaired forty laptops. Devices that cannot be repaired are sent to a recycling partner.",
+        "examples": [
+          "Consent comes before replacement.",
+          "The centre uses a different route for unrepairable devices."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete with be: The results will ___ published on Friday.",
+        "correct_answer": "be",
+        "explanation": "Future Passive: will be + past participle.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the passive sentence.",
+        "correct_answer": "The report was written by students.",
+        "explanation": "Was written — пассивная конструкция.",
+        "kind": "choice",
+        "options": [
+          "Students wrote the report.",
+          "The report was written by students.",
+          "The report wrote students."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: These applications ___ checked every week.",
+        "correct_answer": "are",
+        "explanation": "Множественное applications требует are.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "When are laptop parts replaced?",
+        "correct_answer": "After the owner agrees to the cost",
+        "explanation": "Согласие предшествует замене.",
+        "kind": "choice",
+        "options": [
+          "Before any checks",
+          "After the owner agrees to the cost",
+          "As soon as the laptop arrives"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "How many laptops did the centre repair last month?",
+        "correct_answer": "40",
+        "explanation": "В тексте: forty laptops.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "forty"
+        ]
+      },
+      {
+        "question": "Complete the past participle: The form was ___ (send) yesterday.",
+        "correct_answer": "sent",
+        "explanation": "Send — sent — sent.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b1-reported-speech",
+    "subject": "english",
+    "level": "B1",
+    "title": "Reporting what someone said",
+    "topic": "Reporting what someone said",
+    "position": 18,
+    "summary": "Reported speech передаёт смысл без прямой цитаты. После said в рассказе о прошлом времена часто сдвигаются: am → was, will → would, can → could.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Передаём сообщение",
+        "body": "Reported speech передаёт смысл без прямой цитаты. После said в рассказе о прошлом времена часто сдвигаются: am → was, will → would, can → could.",
+        "examples": [
+          "“I am tired.” → She said she was tired.",
+          "“I will call.” → He said he would call."
+        ]
+      },
+      {
+        "title": "Say и tell",
+        "body": "Say обычно не требует адресата; tell требует: told me, told us. Местоимения меняются с точки зрения рассказчика. Иногда время сохраняется, если факт всё ещё актуален.",
+        "examples": [
+          "She told me she was busy.",
+          "He said that the course was useful."
+        ]
+      },
+      {
+        "title": "Косвенные вопросы",
+        "body": "В косвенном вопросе обычный порядок слов, без do/does/did. Вопрос без вопросительного слова вводится if или whether.",
+        "examples": [
+          "“Where do you live?” → She asked where I lived.",
+          "“Are you ready?” → He asked if I was ready."
+        ]
+      },
+      {
+        "title": "Read: a changed room",
+        "body": "The tutor said that the seminar would move to Room 12. She told the students to bring their laptops. Amir asked whether the Wi-Fi was working. The tutor said it was, but asked everyone to download the files before arriving. The seminar would begin at the usual time.",
+        "examples": [
+          "The location changes; the start time does not.",
+          "Downloading files is requested in advance."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Report in the past: “I can help.” She said she ___ help.",
+        "correct_answer": "could",
+        "explanation": "Can обычно становится could при согласовании времён.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the correct indirect question.",
+        "correct_answer": "She asked where I lived.",
+        "explanation": "В косвенном вопросе нет инверсии или did.",
+        "kind": "choice",
+        "options": [
+          "She asked where did I live.",
+          "She asked where I lived.",
+          "She asked where I did lived."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: The tutor ___ us that the room had changed.",
+        "correct_answer": "told",
+        "explanation": "Tell требует адресата us; said us неверно.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "What changed in the text?",
+        "correct_answer": "The seminar room",
+        "explanation": "Комната изменилась, начало осталось прежним.",
+        "kind": "choice",
+        "options": [
+          "The seminar room",
+          "The starting time",
+          "The subject"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "What should students download before arriving?",
+        "correct_answer": "The files",
+        "explanation": "Тьютор попросил заранее загрузить файлы.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "files"
+        ]
+      },
+      {
+        "question": "Complete: He asked ___ I was ready. (one word)",
+        "correct_answer": "if",
+        "explanation": "Для вопроса да/нет используем if или whether.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "whether"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b1-study-work",
+    "subject": "english",
+    "level": "B1",
+    "title": "Vocabulary for study and work",
+    "topic": "Vocabulary for study and work",
+    "position": 19,
+    "summary": "Запоминай устойчивые сочетания: meet a deadline, gain experience, apply for a course, make progress. Глагол часто нельзя заменить дословным переводом.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Сочетания важнее отдельных слов",
+        "body": "Запоминай устойчивые сочетания: meet a deadline, gain experience, apply for a course, make progress. Глагол часто нельзя заменить дословным переводом.",
+        "examples": [
+          "I want to gain practical experience.",
+          "We worked together to meet the deadline."
+        ]
+      },
+      {
+        "title": "Qualifications и skills",
+        "body": "A qualification подтверждает обучение или экзамен. A skill — способность выполнять задачу. Experience — опыт; обычно неисчисляемое в этом значении.",
+        "examples": [
+          "She has a teaching qualification.",
+          "Communication is an important skill.",
+          "I need some work experience."
+        ]
+      },
+      {
+        "title": "Объясняем цель",
+        "body": "To + infinitive и in order to выражают цель. So that вводит предложение с подлежащим и глаголом. Avoid повторение одной связки в каждом предложении.",
+        "examples": [
+          "I joined the club to practise speaking.",
+          "I saved the notes so that I could revise later."
+        ]
+      },
+      {
+        "title": "Read: a voluntary role",
+        "body": "Dani volunteered at a community computer club for six weeks. He helped older visitors create email accounts and save photographs. He received no salary, but he gained experience explaining instructions patiently. At the end, the coordinator wrote him a reference. Dani plans to include the role in his CV when he applies for an internship.",
+        "examples": [
+          "The benefit was experience rather than payment.",
+          "A reference supports a later application."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete the collocation: ___ a deadline.",
+        "correct_answer": "meet",
+        "explanation": "Meet a deadline — успеть к сроку.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose a correct use of experience.",
+        "correct_answer": "I gained useful experience.",
+        "explanation": "В значении опыта experience обычно неисчисляемое.",
+        "kind": "choice",
+        "options": [
+          "I gained a useful experience of work many.",
+          "I gained useful experience.",
+          "I did an experience useful."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: I joined the club ___ practise speaking.",
+        "correct_answer": "to",
+        "explanation": "To + infinitive выражает цель.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Was Dani paid a salary?",
+        "correct_answer": "No",
+        "explanation": "Текст прямо говорит received no salary.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "What did the coordinator write?",
+        "correct_answer": "A reference",
+        "explanation": "Это рекомендация для дальнейшей заявки.",
+        "kind": "choice",
+        "options": [
+          "A job contract",
+          "A reference",
+          "An exam paper"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the preposition: apply ___ an internship.",
+        "correct_answer": "for",
+        "explanation": "Apply for — подавать заявку на место или возможность.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b1-reading-evidence",
+    "subject": "english",
+    "level": "B1",
+    "title": "Reading: claims and evidence",
+    "topic": "Reading: claims and evidence",
+    "position": 20,
+    "summary": "Сначала выдели главную мысль абзаца, затем конкретные доказательства. Заголовок должен охватывать весь текст, а не единственное число или пример.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Тема и детали",
+        "body": "Сначала выдели главную мысль абзаца, затем конкретные доказательства. Заголовок должен охватывать весь текст, а не единственное число или пример.",
+        "examples": [
+          "Main idea: what the whole paragraph is about.",
+          "Detail: a date, name, number or example."
+        ]
+      },
+      {
+        "title": "True, False, Not Given",
+        "body": "True подтверждается текстом; False противоречит ему; Not Given — текст не позволяет решить. Правдоподобность и личные знания не заменяют доказательство.",
+        "examples": [
+          "Text: some students walked. Claim: all students walked → not supported.",
+          "Не подменяй some словом all."
+        ]
+      },
+      {
+        "title": "Read: a quieter route",
+        "body": "A college tested a walking route between its two buildings. The old route followed a busy road and took twelve minutes. The new route crossed a park and took fifteen minutes. During a two-week trial, sixty students recorded their journeys. Forty preferred the park because it was quieter; twelve preferred the shorter route; eight had no preference. The college kept both routes open. It added signs to the park path but did not change the class timetable. The report did not measure students’ fitness or compare their exam results.",
+        "examples": [
+          "The trial measured preferences, not health improvements.",
+          "Both routes remain available."
+        ]
+      },
+      {
+        "title": "Причина и осторожный вывод",
+        "body": "Because вводит причину, although — уступку. Отделяй измеренный результат от возможного объяснения. Небольшой опрос не доказывает пользу для каждого студента.",
+        "examples": [
+          "Most participants preferred the park.",
+          "The trial does not show that the park improved exam scores."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "How many minutes longer was the park route?",
+        "correct_answer": "3",
+        "explanation": "15 минус 12 = 3; это разница, а не полная длительность.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "three"
+        ]
+      },
+      {
+        "question": "Choose the best title.",
+        "correct_answer": "Students compare two campus routes",
+        "explanation": "Текст о сравнении предпочтений, не об экзаменах или закрытии дороги.",
+        "kind": "choice",
+        "options": [
+          "A proven way to improve exam scores",
+          "Students compare two campus routes",
+          "Why the college closed its road"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "True, False or Not Given: The college closed the old route.",
+        "correct_answer": "False",
+        "explanation": "Оба маршрута оставили открытыми.",
+        "kind": "choice",
+        "options": [
+          "True",
+          "False",
+          "Not Given"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "True, False or Not Given: Students became fitter during the trial.",
+        "correct_answer": "Not Given",
+        "explanation": "Физическую форму не измеряли.",
+        "kind": "choice",
+        "options": [
+          "True",
+          "False",
+          "Not Given"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "How many students preferred the park?",
+        "correct_answer": "40",
+        "explanation": "Текст: Forty preferred the park.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "forty"
+        ]
+      },
+      {
+        "question": "Why did most participants prefer the park?",
+        "correct_answer": "It was quieter",
+        "explanation": "Причина названа прямо; не нужно придумывать безопасность или здоровье.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "because it was quieter",
+          "quieter"
+        ]
+      }
+    ]
+  }
+]

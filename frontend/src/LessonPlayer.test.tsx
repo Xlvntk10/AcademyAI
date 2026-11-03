@@ -81,3 +81,11 @@ test('Python has its own label and disables phone autocapitalization for exact a
   expect(await screen.findByRole('textbox')).toHaveAttribute('autocapitalize', 'none')
   expect(screen.getByRole('textbox')).toHaveAttribute('spellcheck', 'false')
 })
+
+test('locked lessons allow theory preview but cannot start exercises', async () => {
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => ({ ok: true, json: async () => url.endsWith('/progress') ? { lessons: [] } : {...lesson, level:'B1',unlocked:false,mastered:false,prerequisites:['a2-reading']} })))
+  render(<LessonPlayer slug={lesson.slug} onSaved={vi.fn()} onExit={vi.fn()} />)
+  expect(await screen.findByRole('button',{name:/Начать практику/})).toBeDisabled()
+  expect(screen.getByRole('status')).toHaveTextContent('80%')
+  expect(screen.getByRole('link',{name:'a2-reading'})).toHaveAttribute('href','#lesson/a2-reading')
+})

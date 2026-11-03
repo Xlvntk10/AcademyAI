@@ -1,0 +1,1083 @@
+[
+  {
+    "slug": "b2-perfect-aspect",
+    "subject": "english",
+    "level": "B2",
+    "title": "Results, duration and changing situations",
+    "topic": "Results, duration and changing situations",
+    "position": 21,
+    "summary": "Present Perfect Simple часто выделяет результат или количество. Continuous — длительность и процесс: have/has been + -ing. Контекст важнее механического правила.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Результат или процесс",
+        "body": "Present Perfect Simple часто выделяет результат или количество. Continuous — длительность и процесс: have/has been + -ing. Контекст важнее механического правила.",
+        "examples": [
+          "I have written three reports.",
+          "I have been writing reports all morning."
+        ]
+      },
+      {
+        "title": "Состояния и длительность",
+        "body": "Know, own и believe обычно не ставят в Continuous. For и since подходят обоим аспектам, поэтому сами по себе не определяют форму.",
+        "examples": [
+          "I have known her for years.",
+          "They have been discussing the proposal since nine."
+        ]
+      },
+      {
+        "title": "Признак недавнего процесса",
+        "body": "Continuous может объяснять наблюдаемый сейчас результат недавней деятельности, даже если она только что закончилась. Simple удобен для подсчёта завершённых действий.",
+        "examples": [
+          "Your hands are dirty. Have you been gardening?",
+          "She has interviewed twelve participants."
+        ]
+      },
+      {
+        "title": "Read: research in progress",
+        "body": "For the past month, Ada has been interviewing commuters about bus reliability. She has completed twenty interviews, but she has not analysed all the responses yet. Several participants have mentioned missed connections. Ada has known the project supervisor since her first year. This week she has been revising the questionnaire because some questions produced unclear answers.",
+        "examples": [
+          "Twenty interviews is an achieved count.",
+          "Revising describes ongoing work rather than a finished total."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Choose the natural sentence about a state.",
+        "correct_answer": "I have known her for years.",
+        "explanation": "Know обычно не используется в Continuous.",
+        "kind": "choice",
+        "options": [
+          "I have been knowing her for years.",
+          "I have known her for years.",
+          "I am knowing her since years."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: She has ___ interviewing commuters all month.",
+        "correct_answer": "been",
+        "explanation": "Perfect Continuous: has been + -ing.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which wording emphasises a completed quantity?",
+        "correct_answer": "She has completed twenty interviews.",
+        "explanation": "Количество завершённых действий выделяет Simple.",
+        "kind": "choice",
+        "options": [
+          "She has been interviewing people.",
+          "She has completed twenty interviews.",
+          "She is conducting interviews."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Has Ada analysed every response?",
+        "correct_answer": "No",
+        "explanation": "Она ещё не проанализировала все ответы.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "Why is the questionnaire being revised?",
+        "correct_answer": "Some questions produced unclear answers",
+        "explanation": "Текст называет проблему формулировок, не недостаток участников.",
+        "kind": "choice",
+        "options": [
+          "Some questions produced unclear answers",
+          "All commuters refused to participate",
+          "The supervisor cancelled the project"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the participle: We have ___ (choose) a new method.",
+        "correct_answer": "chosen",
+        "explanation": "Choose — chose — chosen.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-future-progress",
+    "subject": "english",
+    "level": "B2",
+    "title": "Looking ahead: deadlines and duration",
+    "topic": "Looking ahead: deadlines and duration",
+    "position": 22,
+    "summary": "Will be + -ing описывает действие в процессе в будущий момент. Это может быть нейтральное описание плана без обещания завершить его.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Future Continuous",
+        "body": "Will be + -ing описывает действие в процессе в будущий момент. Это может быть нейтральное описание плана без обещания завершить его.",
+        "examples": [
+          "At ten tomorrow, I’ll be attending a workshop.",
+          "This time next week, we’ll be travelling."
+        ]
+      },
+      {
+        "title": "Future Perfect",
+        "body": "Will have + третья форма означает завершение к будущему рубежу. By означает «к моменту», until — продолжение до момента.",
+        "examples": [
+          "By June, I will have completed the course.",
+          "I’ll stay here until six."
+        ]
+      },
+      {
+        "title": "Будущие придаточные",
+        "body": "После by the time, when и before в придаточном будущего обычно нужен Present Simple или Present Perfect, а не will.",
+        "examples": [
+          "By the time you arrive, we’ll have finished.",
+          "Call me when you have read the instructions."
+        ]
+      },
+      {
+        "title": "Read: a laboratory move",
+        "body": "The laboratory will move on 18 July. By 15 July, the team will have packed the equipment. On the morning of the move, technicians will be checking the temperature sensors. The old room will remain available until 20 July in case anything is delayed. The team expects normal work to resume on 22 July, but this is not guaranteed.",
+        "examples": [
+          "Packing has a deadline; checking is a process.",
+          "Expected resumption is not a promise."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: By July, we will have ___ (finish) the project.",
+        "correct_answer": "finished",
+        "explanation": "Future Perfect требует третьей формы.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which sentence describes an action in progress at a future time?",
+        "correct_answer": "At nine, I will be travelling.",
+        "explanation": "Will be travelling — Future Continuous.",
+        "kind": "choice",
+        "options": [
+          "At nine, I will be travelling.",
+          "I travelled at nine.",
+          "By nine, I had arrived."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the deadline preposition: Please submit the report ___ Friday.",
+        "correct_answer": "by",
+        "explanation": "By Friday означает не позднее пятницы.",
+        "kind": "choice",
+        "options": [
+          "until",
+          "during",
+          "by"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: By the time she ___ (arrive), we’ll have finished.",
+        "correct_answer": "arrives",
+        "explanation": "В придаточном будущего Present Simple; she требует -s.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Until which July date will the old room remain available? Write a number.",
+        "correct_answer": "20",
+        "explanation": "В тексте: until 20 July.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "twenty"
+        ]
+      },
+      {
+        "question": "Is normal work guaranteed to resume on 22 July?",
+        "correct_answer": "No",
+        "explanation": "Ожидание отдельно обозначено как негарантированное.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b2-unreal-past",
+    "subject": "english",
+    "level": "B2",
+    "title": "Regret and mixed conditionals",
+    "topic": "Regret and mixed conditionals",
+    "position": 23,
+    "summary": "Third Conditional: if + had + третья форма, would have + третья форма. Это воображаемый результат события, которое уже нельзя изменить.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Нереальное прошлое",
+        "body": "Third Conditional: if + had + третья форма, would have + третья форма. Это воображаемый результат события, которое уже нельзя изменить.",
+        "examples": [
+          "If I had saved the file, I would not have lost my notes.",
+          "If they had left earlier, they would have caught the train."
+        ]
+      },
+      {
+        "title": "Прошлая причина — нынешний результат",
+        "body": "Mixed Conditional связывает прошлое условие с настоящим результатом: if + Past Perfect, would + начальная форма. Временные указатели помогают увидеть связь.",
+        "examples": [
+          "If I had learned Python earlier, I would feel more confident now.",
+          "If she had accepted the offer, she would live abroad now."
+        ]
+      },
+      {
+        "title": "Wish и if only",
+        "body": "Wish + Past Simple — желание изменить настоящее; wish + Past Perfect — сожаление о прошлом. Не путай wished past form с реальной датой события.",
+        "examples": [
+          "I wish I knew the answer.",
+          "I wish I had checked the deadline."
+        ]
+      },
+      {
+        "title": "Read: a late application",
+        "body": "Jon missed a scholarship deadline because he had copied the wrong date into his calendar. He had prepared most documents but had not asked for a reference. If he had checked the official notice, he would have submitted on time. He now checks deadlines twice. He wishes he had contacted his lecturer earlier.",
+        "examples": [
+          "The wrong date is the stated cause.",
+          "The new habit follows a past mistake."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: If I had saved it, I would have ___ (keep) a copy.",
+        "correct_answer": "kept",
+        "explanation": "Keep — kept — kept.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which sentence connects a past choice to a present result?",
+        "correct_answer": "If I had studied more, I would feel confident now.",
+        "explanation": "Past Perfect связан с would + infinitive и now.",
+        "kind": "choice",
+        "options": [
+          "If it rains, we will stay home.",
+          "If I had studied more, I would feel confident now.",
+          "If I study, I learn."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: I wish I ___ checked the deadline yesterday.",
+        "correct_answer": "had",
+        "explanation": "Сожаление о прошлом: wish + Past Perfect.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Why did Jon miss the deadline?",
+        "correct_answer": "He recorded the wrong date",
+        "explanation": "Причина — ошибка в календаре, не внезапная смена правил.",
+        "kind": "choice",
+        "options": [
+          "He recorded the wrong date",
+          "The deadline was cancelled",
+          "His computer was stolen"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Had Jon requested a reference before the deadline?",
+        "correct_answer": "No",
+        "explanation": "Текст: had not asked for a reference.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "Complete for an unreal present: I wish I ___ (know) the answer.",
+        "correct_answer": "knew",
+        "explanation": "Wish + Past Simple описывает желаемое изменение настоящего.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-modal-deduction",
+    "subject": "english",
+    "level": "B2",
+    "title": "Evidence, possibility and criticism",
+    "topic": "Evidence, possibility and criticism",
+    "position": 24,
+    "summary": "Must может означать уверенный логический вывод, а не обязанность. Might/may/could — возможность; can’t — вывод о невозможности.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Вывод о настоящем",
+        "body": "Must может означать уверенный логический вывод, а не обязанность. Might/may/could — возможность; can’t — вывод о невозможности.",
+        "examples": [
+          "The lights are on; someone might be inside.",
+          "She can’t be at home; I can see her at the office."
+        ]
+      },
+      {
+        "title": "Вывод о прошлом",
+        "body": "Modal + have + третья форма относится к прошлому: must have left, might have forgotten, can’t have finished. Уверенность зависит от доказательств.",
+        "examples": [
+          "The ground is wet; it must have rained.",
+          "He might have taken a different bus."
+        ]
+      },
+      {
+        "title": "Критика и ненужное действие",
+        "body": "Should have done — следовало сделать, но обычно не сделали. Needn’t have done означает, что действие совершили, хотя необходимости не было. Didn’t need to не утверждает, произошло ли оно.",
+        "examples": [
+          "I should have backed up the file.",
+          "You needn’t have printed it; we accept digital copies."
+        ]
+      },
+      {
+        "title": "Read: an absent colleague",
+        "body": "The team expected Eva at nine, but she was not there. Her bicycle was outside, so one colleague thought she must have arrived. Another pointed out that Eva had left it there overnight. At ten, Eva called: she had attended an appointment elsewhere. The bicycle had not proved her location.",
+        "examples": [
+          "An observation can have more than one explanation.",
+          "A strong conclusion may rest on weak evidence."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: You should have ___ (check) the instructions.",
+        "correct_answer": "checked",
+        "explanation": "Should have + past participle.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "“You needn’t have printed it” implies…",
+        "correct_answer": "You printed it, but printing was unnecessary",
+        "explanation": "Действие произошло, хотя необходимости не было.",
+        "kind": "choice",
+        "options": [
+          "You definitely did not print it",
+          "You printed it, but printing was unnecessary",
+          "Printing was forbidden"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose a cautious past possibility.",
+        "correct_answer": "She might have taken another route.",
+        "explanation": "Might have не выдаёт предположение за факт.",
+        "kind": "choice",
+        "options": [
+          "She must have took another route.",
+          "She might have taken another route.",
+          "She can took another route."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Did Eva’s bicycle prove that she was inside?",
+        "correct_answer": "No",
+        "explanation": "Велосипед остался с прошлого вечера.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "Where had Eva been that morning?",
+        "correct_answer": "At an appointment",
+        "explanation": "В конце она сообщила о встрече в другом месте.",
+        "kind": "choice",
+        "options": [
+          "At an appointment",
+          "Inside the office",
+          "At a bicycle shop"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete the negative deduction: She ___ have finished; she hasn’t started.",
+        "correct_answer": "can’t",
+        "explanation": "Can’t have + participle выражает невозможность.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "can't",
+          "cannot"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b2-reporting-passive",
+    "subject": "english",
+    "level": "B2",
+    "title": "Reporting findings responsibly",
+    "topic": "Reporting findings responsibly",
+    "position": 25,
+    "summary": "It is believed/reported/estimated that выделяет сообщение или мнение без указания автора в главной части. Не скрывай источник, если его качество важно.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Безличная пассивная конструкция",
+        "body": "It is believed/reported/estimated that выделяет сообщение или мнение без указания автора в главной части. Не скрывай источник, если его качество важно.",
+        "examples": [
+          "It is estimated that costs will rise.",
+          "It was reported that the service had improved."
+        ]
+      },
+      {
+        "title": "Подлежащее + reporting passive",
+        "body": "Subject + is believed + to-infinitive передаёт похожий смысл. Для более раннего действия используем to have + третья форма.",
+        "examples": [
+          "The system is believed to be reliable.",
+          "The team is reported to have completed the trial."
+        ]
+      },
+      {
+        "title": "Мнение не равно доказательству",
+        "body": "Claimed, suggested, reported и demonstrated имеют разную силу. Claimed сообщает утверждение; demonstrated предполагает показанное доказательство. Не превращай believed в proved.",
+        "examples": [
+          "The company claims the battery lasts longer.",
+          "Independent tests are needed to evaluate the claim."
+        ]
+      },
+      {
+        "title": "Read: a battery announcement",
+        "body": "A manufacturer announced a battery that it claims lasts forty percent longer than its previous model. The figure came from tests in the company’s own laboratory at a constant temperature. Independent reviewers have not yet repeated the tests. The new model is expected to become available next spring, although no exact release date has been given.",
+        "examples": [
+          "A company test is evidence with a specific source.",
+          "Expected availability is not a confirmed release date."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: The team is believed ___ have finished.",
+        "correct_answer": "to",
+        "explanation": "После reporting passive нужен to-infinitive.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which wording preserves the uncertainty of the announcement?",
+        "correct_answer": "The manufacturer claims the battery lasts longer.",
+        "explanation": "Нужно сохранить источник и статус утверждения.",
+        "kind": "choice",
+        "options": [
+          "The battery is proven to last longer in every climate.",
+          "The manufacturer claims the battery lasts longer.",
+          "All reviewers have confirmed the battery’s performance."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Have independent reviewers repeated the tests?",
+        "correct_answer": "No",
+        "explanation": "В тексте: have not yet repeated.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "Where did the reported tests take place?",
+        "correct_answer": "In the company’s laboratory",
+        "explanation": "Это источник данных, который следует учитывать.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "in the company's laboratory",
+          "the company’s laboratory",
+          "the company's laboratory"
+        ]
+      },
+      {
+        "question": "Complete the past participle: It is ___ (estimate) that demand will increase.",
+        "correct_answer": "estimated",
+        "explanation": "Be + estimated — passive reporting.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which release information is confirmed?",
+        "correct_answer": "No exact release date has been given",
+        "explanation": "Названо ожидание на весну, а не точная дата.",
+        "kind": "choice",
+        "options": [
+          "A precise day in March",
+          "No exact release date has been given",
+          "A release next week"
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-participle-clauses",
+    "subject": "english",
+    "level": "B2",
+    "title": "Concise descriptions and clear subjects",
+    "topic": "Concise descriptions and clear subjects",
+    "position": 26,
+    "summary": "Причастная конструкция может заменить относительное придаточное. -ing обычно имеет активное значение, третья форма — пассивное.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Сокращаем определение",
+        "body": "Причастная конструкция может заменить относительное придаточное. -ing обычно имеет активное значение, третья форма — пассивное.",
+        "examples": [
+          "Students working part-time may need flexible schedules.",
+          "The data collected last week are incomplete."
+        ]
+      },
+      {
+        "title": "Совпадение подлежащего",
+        "body": "В начальном причастном обороте исполнитель должен совпадать с подлежащим главного предложения. Иначе возникает dangling participle: кажется, что действие выполняет не тот объект.",
+        "examples": [
+          "Walking to class, I noticed a new sign.",
+          "Неудачно: Walking to class, the rain started."
+        ]
+      },
+      {
+        "title": "Сначала одно, потом другое",
+        "body": "Having + третья форма подчёркивает предшествование. Отрицание ставится перед причастием. Используй такие структуры умеренно, сохраняя ясность.",
+        "examples": [
+          "Having checked the figures, we submitted the report.",
+          "Not knowing the answer, she asked for help."
+        ]
+      },
+      {
+        "title": "Read: the survey team",
+        "body": "Having piloted their questions with five students, the researchers changed two unclear items. The revised survey was sent to everyone enrolled in the course. Responses submitted after Friday were stored separately. Analysing the first batch, the researchers noticed that evening students were underrepresented. They decided to send a reminder rather than assume the early responses represented the whole class.",
+        "examples": [
+          "The pilot came before the revision.",
+          "A missing subgroup limits generalisation."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: The data ___ (collect) last week are incomplete.",
+        "correct_answer": "collected",
+        "explanation": "Данные были собраны: пассивное значение.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which sentence has a clear shared subject?",
+        "correct_answer": "Walking to class, I noticed a sign.",
+        "explanation": "И walked, и noticed выполняет I.",
+        "kind": "choice",
+        "options": [
+          "Walking to class, the rain started.",
+          "Walking to class, I noticed a sign.",
+          "Walking to class, my bag was heavy."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: Having ___ (check) the figures, we submitted them.",
+        "correct_answer": "checked",
+        "explanation": "Having + past participle обозначает предшествование.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "How many students took part in the pilot?",
+        "correct_answer": "5",
+        "explanation": "В тексте: five students.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "five"
+        ]
+      },
+      {
+        "question": "Which group was underrepresented?",
+        "correct_answer": "Evening students",
+        "explanation": "Недостаточно представлены студенты вечерних занятий.",
+        "kind": "choice",
+        "options": [
+          "Morning lecturers",
+          "Evening students",
+          "All researchers"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Why did the researchers send a reminder?",
+        "correct_answer": "To obtain a more representative set of responses",
+        "explanation": "Напоминание помогает привлечь недостающую группу, не исправляя ответы за неё.",
+        "kind": "choice",
+        "options": [
+          "To change students’ answers",
+          "To obtain a more representative set of responses",
+          "To cancel the survey"
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-argument-links",
+    "subject": "english",
+    "level": "B2",
+    "title": "Concession, contrast and cautious claims",
+    "topic": "Concession, contrast and cautious claims",
+    "position": 27,
+    "summary": "Although/even though вводят предложение. Despite/in spite of требуют существительное или -ing; возможна конструкция despite the fact that.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Уступка с разной грамматикой",
+        "body": "Although/even though вводят предложение. Despite/in spite of требуют существительное или -ing; возможна конструкция despite the fact that.",
+        "examples": [
+          "Although the course was demanding, she enjoyed it.",
+          "Despite the workload, she enjoyed the course."
+        ]
+      },
+      {
+        "title": "Связь между предложениями",
+        "body": "However отделяет противопоставление между самостоятельными предложениями. Therefore вводит результат. Не соединяй два самостоятельных предложения одной запятой перед however.",
+        "examples": [
+          "The sample was small. However, the responses were detailed.",
+          "The bus was cancelled; therefore, we walked."
+        ]
+      },
+      {
+        "title": "Осторожность утверждений",
+        "body": "May, tends to, appears to и is likely to ограничивают силу вывода. Some, many и all задают разный охват. Это особенно важно в академических текстах.",
+        "examples": [
+          "The findings suggest that feedback may help.",
+          "The effect appears to depend on prior experience."
+        ]
+      },
+      {
+        "title": "Read: flexible attendance",
+        "body": "A department allowed students to attend lectures online or in person. Attendance rose, although some students reported technical difficulties. The survey was voluntary, and only half the class responded. The results suggest that flexibility may improve access, but they do not establish that online attendance causes higher grades. Further research should include students who did not respond.",
+        "examples": [
+          "Improved access and improved grades are different outcomes.",
+          "Nonresponse may affect the picture."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Choose the grammatically correct sentence.",
+        "correct_answer": "Despite the workload, she continued.",
+        "explanation": "После despite допустимо существительное, не обычное самостоятельное предложение.",
+        "kind": "choice",
+        "options": [
+          "Despite the workload, she continued.",
+          "Despite she was busy, she continued.",
+          "Although the workload, she continued."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete with one linking word: The sample was small. ___, the responses were detailed.",
+        "correct_answer": "However",
+        "explanation": "However вводит противопоставление.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "What proportion of the class answered the survey?",
+        "correct_answer": "Half",
+        "explanation": "В тексте: only half the class.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "one half",
+          "50%"
+        ]
+      },
+      {
+        "question": "Does the report establish that online attendance causes higher grades?",
+        "correct_answer": "No",
+        "explanation": "Текст прямо ограничивает причинный вывод.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "Choose the most cautious claim.",
+        "correct_answer": "Flexibility may improve access.",
+        "explanation": "May соответствует ограниченным данным.",
+        "kind": "choice",
+        "options": [
+          "Flexibility always improves every result.",
+          "Flexibility may improve access.",
+          "Flexibility guarantees higher grades."
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: In spite ___ the difficulties, attendance rose.",
+        "correct_answer": "of",
+        "explanation": "Устойчивая конструкция in spite of.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-academic-collocations",
+    "subject": "english",
+    "level": "B2",
+    "title": "Academic vocabulary in context",
+    "topic": "Academic vocabulary in context",
+    "position": 28,
+    "summary": "Conduct research, collect data, draw a conclusion и address a problem — устойчивые сочетания. Research и evidence обычно неисчисляемые.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Действия исследователя",
+        "body": "Conduct research, collect data, draw a conclusion и address a problem — устойчивые сочетания. Research и evidence обычно неисчисляемые.",
+        "examples": [
+          "The team conducted research into travel habits.",
+          "The available evidence is limited."
+        ]
+      },
+      {
+        "title": "Слова с близким смыслом",
+        "body": "A finding — полученный результат; an assumption — принятое без проверки допущение; a limitation — ограничение метода. Не называй предположение результатом исследования.",
+        "examples": [
+          "The sample size is a limitation.",
+          "We should test that assumption."
+        ]
+      },
+      {
+        "title": "Причина, связь и влияние",
+        "body": "A correlation описывает совместное изменение, но сама по себе не доказывает causation. Contribute to означает быть одной из причин, а не единственной.",
+        "examples": [
+          "Sleep may contribute to better concentration.",
+          "The study found an association, not proof of causation."
+        ]
+      },
+      {
+        "title": "Read: study spaces",
+        "body": "Researchers compared students who used quiet study rooms with those who studied elsewhere. Room users reported better concentration, but they also tended to study for longer. Participants selected their own locations; they were not randomly assigned. The authors identified study duration as a possible alternative explanation. They recommended a controlled trial before drawing a causal conclusion.",
+        "examples": [
+          "Choice of location may relate to other characteristics.",
+          "An alternative explanation needs investigation."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "Complete: ___ a conclusion from the evidence.",
+        "correct_answer": "draw",
+        "explanation": "Draw a conclusion — делать вывод.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "An assumption is…",
+        "correct_answer": "An idea accepted without being verified",
+        "explanation": "Это допущение, а не уже проверенный результат.",
+        "kind": "choice",
+        "options": [
+          "A verified measurement",
+          "An idea accepted without being verified",
+          "The number of participants"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Complete: Several factors may contribute ___ the result.",
+        "correct_answer": "to",
+        "explanation": "Contribute to — вносить вклад в результат.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Were participants randomly assigned to study locations?",
+        "correct_answer": "No",
+        "explanation": "Они сами выбирали место.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      },
+      {
+        "question": "What possible alternative explanation is mentioned?",
+        "correct_answer": "Study duration",
+        "explanation": "Пользователи комнат также занимались дольше.",
+        "kind": "choice",
+        "options": [
+          "Study duration",
+          "Different exam subjects",
+          "New computer software"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Choose the accurate interpretation.",
+        "correct_answer": "The association does not prove causation.",
+        "explanation": "Наблюдение оставляет альтернативные причины.",
+        "kind": "choice",
+        "options": [
+          "Quiet rooms definitely cause higher exam scores.",
+          "The association does not prove causation.",
+          "Every student should use the same room."
+        ],
+        "accepted_answers": []
+      }
+    ]
+  },
+  {
+    "slug": "b2-describing-data",
+    "subject": "english",
+    "level": "B2",
+    "title": "Describing changes without inventing causes",
+    "topic": "Describing changes without inventing causes",
+    "position": 29,
+    "summary": "Rise/fall by обозначает величину изменения; rise/fall to — конечное значение. From...to показывает начало и конец. Increase может быть глаголом и существительным.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Объём изменения",
+        "body": "Rise/fall by обозначает величину изменения; rise/fall to — конечное значение. From...to показывает начало и конец. Increase может быть глаголом и существительным.",
+        "examples": [
+          "Users rose from 200 to 260.",
+          "The number increased by 60."
+        ]
+      },
+      {
+        "title": "Проценты и процентные пункты",
+        "body": "Рост доли с 20% до 30% — 10 процентных пунктов, но относительный рост 50%. Не смешивай эти показатели. A quarter = 25%, roughly = approximately.",
+        "examples": [
+          "The share rose by ten percentage points.",
+          "Thirty is fifty percent higher than twenty."
+        ]
+      },
+      {
+        "title": "Нейтральное описание",
+        "body": "Slightly, steadily и sharply требуют соответствия данным. Если есть лишь две точки, нельзя утверждать, что рост был steady всё время. График обычно не сообщает причину.",
+        "examples": [
+          "The total was higher in June than in January.",
+          "The figures do not explain why it changed."
+        ]
+      },
+      {
+        "title": "Read the figures: an original dataset",
+        "body": "A fictional college counted active users of its learning platform. In January there were 200 English learners and 100 Python learners. In June the counts were 260 and 180 respectively. These are snapshots, not monthly records. A learner could use both subjects, so the counts cannot be added to obtain a unique student total. No information about exam performance was collected.",
+        "examples": [
+          "English: 200 → 260; Python: 100 → 180.",
+          "The same person may occur in both counts."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "By how many did the English count increase?",
+        "correct_answer": "60",
+        "explanation": "260 − 200 = 60.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "sixty"
+        ]
+      },
+      {
+        "question": "What was the relative percentage increase in Python users?",
+        "correct_answer": "80%",
+        "explanation": "(180 − 100) / 100 × 100 = 80%.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "80",
+          "eighty percent"
+        ]
+      },
+      {
+        "question": "Complete: The English count rose ___ 260.",
+        "correct_answer": "to",
+        "explanation": "To обозначает конечное значение.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": []
+      },
+      {
+        "question": "Why can’t the June counts be added to find unique learners?",
+        "correct_answer": "Some learners may be counted in both subjects",
+        "explanation": "Пересечение групп не указано.",
+        "kind": "choice",
+        "options": [
+          "The counts are negative",
+          "Some learners may be counted in both subjects",
+          "English has no users"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "A share changes from 20% to 30%. How many percentage points is that?",
+        "correct_answer": "10",
+        "explanation": "Это разница долей в пунктах, а не относительные 50%.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "ten"
+        ]
+      },
+      {
+        "question": "Can the snapshots demonstrate steady month-by-month growth?",
+        "correct_answer": "No",
+        "explanation": "Между январём и июнем нет помесячных данных.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "b2-critical-reading",
+    "subject": "english",
+    "level": "B2",
+    "title": "Critical reading: a promising pilot",
+    "topic": "Critical reading: a promising pilot",
+    "position": 30,
+    "summary": "Отмечай, какие предложения сообщают наблюдения, какие предлагают объяснение, а какие рекомендуют действие. Recommendation не является уже выполненным действием.",
+    "duration_minutes": 20,
+    "theory": [
+      {
+        "title": "Факт, интерпретация, рекомендация",
+        "body": "Отмечай, какие предложения сообщают наблюдения, какие предлагают объяснение, а какие рекомендуют действие. Recommendation не является уже выполненным действием.",
+        "examples": [
+          "Observed: waiting times fell.",
+          "Recommended: extend the trial."
+        ]
+      },
+      {
+        "title": "Read: a booking pilot",
+        "body": "A city library tested an online booking system for six weeks. Visitors could reserve a computer before arriving, while two computers remained available without booking. Staff recorded an average waiting time of eight minutes during the pilot, compared with fourteen minutes in the previous six weeks. However, the pilot took place during a quieter holiday period, and the library did not record the total number of visitors in the earlier period. In a survey, 72 of 90 respondents supported keeping the system. Several older visitors said the website was difficult to use, so staff began offering help at the desk. The library director described the results as promising rather than conclusive. She proposed extending the trial during term time and collecting visitor counts. A local newspaper instead reported that the system had solved the waiting-time problem. The library has not yet decided whether to introduce the system permanently.",
+        "examples": [
+          "The previous period is a comparison, not a controlled experiment.",
+          "The newspaper’s claim is stronger than the director’s."
+        ]
+      },
+      {
+        "title": "Проверяем обобщения",
+        "body": "A majority — большинство, не все. Average не означает одинаковое ожидание для каждого. Always, entirely и proved часто делают утверждение сильнее, чем источник.",
+        "examples": [
+          "72 of 90 respondents is not every visitor.",
+          "An average of eight minutes allows shorter and longer waits."
+        ]
+      },
+      {
+        "title": "Как обосновать ответ",
+        "body": "Для каждого вывода найди строку и проверь, нет ли альтернативного объяснения. Сезонность здесь может влиять на ожидание независимо от системы бронирования.",
+        "examples": [
+          "The holiday period is a possible confounding factor.",
+          "A longer trial may clarify the findings."
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "question": "How many minutes lower was the average waiting time during the pilot?",
+        "correct_answer": "6",
+        "explanation": "14 − 8 = 6; нельзя приписывать всю разницу системе без проверки.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "six"
+        ]
+      },
+      {
+        "question": "True, False or Not Given: All computers required a reservation.",
+        "correct_answer": "False",
+        "explanation": "Два компьютера были доступны без брони.",
+        "kind": "choice",
+        "options": [
+          "True",
+          "False",
+          "Not Given"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "True, False or Not Given: The system cost £5,000.",
+        "correct_answer": "Not Given",
+        "explanation": "Стоимость не указана.",
+        "kind": "choice",
+        "options": [
+          "True",
+          "False",
+          "Not Given"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which factor limits the comparison?",
+        "correct_answer": "The pilot took place during a quieter holiday period",
+        "explanation": "Сезон мог повлиять на ожидание.",
+        "kind": "choice",
+        "options": [
+          "All computers were removed",
+          "The pilot took place during a quieter holiday period",
+          "No survey was conducted"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Which description best reflects the director’s position?",
+        "correct_answer": "Promising, but more evidence is needed",
+        "explanation": "Она предложила продолжить испытание, не объявила окончательное решение.",
+        "kind": "choice",
+        "options": [
+          "The problem has definitely been solved",
+          "Promising, but more evidence is needed",
+          "The system has already been permanently adopted"
+        ],
+        "accepted_answers": []
+      },
+      {
+        "question": "Has permanent introduction already been decided?",
+        "correct_answer": "No",
+        "explanation": "Последняя строка: has not yet decided.",
+        "kind": "text",
+        "options": [],
+        "accepted_answers": [
+          "no"
+        ]
+      }
+    ]
+  }
+]
