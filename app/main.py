@@ -5,6 +5,7 @@ from app.routers.exercises import router
 from app.routers.planner import router as planner_router
 from app.routers.analytics import router as analytics_router
 from app.routers.vocabulary import router as vocabulary_router
+from app.routers.ielts import router as ielts_router
 
 
 def create_app(database_engine=None):
@@ -14,6 +15,7 @@ def create_app(database_engine=None):
     application.include_router(planner_router)
     application.include_router(analytics_router)
     application.include_router(vocabulary_router)
+    application.include_router(ielts_router)
 
     @application.get("/")
     def home():

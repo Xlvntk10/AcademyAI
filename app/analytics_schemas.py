@@ -11,6 +11,7 @@ class DailyActivity(BaseModel):
     minutes: int
     practice_xp: int
     vocabulary_reviews: int
+    ielts_sessions: int
 
 
 class SubjectStats(BaseModel):

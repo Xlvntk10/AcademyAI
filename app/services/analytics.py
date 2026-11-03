@@ -4,7 +4,7 @@ Practice grants at most 10 XP per subject/local day, even after plan rebuilds.
 from collections import defaultdict
 from datetime import timedelta
 from sqlmodel import select
-from app.database.models import Attempt, LessonContent, LessonMeta, LessonRun, RunAnswer, StudyTask, VocabularyReview
+from app.database.models import Attempt, LessonContent, LessonMeta, LessonRun, RunAnswer, StudyTask, VocabularyReview, IeltsRun
 from app.services import clock
 from app.services.planner import monday, settings
 
@@ -40,7 +40,7 @@ def dashboard(session):
     runs = {r.id: r for r in session.exec(select(LessonRun)).all() if r.lesson_id in published}
     answer_rows = session.exec(select(Attempt, RunAnswer).join(RunAnswer, RunAnswer.attempt_id == Attempt.id)).all()
     tasks = session.exec(select(StudyTask).where(StudyTask.status == "completed")).all()
-    days = defaultdict(lambda: dict(answers=0, correct_answers=0, completed_runs=0, tasks=0, minutes=0, practice_xp=0, vocabulary_reviews=0))
+    days = defaultdict(lambda: dict(answers=0, correct_answers=0, completed_runs=0, tasks=0, minutes=0, practice_xp=0, vocabulary_reviews=0, ielts_sessions=0))
     subjects = {s: dict(subject=s, completed_lessons=0, available_lessons=sum(m.subject == s and m.lesson_id in published for m in meta.values()),
         answers=0, correct_answers=0, minutes=0, lesson_xp=0) for s in ("english", "python")}
     scores = defaultdict(int)
@@ -90,7 +90,11 @@ def dashboard(session):
         day = clock.local_day(review.reviewed_at)
         if day <= today:
             days[day]["vocabulary_reviews"] += 1
-    active_days = {day for day, row in days.items() if row["answers"] or row["tasks"] or row["completed_runs"] or row["vocabulary_reviews"]}
+    for run in session.exec(select(IeltsRun).where(IeltsRun.submitted_at.is_not(None))).all():
+        day = clock.local_day(run.submitted_at)
+        if day <= today:
+            days[day]["ielts_sessions"] += 1
+    active_days = {day for day, row in days.items() if row["answers"] or row["tasks"] or row["completed_runs"] or row["vocabulary_reviews"] or row["ielts_sessions"]}
     current, longest, seven_on = streaks(active_days, today)
     english_days = sorted(day for lesson_id, day in first_completion.items() if meta.get(lesson_id) and meta[lesson_id].subject == "english")
     python_days = sorted(day for lesson_id, day in first_completion.items() if meta.get(lesson_id) and meta[lesson_id].subject == "python")

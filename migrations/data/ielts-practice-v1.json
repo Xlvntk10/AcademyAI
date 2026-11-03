@@ -1,0 +1,493 @@
+[
+  {
+    "id": "listening-course",
+    "section": "listening",
+    "title": "Booking a short course",
+    "duration_seconds": 360,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Прослушай разговор, затем заполни сведения. Короткие ответы: не более двух слов и/или числа. Можно слушать повторно: это учебный режим.",
+      "transcript": "Receptionist: Hello, Riverside Learning Centre. How can I help? Student: I would like to join the evening photography course. Does it start on Monday? Receptionist: The general course starts on Monday, but the evening group begins on Wednesday, the fourteenth of October. Student: What time should I arrive? Receptionist: The class starts at six thirty in the evening. Please arrive ten minutes early. Student: Is the fee forty pounds? Receptionist: That was last year. It is forty-five pounds now, including a printed guide. Student: Do I need to bring a camera? Receptionist: Yes, bring your own camera. We provide the other equipment. Student: And where is the classroom? Receptionist: Room sixteen, on the first floor. Student: Thank you. I will book that group.",
+      "questions": [
+        {
+          "id": "day",
+          "prompt": "On which day of the week does the evening group begin?",
+          "answer": "Wednesday",
+          "explanation": "Monday относится к другому курсу. Вечерняя группа начинается в среду.",
+          "options": [],
+          "accepted": []
+        },
+        {
+          "id": "time",
+          "prompt": "What time does the class start?",
+          "answer": "6:30",
+          "explanation": "Приходить просят раньше, но начало в 6:30 вечера.",
+          "options": [],
+          "accepted": [
+            "6.30",
+            "18:30",
+            "six thirty",
+            "6:30 pm"
+          ]
+        },
+        {
+          "id": "fee",
+          "prompt": "Current fee in pounds: write a number.",
+          "answer": "45",
+          "explanation": "£40 — прошлогодняя цена; сейчас £45.",
+          "options": [],
+          "accepted": [
+            "forty-five",
+            "forty five"
+          ]
+        },
+        {
+          "id": "bring",
+          "prompt": "What should the student bring?",
+          "answer": "camera",
+          "explanation": "Свой фотоаппарат обязателен; остальное оборудование предоставляют.",
+          "options": [],
+          "accepted": [
+            "a camera",
+            "own camera"
+          ]
+        },
+        {
+          "id": "room",
+          "prompt": "Room number:",
+          "answer": "16",
+          "explanation": "Кабинет sixteen, не sixty.",
+          "options": [],
+          "accepted": [
+            "sixteen"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "listening-gardens",
+    "section": "listening",
+    "title": "A community garden briefing",
+    "duration_seconds": 420,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Послушай короткое объявление координатора. Для открытых вопросов используй не более двух слов или число.",
+      "transcript": "Welcome to the Eastfield community garden. Before we begin, let me explain how the project works. The site used to be a car park. The council gave us permission to use it last spring, and local residents built the first beds in April. We meet every Saturday morning, but watering is shared throughout the week. New volunteers should first speak to Helen, our coordinator. You do not need gardening experience. We will provide gloves, but please wear strong shoes. Children can join if an adult stays with them. We grow vegetables for volunteers and donate any extra produce to the neighbourhood kitchen. At first we planned to sell it, but the group preferred sharing. Next month we hope to add a rainwater tank. The tank has not been ordered yet because we are still collecting donations. Today, please help clear the path before we begin planting.",
+      "questions": [
+        {
+          "id": "previous",
+          "prompt": "What was the site before the garden?",
+          "answer": "car park",
+          "explanation": "До сада это была парковка.",
+          "options": [],
+          "accepted": [
+            "a car park"
+          ]
+        },
+        {
+          "id": "coordinator",
+          "prompt": "Who should new volunteers speak to first?",
+          "answer": "Helen",
+          "explanation": "Координатора зовут Helen.",
+          "options": [],
+          "accepted": []
+        },
+        {
+          "id": "provided",
+          "prompt": "What does the group provide?",
+          "answer": "Gloves",
+          "explanation": "Обувь нужно надеть свою; перчатки выдадут.",
+          "options": [
+            "Strong shoes",
+            "Gloves",
+            "Raincoats"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "extra",
+          "prompt": "Where does extra produce go?",
+          "answer": "neighbourhood kitchen",
+          "explanation": "Излишки передают местной кухне.",
+          "options": [],
+          "accepted": [
+            "the neighbourhood kitchen",
+            "neighborhood kitchen"
+          ]
+        },
+        {
+          "id": "tank",
+          "prompt": "Which statement about the rainwater tank is accurate?",
+          "answer": "It has not been ordered yet",
+          "explanation": "Пока собирают пожертвования; заказ ещё не сделан.",
+          "options": [
+            "It was installed in April",
+            "It has not been ordered yet",
+            "It was paid for by selling vegetables"
+          ],
+          "accepted": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "reading-bikes",
+    "section": "reading",
+    "title": "A campus bicycle trial",
+    "duration_seconds": 900,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Прочитай авторский текст. Ответь на 6 вопросов. Для True / False / Not Given используй только сведения текста. Таймер ориентировочный; ответ после лимита сохраняется с отметкой.",
+      "passage": "A. Northbridge College introduced a bicycle lending scheme for one term. Fifty bicycles were available from two staffed collection points. Students could borrow a bicycle for up to four hours after showing their college card. There was no charge, although late returns could lead to a temporary suspension. The scheme was intended to make short trips between teaching buildings easier.\n\nB. During the first month, staff recorded 620 loans. The busiest collection point was near the science building, where the path to the main library was longer than the route from other departments. Staff did not ask borrowers why they chose cycling, so the location alone cannot establish the reason for the difference. Some students commented that the bicycles were particularly useful when they carried books, but these comments were not collected systematically.\n\nC. A survey at the end of the term received 180 responses. Most respondents wanted the scheme to continue. However, the invitation was sent only to students who had borrowed a bicycle at least once. Students who avoided cycling because of safety concerns or disability were therefore not represented. The college acknowledged that the survey could not describe the needs of the entire student population.\n\nD. The maintenance team found that tyre repairs took more time than expected. It recommended a weekly inspection and a small stock of replacement tyres. No serious accidents were reported during the trial, but the number of journeys was too small to draw a broad conclusion about safety. The college decided to continue the scheme for another term while also consulting students who had not used it. It has not decided whether to increase the number of bicycles.",
+      "questions": [
+        {
+          "id": "hours",
+          "prompt": "Maximum loan length, in hours:",
+          "answer": "4",
+          "explanation": "Абзац A: up to four hours.",
+          "options": [],
+          "accepted": [
+            "four"
+          ]
+        },
+        {
+          "id": "charge",
+          "prompt": "Students paid a fee for every bicycle loan.",
+          "answer": "False",
+          "explanation": "В абзаце A: no charge.",
+          "options": [
+            "True",
+            "False",
+            "Not Given"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "heading",
+          "prompt": "Best heading for paragraph C:",
+          "answer": "A survey with limited coverage",
+          "explanation": "Опрошены только пользователи; других студентов не включили.",
+          "options": [
+            "Proof that all students prefer cycling",
+            "A survey with limited coverage",
+            "How bicycles were repaired"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "loans",
+          "prompt": "How many loans were recorded in the first month?",
+          "answer": "620",
+          "explanation": "Абзац B приводит 620 выдач.",
+          "options": [],
+          "accepted": [
+            "six hundred and twenty"
+          ]
+        },
+        {
+          "id": "safety",
+          "prompt": "The college proved the scheme was safe for every student.",
+          "answer": "False",
+          "explanation": "Абзац D прямо говорит о недостаточном числе поездок для широкого вывода.",
+          "options": [
+            "True",
+            "False",
+            "Not Given"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "cost",
+          "prompt": "Each replacement tyre cost £12.",
+          "answer": "Not Given",
+          "explanation": "Стоимость покрышек в тексте отсутствует.",
+          "options": [
+            "True",
+            "False",
+            "Not Given"
+          ],
+          "accepted": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "reading-workshops",
+    "section": "reading",
+    "title": "Learning through repair",
+    "duration_seconds": 900,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Найди доказательство каждого ответа в тексте. В открытых вопросах используй не более двух слов. Нельзя выводить Not Given из собственных предположений.",
+      "passage": "A. Repair workshops have become a familiar feature of some public libraries. Visitors bring small household objects and work alongside volunteers to diagnose faults. The aim is not simply to return an object in working order. Organisers also want visitors to understand how it works and recognise when a repair requires professional help. Electrical items are accepted only where a qualified volunteer is present.\n\nB. A regional network followed twelve workshops for six months. Volunteers recorded the type of object, whether it was repaired, and the approximate time spent. Of 480 objects brought in, 288 were repaired during the session. Other objects needed parts that were not immediately available, or had faults beyond the volunteers’ expertise. An unsuccessful repair did not always mean an unsuccessful learning experience: several visitors reported that they now understood why their item had failed.\n\nC. The network’s report estimated the potential reduction in discarded objects, but it did not weigh the items or verify what happened to them after the workshops. Some repaired objects might have been kept anyway. The authors therefore avoided presenting their estimate as a precise measure of waste prevented. They suggested contacting visitors after three months to find out whether the objects were still in use.\n\nD. Recruiting volunteers remained a challenge. Technical expertise was valuable, but organisers also looked for patience and an ability to explain decisions. One volunteer commented that doing a repair alone was often faster than teaching someone to do it. Nevertheless, the network chose to preserve its educational approach. It planned shorter introductory sessions for new volunteers rather than converting the workshops into a free repair service.",
+      "questions": [
+        {
+          "id": "qualified",
+          "prompt": "For electrical items, what kind of volunteer must be present?",
+          "answer": "qualified",
+          "explanation": "Абзац A: a qualified volunteer.",
+          "options": [],
+          "accepted": [
+            "qualified volunteer"
+          ]
+        },
+        {
+          "id": "repaired",
+          "prompt": "How many objects were repaired during a session?",
+          "answer": "288",
+          "explanation": "В абзаце B: 288 из 480.",
+          "options": [],
+          "accepted": [
+            "two hundred and eighty-eight"
+          ]
+        },
+        {
+          "id": "learning",
+          "prompt": "Every unrepaired item produced no learning benefit.",
+          "answer": "False",
+          "explanation": "Абзац B говорит, что люди могли понять причину поломки.",
+          "options": [
+            "True",
+            "False",
+            "Not Given"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "weight",
+          "prompt": "The network weighed every item.",
+          "answer": "False",
+          "explanation": "Абзац C: did not weigh the items.",
+          "options": [
+            "True",
+            "False",
+            "Not Given"
+          ],
+          "accepted": []
+        },
+        {
+          "id": "followup",
+          "prompt": "After how many months did the authors suggest contacting visitors?",
+          "answer": "three",
+          "explanation": "Абзац C предлагает контакт через три месяца.",
+          "options": [],
+          "accepted": [
+            "3",
+            "three months"
+          ]
+        },
+        {
+          "id": "approach",
+          "prompt": "Why retain an educational approach even if it takes longer?",
+          "answer": "Teaching visitors is part of the purpose",
+          "explanation": "Обучение входит в цель мастерских; это не только бесплатный ремонт.",
+          "options": [
+            "The volunteers are paid by the hour",
+            "Teaching visitors is part of the purpose",
+            "Visitors are forbidden to watch"
+          ],
+          "accepted": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "writing-task1",
+    "section": "writing",
+    "title": "Task 1: learning at a community centre",
+    "duration_seconds": 1200,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "task_type": "task1",
+      "min_words": 150,
+      "introduction": "Авторская таблица с вымышленными данными. Опиши основные особенности и сравни важные изменения. Не объясняй причины, которых нет в данных.",
+      "prompt": "The table shows enrolments in three courses at a fictional community centre in 2024 and 2025. Summarise the main features and make relevant comparisons. Write at least 150 words.",
+      "table": {
+        "headers": [
+          "Course",
+          "2024",
+          "2025"
+        ],
+        "rows": [
+          [
+            "English",
+            "120",
+            "180"
+          ],
+          [
+            "Python",
+            "60",
+            "150"
+          ],
+          [
+            "Photography",
+            "90",
+            "75"
+          ]
+        ]
+      },
+      "criteria": [
+        {
+          "title": "Выполнение задачи",
+          "description": "Ответь на все части вопроса. Для Task 1 выдели общий обзор и важные сравнения; для Task 2 сформулируй позицию и подкрепи её."
+        },
+        {
+          "title": "Связность",
+          "description": "Каждый абзац развивает одну мысль. Связки должны отражать реальную связь, а не просто украшать текст."
+        },
+        {
+          "title": "Лексика",
+          "description": "Выбирай точные слова и устойчивые сочетания. Проверяй повторения, написание и уместность формального стиля."
+        },
+        {
+          "title": "Грамматика",
+          "description": "Используй разнообразные, понятные конструкции. Проверь времена, согласование, артикли и пунктуацию."
+        }
+      ],
+      "guide": [
+        "Выдели общий обзор: два направления выросли, одно сократилось.",
+        "Сравни английский и Python: +60 и +90; в 2025 английский всё ещё больше.",
+        "Фотография уменьшилась на 15; не придумывай причины.",
+        "Не перечисляй каждое число отдельным предложением."
+      ]
+    }
+  },
+  {
+    "id": "writing-task2",
+    "section": "writing",
+    "title": "Task 2: independent study or guided learning?",
+    "duration_seconds": 2400,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "task_type": "task2",
+      "min_words": 250,
+      "introduction": "Авторская тема для аргументированного эссе. Это тренировка, автоматического IELTS band score не будет.",
+      "prompt": "Some people believe university students should choose all their own learning materials. Others think teachers should provide a structured programme. Discuss both views and give your own opinion. Write at least 250 words.",
+      "criteria": [
+        {
+          "title": "Выполнение задачи",
+          "description": "Ответь на все части вопроса. Для Task 1 выдели общий обзор и важные сравнения; для Task 2 сформулируй позицию и подкрепи её."
+        },
+        {
+          "title": "Связность",
+          "description": "Каждый абзац развивает одну мысль. Связки должны отражать реальную связь, а не просто украшать текст."
+        },
+        {
+          "title": "Лексика",
+          "description": "Выбирай точные слова и устойчивые сочетания. Проверяй повторения, написание и уместность формального стиля."
+        },
+        {
+          "title": "Грамматика",
+          "description": "Используй разнообразные, понятные конструкции. Проверь времена, согласование, артикли и пунктуацию."
+        }
+      ],
+      "guide": [
+        "Объясни преимущество самостоятельного выбора и его возможное ограничение.",
+        "Рассмотри пользу структуры, не игнорируя индивидуальные потребности.",
+        "Вырази собственную позицию и поддержи её примером.",
+        "В заключении ответь на вопрос, не добавляя новый аргумент."
+      ]
+    }
+  },
+  {
+    "id": "speaking-interview",
+    "section": "speaking",
+    "title": "Part 1 practice: learning habits",
+    "duration_seconds": 180,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Ответь на три коротких вопроса. Таймер — ориентир на всю карточку, не официальный регламент части экзамена.",
+      "prompt": "What do you enjoy learning at the moment?\nWhen do you usually study, and why?\nDo you prefer studying alone or with other people?",
+      "criteria": [
+        {
+          "title": "Плавность и связность",
+          "description": "Развивай ответ логично, избегай чрезмерно длинных пауз и заученного монолога не по теме."
+        },
+        {
+          "title": "Лексика",
+          "description": "Объясняй мысль разными словами, если забыл одно слово. Проверь точность выражений."
+        },
+        {
+          "title": "Грамматика",
+          "description": "Соединяй простые и сложные предложения, следи за временем событий."
+        },
+        {
+          "title": "Произношение",
+          "description": "Прослушай свою запись: понятны ли слова, ударение и границы фраз? По текстовому ответу произношение оценить нельзя."
+        }
+      ],
+      "guide": [
+        "Ответь прямо, затем добавь причину или пример.",
+        "Не ограничивайся одним словом; не растягивай ответ искусственно."
+      ]
+    }
+  },
+  {
+    "id": "speaking-long-turn",
+    "section": "speaking",
+    "title": "Part 2 practice: a useful skill",
+    "duration_seconds": 120,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "preparation_seconds": 60,
+      "introduction": "Сначала подготовь заметки за одну минуту. Затем говори до двух минут. Подготовка и ответ запускаются отдельно.",
+      "prompt": "Describe a useful skill you learned.\nSay what the skill is, how you learned it, what was difficult, and explain why it is useful to you.",
+      "criteria": [
+        {
+          "title": "Плавность и связность",
+          "description": "Развивай ответ логично, избегай чрезмерно длинных пауз и заученного монолога не по теме."
+        },
+        {
+          "title": "Лексика",
+          "description": "Объясняй мысль разными словами, если забыл одно слово. Проверь точность выражений."
+        },
+        {
+          "title": "Грамматика",
+          "description": "Соединяй простые и сложные предложения, следи за временем событий."
+        },
+        {
+          "title": "Произношение",
+          "description": "Прослушай свою запись: понятны ли слова, ударение и границы фраз? По текстовому ответу произношение оценить нельзя."
+        }
+      ],
+      "guide": [
+        "Запиши ключевые слова вместо полного заученного текста.",
+        "Расположи события по порядку и добавь конкретный пример."
+      ]
+    }
+  },
+  {
+    "id": "speaking-discussion",
+    "section": "speaking",
+    "title": "Part 3 practice: education and technology",
+    "duration_seconds": 240,
+    "instructions": "Авторская тренировочная работа Academy AI. Это сокращённая практика, а не официальный IELTS test. Балл IELTS не вычисляется.",
+    "content": {
+      "introduction": "Обсуди общие идеи, причины и последствия. Время относится только к этой тренировочной карточке.",
+      "prompt": "How can technology make education more accessible?\nWhat might be lost when all learning happens online?\nShould employers help people continue learning throughout their careers?",
+      "criteria": [
+        {
+          "title": "Плавность и связность",
+          "description": "Развивай ответ логично, избегай чрезмерно длинных пауз и заученного монолога не по теме."
+        },
+        {
+          "title": "Лексика",
+          "description": "Объясняй мысль разными словами, если забыл одно слово. Проверь точность выражений."
+        },
+        {
+          "title": "Грамматика",
+          "description": "Соединяй простые и сложные предложения, следи за временем событий."
+        },
+        {
+          "title": "Произношение",
+          "description": "Прослушай свою запись: понятны ли слова, ударение и границы фраз? По текстовому ответу произношение оценить нельзя."
+        }
+      ],
+      "guide": [
+        "Отдели личный пример от общего вывода.",
+        "Рассмотри преимущество, ограничение и условия, при которых решение полезно."
+      ]
+    }
+  }
+]

@@ -160,3 +160,25 @@ class LessonPrerequisite(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     lesson_id: int = Field(foreign_key="lesson.id", index=True)
     prerequisite_id: int = Field(foreign_key="lesson.id")
+
+
+class IeltsTest(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    section: str = Field(index=True)
+    title: str
+    instructions: str
+    duration_seconds: int
+    content: dict = Field(sa_column=Column(JSON, nullable=False))
+
+
+class IeltsRun(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    test_id: str = Field(foreign_key="ieltstest.id", index=True)
+    started_at: datetime
+    updated_at: datetime
+    submitted_at: Optional[datetime] = None
+    revision: int = 0
+    answers: dict = Field(default_factory=dict, sa_column=Column(JSON, nullable=False))
+    text: str = ""
+    mode: str = "text"
+    result: Optional[dict] = Field(default=None, sa_column=Column(JSON, nullable=True))
