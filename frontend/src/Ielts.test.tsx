@@ -44,3 +44,36 @@ test('Speaking explains unavailable recording without requesting a microphone',(
   expect(screen.getByText(/Запись недоступна/)).toBeVisible()
   expect(screen.queryByRole('button',{name:'Записать голос'})).not.toBeInTheDocument()
 })
+
+test('stale local writing is offered for recovery instead of being silently overwritten',async()=>{
+  const saved={id:'conflict-1',test_id:'writing-task2',title:'Task 2',section:'writing',started_at:new Date().toISOString(),updated_at:new Date().toISOString(),submitted_at:null,revision:2,answers:{},text:'Server version.',mode:'text',result:null}
+  const task={id:'writing-task2',title:'Task 2',section:'writing',instructions:'Practice',duration_seconds:2400,content:{introduction:'Original prompt',prompt:'Discuss both views.'}}
+  localStorage.setItem('academy-ielts-draft-conflict-1',JSON.stringify({revision:1,answers:{},text:'My unsaved paragraph.',mode:'text'}))
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>({ok:true,json:async()=>structuredClone(url.includes('/tests/')?task:saved)})))
+  render(<Ielts route="ielts/run/conflict-1" onSaved={vi.fn()}/>)
+  expect(await screen.findByRole('textbox',{name:'Локальная несохранённая копия'})).toHaveValue('My unsaved paragraph.')
+  expect(screen.getByRole('button',{name:'Сохранить черновик'})).toBeDisabled()
+  expect(Object.keys(localStorage).some(key=>key.startsWith('academy-ielts-draft-conflict-1-conflict-'))).toBe(true)
+  await userEvent.setup().click(screen.getByRole('button',{name:'Восстановить локальную версию'}))
+  expect(screen.getByRole('textbox',{name:'Твоя работа'})).toHaveValue('My unsaved paragraph.')
+})
+
+test('microphone denied keeps text mode available and releases the recording lock',async()=>{
+  const descriptor=Object.getOwnPropertyDescriptor(navigator,'mediaDevices')
+  const getUserMedia=vi.fn(async()=>{throw new Error('Permission denied')})
+  Object.defineProperty(navigator,'mediaDevices',{configurable:true,value:{getUserMedia}})
+  vi.stubGlobal('isSecureContext',true)
+  vi.stubGlobal('MediaRecorder',class {})
+  const lock=vi.fn()
+  try {
+    render(<SpeakingRecorder id="denied" disabled={false} onMode={vi.fn()} onRecording={lock}/>)
+    expect(getUserMedia).not.toHaveBeenCalled()
+    await userEvent.setup().click(screen.getByRole('button',{name:'Записать голос'}))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Напиши ответ в текстовом поле')
+    expect(lock).toHaveBeenLastCalledWith(false)
+    expect(getUserMedia).toHaveBeenCalledWith({audio:true})
+  } finally {
+    if(descriptor)Object.defineProperty(navigator,'mediaDevices',descriptor)
+    else delete (navigator as any).mediaDevices
+  }
+})

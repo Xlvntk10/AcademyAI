@@ -119,6 +119,24 @@ def run():
                 result = post(f"/api/vocabulary/{due['id']}/review", {"request_id": str(uuid4()), "answer": due["term"]})
                 assert result["is_correct"]
             vocabulary_saved = get("/api/vocabulary")
+            training = get("/api/ielts/tests")
+            assert len(training) == 9
+            reading = post('/api/ielts/tests/reading-bikes/runs', {'request_id':str(uuid4())})
+            with sqlite3.connect(database) as db:
+                authored = json.loads(db.execute("SELECT content FROM ieltstest WHERE id='reading-bikes'").fetchone()[0])
+            reading = post(f"/api/ielts/runs/{reading['id']}/submit", {'revision':0,
+                'answers':{q['id']:q['answer'] for q in authored['questions']}})
+            assert reading['result']['score'] == 6
+            writing = post('/api/ielts/tests/writing-task1/runs', {'request_id':str(uuid4())})
+            writing = post(f"/api/ielts/runs/{writing['id']}/save", {'revision':0,'text':'English increased.\n\nPhotography decreased.'})
+            assert writing['submitted_at'] is None
+            prefs = get('/api/planner/settings')
+            prefs.pop('timezone')
+            if today.year <= 2028:
+                prefs.update(target_month=max(today.strftime('%Y-%m'),'2028-06'), english_percent=80)
+                post('/api/planner/settings', prefs)
+            horizon = get('/api/planner/roadmap')
+            assert horizon['total_topics'] == 40
             saved = get("/api/dashboard")
             assert saved["total_xp"] >= before["total_xp"]
             assert saved == get("/api/dashboard")
@@ -144,11 +162,15 @@ def run():
             assert get("/api/dashboard") == saved
             assert get(f"/api/runs/{attempt['id']}") == attempt
             assert get("/api/vocabulary") == vocabulary_saved
+            assert get(f"/api/ielts/runs/{reading['id']}") == reading
+            assert get(f"/api/ielts/runs/{writing['id']}") == writing
+            assert get('/api/planner/roadmap') == horizon
             verify(database)
             assert snapshot(source) == original, "Production database changed during smoke test"
             print(json.dumps({"health": health, "lessons": len(lessons), "completed_slug": slug,
                 "score": attempt["score"], "saved_after_restart": True,
-                "static_assets_verified": len(paths), "production_database_unchanged": True,
+                "static_assets_verified": len(paths), "ielts_reading_score": reading['result']['score'],
+                "writing_draft_restored": True, "roadmap_restored": True, "production_database_unchanged": True,
                 "artifacts": str(folder)}, ensure_ascii=False, indent=2))
     finally:
         for process in reversed(processes):
