@@ -16,7 +16,7 @@ const bundle: OfflineBundle = {
     version:1,subject:'english',topic:'Grammar',position:1,unlocked:true,theory:[],exercises:[{id:1,question:'Answer',points:10,position:1,kind:'text',options:[]}]},
 }
 beforeEach(() => { localStorage.clear(); setAccountContext(null); vi.stubGlobal('indexedDB', new IDBFactory()) })
-afterEach(() => { cleanup(); setAccountContext(null); vi.unstubAllGlobals(); vi.restoreAllMocks(); localStorage.clear() })
+afterEach(() => { cleanup(); setAccountContext(null); vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.restoreAllMocks(); localStorage.clear() })
 
 test('account namespaces preserve legacy storage and isolate lessons, drafts and queues', async () => {
   await saveBundle(bundle)
@@ -72,6 +72,7 @@ test('signed-out account shows login and submits registration through the provid
   const user = userEvent.setup()
   render(<AccountGate><h1>Private library</h1></AccountGate>)
   await user.click(await screen.findByRole('button',{name:'Зарегистрироваться'}))
+  expect(screen.getByRole('button',{name:'Проверить обновления'})).toBeVisible()
   await user.type(screen.getByLabelText('Email'),'one@example.test')
   await user.click(screen.getByRole('button',{name:'Получить код'}))
   expect(await screen.findByLabelText('Код из письма')).toBeVisible()
@@ -87,4 +88,31 @@ test('a cross-tab account switch hides the old interface and blocks its network 
   await waitFor(()=>expect(screen.queryByRole('heading',{name:'Private library'})).not.toBeInTheDocument())
   expect(screen.getByRole('heading',{name:'Аккаунт изменился'})).toBeVisible()
   await expect(api('/progress')).rejects.toThrow('Офлайн')
+})
+
+test('a fresh cloud install shows reconnect instead of entering a local profile during an outage', async () => {
+  vi.stubEnv('VITE_ACCOUNT_MODE', 'supabase')
+  const fetch = vi.fn().mockRejectedValueOnce(new TypeError('offline')).mockResolvedValue({ok:true,json:async()=>({mode:'supabase',user:alice})})
+  vi.stubGlobal('fetch',fetch)
+  const user = userEvent.setup()
+  render(<AccountGate><h1>Private library</h1></AccountGate>)
+  await user.click(await screen.findByRole('button',{name:'Повторить подключение'}))
+  expect(await screen.findByRole('heading',{name:'Private library'})).toBeVisible()
+  expect(accountNamespace()).toBe(alice.namespace)
+  expect(fetch).toHaveBeenCalledTimes(2)
+})
+
+test('expired sessions require login and keep queued answers in the original account', async () => {
+  setAccountContext(alice)
+  await saveBundle(bundle)
+  const draft = await startOffline(bundle)
+  const saved = await saveDraft(draft.id,0,{1:'offline answer'})
+  await queueAttempt(draft.id,saved.revision)
+  localStorage.setItem('academy-account-v4',JSON.stringify({mode:'supabase',user:alice}))
+  vi.stubGlobal('fetch',vi.fn(async()=>({ok:false,status:401,json:async()=>({detail:'expired'})})))
+  render(<AccountGate><h1>Private library</h1></AccountGate>)
+  expect(await screen.findByRole('heading',{name:'Войти в своё обучение'})).toBeVisible()
+  expect(screen.queryByRole('heading',{name:'Private library'})).not.toBeInTheDocument()
+  expect(await listAttempts()).toEqual([expect.objectContaining({id:draft.id,status:'queued',answers:{1:'offline answer'}})])
+  await expect(api('/offline/attempts',{})).rejects.toThrow('Офлайн')
 })

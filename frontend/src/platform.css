@@ -63,4 +63,10 @@
 .account-entry { width: min(560px, calc(100% - 32px)); margin: 8vh auto; }
 .account-entry form { display: grid; gap: 18px; }
 .account-entry label { display: grid; gap: 7px; }
-.account-entry input { width: 100%; box-sizing: border-box; }
+.account-entry input { width: 100%; box-sizing: border-box; min-height: 44px; font-size: 16px; }
+.account-entry p, .settings-panel .small-note { overflow-wrap: anywhere; }
+.account-entry button { min-height: 44px; }
+.account-entry > p { margin-top: 16px; }
+:root { background: var(--bg); }
+body { min-height: 100dvh; }
+.account-entry > section { display: grid; gap: 16px; }

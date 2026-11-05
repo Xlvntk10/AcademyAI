@@ -2,11 +2,12 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { api, ApiError } from './api'
 import { accountUser, setAccountContext, type AccountSession } from './account-context'
 import { listAttempts, OFFLINE_CHANGED } from './offline-store'
-import { synchronize } from './offline-sync'
+import { synchronize, syncStatus } from './offline-sync'
 import { message } from './Planner'
+import { UpdateNotice } from './PwaUpdate'
 
 const markerKey = 'academy-account-v4'
-const SessionContext = createContext({ session: {mode:'local', user:null} as AccountSession, offline:false })
+const SessionContext = createContext({ session: {mode:'local', user:null} as AccountSession, offline:false, reconnect: async () => {} })
 
 function remember(session: AccountSession) {
   // Only an offline namespace hint. Authentication stays in the HttpOnly cookie.
@@ -24,16 +25,16 @@ function remembered(): AccountSession {
       return {mode:'supabase', user:null}
     }
   } catch { /* Legacy local mode remains usable offline. */ }
-  return {mode:'local', user:null}
+  return {mode: import.meta.env.VITE_ACCOUNT_MODE === 'supabase' ? 'supabase' : 'local', user:null}
 }
 
-function Login({notice}: {notice:string}) {
+function Login({notice, reconnect}: {notice:string; reconnect: () => Promise<void>}) {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [register, setRegister] = useState(false)
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [status, setStatus] = useState(notice)
+  const [status, setStatus] = useState('')
   async function submit() {
     setBusy(true)
     try {
@@ -53,13 +54,15 @@ function Login({notice}: {notice:string}) {
     <h1>Academy AI</h1><h2>{register ? 'Создать аккаунт' : 'Войти в своё обучение'}</h2>
     <p>Вход по одноразовому коду из письма Supabase. Для восстановления доступа запроси новый код на прежний email.</p>
     <form onSubmit={event => { event.preventDefault(); void submit() }}>
-      <label>Email<input type="email" required maxLength={254} autoComplete="email" value={email} disabled={sent || busy} onChange={event => setEmail(event.target.value)}/></label>
+      <label>Email<input type="email" required maxLength={254} autoComplete="email" autoCapitalize="none" spellCheck={false} value={email} disabled={sent || busy} onChange={event => setEmail(event.target.value)}/></label>
       {sent && <label>Код из письма<input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6,10}" value={code} onChange={event => setCode(event.target.value)}/></label>}
       <button className="primary" disabled={busy}>{busy ? 'Подожди…' : sent ? 'Подтвердить вход' : 'Получить код'}</button>
     </form>
-    {status && <p role="status">{status}</p>}
+    {(status || notice) && <p role="status">{status || notice}</p>}
+    {notice && <button className="secondary" disabled={busy} onClick={async () => { setBusy(true); try { await reconnect() } finally { setBusy(false) } }}>Повторить подключение</button>}
     <div className="button-row"><button className="text-button" disabled={busy} onClick={() => { setSent(false); setRegister(!register); setStatus('') }}>{register ? 'У меня уже есть аккаунт' : 'Зарегистрироваться'}</button>
       {sent && <button className="text-button" disabled={busy} onClick={() => { setSent(false); setCode('') }}>Другой адрес или новый код</button>}</div>
+    <UpdateNotice route="settings"/>
   </section></main>
 }
 
@@ -93,7 +96,10 @@ export function AccountGate({children}: {children: ReactNode}) {
       if (error instanceof ApiError && error.status === 401) {
         setSession({mode:'supabase', user:null})
         setNotice('Сессия закончилась. Войди снова, чтобы продолжить синхронизацию.')
-      } else setSession(hint)
+      } else {
+        setSession(hint)
+        setNotice('Сервер пока недоступен. После простоя запуск может занять около минуты. Повтори подключение немного позже.')
+      }
     } finally { checking.current = false }
   }, [])
   useEffect(() => {
@@ -122,13 +128,13 @@ export function AccountGate({children}: {children: ReactNode}) {
     }
   }, [check])
   if (blocked) return <main className="account-entry panel"><h1>Аккаунт изменился</h1><p>Локальные ответы сохранены в прежнем профиле.</p><button className="primary" onClick={() => window.location.reload()}>Открыть текущий аккаунт</button></main>
-  if (!session) return <main className="account-entry panel" role="status">Открываем Academy AI…</main>
-  if (session.mode === 'supabase' && !session.user) return <Login notice={notice || (offline ? 'Для входа нужно подключение к серверу.' : '')}/>
-  return <SessionContext.Provider value={{session, offline}}>{children}</SessionContext.Provider>
+  if (!session) return <main className="account-entry panel" role="status"><h1>Открываем Academy AI…</h1><p>Проверяем подключение и сессию. Сохранённые уроки появятся, если сервер недоступен.</p></main>
+  if (session.mode === 'supabase' && !session.user) return <Login reconnect={check} notice={notice || (offline ? 'Для входа нужно подключение к серверу.' : '')}/>
+  return <SessionContext.Provider value={{session, offline, reconnect:check}}>{children}</SessionContext.Provider>
 }
 
 export function AccountProfile() {
-  const {session, offline} = useContext(SessionContext)
+  const {session, offline, reconnect} = useContext(SessionContext)
   const [pending, setPending] = useState(0)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
@@ -142,9 +148,13 @@ export function AccountProfile() {
     setBusy(true)
     try {
       await synchronize()
+      const status = syncStatus()
+      if (status.state === 'unavailable' || status.state === 'error') throw new Error(status.detail)
       const snapshot = await api<{generated_at:string}>('/sync/snapshot')
+      const remaining = (await listAttempts()).filter(row => row.status !== 'synced').length
+      setPending(remaining)
       window.dispatchEvent(new Event('academy-sync-complete'))
-      setNotice(`Прогресс получен с сервера ${new Date(snapshot.generated_at).toLocaleTimeString('ru-RU')}.`)
+      setNotice(`Прогресс получен с сервера ${new Date(snapshot.generated_at).toLocaleTimeString('ru-RU')}.${remaining ? ` На устройстве ещё ${remaining} черновиков или результатов. Проверь раздел «Ответы и экспорт».` : ''}`)
     } catch (error) { setNotice(message(error)) }
     finally { setBusy(false) }
   }
@@ -160,6 +170,7 @@ export function AccountProfile() {
     <h2>Мой аккаунт</h2>
     {session.mode === 'local' ? <p>Локальный профиль. Для входа с разных устройств настрой Supabase Auth на сервере по инструкции V4.</p> : <><p>{session.user?.email || 'Сохранённый профиль на устройстве'}</p><p className="small-note">ID аккаунта {session.user?.id}</p><p>Для восстановления доступа на новом устройстве запроси код на этот же email.</p></>}
     <p role="status">{offline ? 'Офлайн. Ответы сохраняются на устройстве.' : 'Подключение к серверу подтверждено.'}</p>
+    {offline && <button className="secondary" disabled={busy} onClick={async () => { setBusy(true); try { await reconnect() } finally { setBusy(false) } }}>Повторить подключение</button>}
     <p>Черновики и неотправленные результаты — {pending}</p>
     <div className="button-row"><button className="primary" disabled={busy || offline} onClick={pull}>Синхронизировать прогресс</button><a className="secondary" href="#offline">Ответы и экспорт</a><a className="secondary" href="#settings">Настройки</a></div>
     {session.mode === 'supabase' && <><p className="small-note">После выхода локальные ответы доступны при следующем входе в этот аккаунт. Перед выходом можно экспортировать их в библиотеке. Для выхода с отзывом сессии требуется сервер.</p><button className="secondary" disabled={busy || offline} onClick={logout}>Выйти из аккаунта</button></>}

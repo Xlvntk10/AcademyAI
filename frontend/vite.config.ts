@@ -24,5 +24,5 @@ export default defineConfig({
     strictPort: true,
     proxy: { '/api': 'http://127.0.0.1:8000' },
   },
-  test: { environment: 'jsdom', setupFiles: './src/test-setup.ts', globals: true },
+  test: { environment: 'jsdom', setupFiles: './src/test-setup.ts', globals: true, maxWorkers: 2, testTimeout: 15000 },
 })

@@ -1,6 +1,6 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
-import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { saveBundle, listBundles, startOffline, saveDraft, queueAttempt, listAttempts, submission, retryAttempt, type OfflineBundle } from './offline-store'
 import { synchronize, syncStatus } from './offline-sync'
@@ -100,7 +100,7 @@ test('offline UI restores typed answers after remount and queues without display
   expect(await screen.findByRole('textbox')).toHaveValue('answer')
   await user.click(screen.getByRole('button',{name:'Завершить и поставить в очередь'}))
   expect(await screen.findByText('Ответы в очереди')).toBeVisible()
-  await synchronize()
+  await act(async () => { await synchronize() })
   expect((await listAttempts())[0]).toMatchObject({status:'queued',answers:{1:'answer'}})
   expect(screen.queryByText(/10 баллов/)).not.toBeInTheDocument()
 })
