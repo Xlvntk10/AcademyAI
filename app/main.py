@@ -6,6 +6,8 @@ from app.routers.planner import router as planner_router
 from app.routers.analytics import router as analytics_router
 from app.routers.vocabulary import router as vocabulary_router
 from app.routers.ielts import router as ielts_router
+from app.routers.offline import router as offline_router
+from app.routers.widgets import router as widgets_router
 
 
 def create_app(database_engine=None):
@@ -16,6 +18,16 @@ def create_app(database_engine=None):
     application.include_router(analytics_router)
     application.include_router(vocabulary_router)
     application.include_router(ielts_router)
+    application.include_router(offline_router)
+    application.include_router(widgets_router)
+
+    @application.middleware("http")
+    async def private_api_responses(request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/api/"):
+            response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
     @application.get("/")
     def home():

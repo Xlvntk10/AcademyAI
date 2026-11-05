@@ -17,6 +17,13 @@ def utc(value):
     return value.replace(tzinfo=timezone.utc) if value and value.tzinfo is None else value
 
 
+def grade_answer(exercise, content, answer):
+    normalized = normalize(answer, content.case_sensitive)
+    if content.kind == "choice" and normalized not in {normalize(o, content.case_sensitive) for o in content.options}:
+        raise HTTPException(422, "Выберите один из предложенных вариантов")
+    return normalized in {normalize(a, content.case_sensitive) for a in [exercise.correct_answer, *content.accepted_answers]}
+
+
 def lesson_by_slug(session: Session, slug: str):
     row = session.exec(select(Lesson, LessonContent).join(LessonContent).where(LessonContent.slug == slug)).first()
     if row is None:

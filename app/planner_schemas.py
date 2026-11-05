@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Literal
+from typing import Annotated, Literal
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -14,6 +14,8 @@ class SettingsInput(BaseModel):
     english_percent: int = Field(default=65, ge=0, le=100, strict=True)
     monthly_goal_minutes: int = Field(default=900, ge=5, le=14880, strict=True)
     target_month: str | None = Field(default=None, pattern=r"^20\d{2}-(?:0[1-9]|1[0-2])$")
+    reminder_days: list[Annotated[int, Field(ge=0, le=6, strict=True)]] = Field(default_factory=lambda: list(range(7)), max_length=7)
+    masters_target_date: date | None = None
 
     @field_validator("available_minutes", mode="before")
     @classmethod
@@ -42,6 +44,7 @@ class ReminderInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     reminder_enabled: bool
     reminder_time: str = Field(pattern=r"^(?:[01]\d|2[0-3]):[0-5]\d$")
+    reminder_days: list[Annotated[int, Field(ge=0, le=6, strict=True)]] = Field(default_factory=lambda: list(range(7)), max_length=7)
 
 
 class CompleteTask(BaseModel):

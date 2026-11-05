@@ -8,7 +8,7 @@ from sqlalchemy import text
 from app.database.models import Attempt, Exercise, ExerciseContent, Lesson, LessonContent, LessonRun, RunAnswer
 from app.schemas import StartRun, SubmitAnswer, LessonRead, LessonDetail, ExerciseRead, RunRead, LessonStats, ProgressRead
 from app.services.learning import (normalize, lesson_by_slug, exercises_for, lesson_summary,
-    exercise_public, get_run, run_result, lesson_stats)
+    exercise_public, get_run, run_result, lesson_stats, grade_answer)
 from app.services import clock
 from app.services.mastery import curriculum_state
 
@@ -29,7 +29,7 @@ def health(session: DB):
         revision = session.exec(text("SELECT version_num FROM alembic_version")).scalar_one()
     except Exception as exc:
         raise HTTPException(503, "База не подготовлена. Запустите python -m scripts.prepare_db") from exc
-    if revision != "0008_learning_horizon":
+    if revision != "0009_offline_sync":
         raise HTTPException(503, "Требуется миграция базы")
     return {"status": "ok", "schema": revision}
 
@@ -106,9 +106,7 @@ def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
     lesson_content = session.get(LessonContent, run.lesson_id)
     if lesson_content.version != run.content_version:
         raise HTTPException(409, "Версия урока изменилась")
-    if content.kind == "choice" and normalize(payload.answer, content.case_sensitive) not in {normalize(o, content.case_sensitive) for o in content.options}:
-        raise HTTPException(422, "Выберите один из предложенных вариантов")
-    correct = normalize(payload.answer, content.case_sensitive) in {normalize(a, content.case_sensitive) for a in [exercise.correct_answer, *content.accepted_answers]}
+    correct = grade_answer(exercise, content, payload.answer)
     attempt = Attempt(exercise_id=exercise.id, answer=payload.answer, is_correct=correct,
         earned_points=exercise.points if correct else 0, created_at=clock.now())
     session.add(attempt)

@@ -97,6 +97,8 @@ class StudySettings(SQLModel, table=True):
     english_percent: int = 65
     monthly_goal_minutes: int = 900
     target_month: Optional[str] = None
+    reminder_days: list[int] = Field(default_factory=lambda: list(range(7)), sa_column=Column(JSON, nullable=False))
+    masters_target_date: Optional[date] = None
 
 
 class PlanWeek(SQLModel, table=True):
@@ -185,3 +187,17 @@ class IeltsRun(SQLModel, table=True):
     text: str = ""
     mode: str = "text"
     result: Optional[dict] = Field(default=None, sa_column=Column(JSON, nullable=True))
+
+
+class SyncIdentity(SQLModel, table=True):
+    id: int = Field(default=1, primary_key=True)
+    server_id: str
+
+
+class OfflineReceipt(SQLModel, table=True):
+    id: str = Field(primary_key=True, foreign_key="lessonrun.id")
+    payload_hash: str
+    client_started_at: datetime
+    client_completed_at: datetime
+    received_at: datetime
+    result: dict = Field(sa_column=Column(JSON, nullable=False))

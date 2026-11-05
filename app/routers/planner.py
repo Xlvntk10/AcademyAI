@@ -42,6 +42,8 @@ def save_reminder(payload: ReminderInput, session: DB):
     prefs = planner.settings(session)
     prefs.reminder_enabled = payload.reminder_enabled
     prefs.reminder_time = payload.reminder_time
+    if "reminder_days" in payload.model_fields_set:
+        prefs.reminder_days = sorted(set(payload.reminder_days))
     session.add(prefs)
     session.commit()
     session.refresh(prefs)
