@@ -4,6 +4,7 @@ Run after frontend build with ports 8000 and 4173 free. Only processes created
 by this script are stopped; their logs and the test database remain ignored.
 """
 from datetime import datetime, timezone
+import argparse
 import json
 import os
 from pathlib import Path
@@ -21,8 +22,8 @@ import httpx
 from scripts.prepare_db import ROOT, backup, snapshot, verify
 
 
-def run():
-    for port in (8000, 4173):
+def run(backend_port=8000, frontend_port=4173):
+    for port in (backend_port, frontend_port):
         with socket.socket() as probe:
             if probe.connect_ex(("127.0.0.1", port)) == 0:
                 raise RuntimeError(f"Port {port} is in use. Stop your local dev server first.")
@@ -34,6 +35,9 @@ def run():
     folder = ROOT / ".test-artifacts" / ("http-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"))
     folder.mkdir(parents=True)
     database = folder / "smoke.db"
+    preview_config = folder / 'vite-smoke.config.mjs'
+    preview_config.write_text('export default ' + json.dumps({'preview': {'host':'127.0.0.1',
+        'port':frontend_port, 'strictPort':True, 'proxy':{'/api':f'http://127.0.0.1:{backend_port}'}}}), encoding='utf8')
     backup(source, database)
     env = {**os.environ, "ACADEMY_DATABASE_URL": "sqlite:///" + database.as_posix(), "PYTHONUTF8": "1"}
     processes = []
@@ -60,7 +64,15 @@ def run():
 
     def stop(process):
         if process.poll() is None:
-            process.terminate()
+            if os.name == 'nt':
+                # Windows venv launches a child interpreter. Stop this owned tree,
+                # otherwise the old API could falsely satisfy the restart checks.
+                result = subprocess.run(['taskkill.exe', '/PID', str(process.pid), '/T', '/F'],
+                                        capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                if result.returncode and process.poll() is None:
+                    raise RuntimeError(f'Could not stop owned process tree {process.pid}')
+            else:
+                process.terminate()
             try:
                 process.wait(timeout=10)
             except subprocess.TimeoutExpired:
@@ -68,11 +80,11 @@ def run():
                 process.wait(timeout=5)
 
     try:
-        backend_args = [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000"]
+        backend_args = [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", str(backend_port)]
         backend = launch(backend_args, "api")
-        launch([node, "node_modules/vite/bin/vite.js", "preview", "--host", "127.0.0.1"], "frontend", ROOT / "frontend")
-        with httpx.Client(base_url="http://127.0.0.1:4173", timeout=15, trust_env=False) as client:
-            wait(client, "http://127.0.0.1:8000/api/health")
+        launch([node, "node_modules/vite/bin/vite.js", "preview", "--config", str(preview_config)], "frontend", ROOT / "frontend")
+        with httpx.Client(base_url=f"http://127.0.0.1:{frontend_port}", timeout=15, trust_env=False) as client:
+            wait(client, f"http://127.0.0.1:{backend_port}/api/health")
             wait(client, "/")
 
             def get(url):
@@ -137,6 +149,19 @@ def run():
                 post('/api/planner/settings', prefs)
             horizon = get('/api/planner/roadmap')
             assert horizon['total_topics'] == 40
+            bundle = get(f'/api/offline/lessons/{slug}')
+            offline_payload = dict(protocol=1, attempt_id=str(uuid4()), server_id=bundle['server_id'],
+                lesson_slug=slug, content_version=bundle['lesson']['version'], content_hash=bundle['content_hash'],
+                started_at=datetime.now(timezone.utc).isoformat(), completed_at=datetime.now(timezone.utc).isoformat(),
+                answers=[dict(exercise_id=e['id'], answer=keys[e['id']]) for e in bundle['lesson']['exercises']])
+            xp_before_offline = get('/api/dashboard')['total_xp']
+            offline_receipt = post('/api/offline/attempts', offline_payload)
+            assert offline_receipt['result']['score'] == lesson['max_score']
+            assert post('/api/offline/attempts', offline_payload) == offline_receipt
+            assert get('/api/dashboard')['total_xp'] == xp_before_offline
+            assert get('/api/widgets/v1/summary')['schema_version'] == 1
+            # Repeating this completed lesson adds a run but leaves mastery and XP unchanged.
+            horizon = get('/api/planner/roadmap')
             saved = get("/api/dashboard")
             assert saved["total_xp"] >= before["total_xp"]
             assert saved == get("/api/dashboard")
@@ -157,20 +182,25 @@ def run():
                 elif path.endswith(".js"):
                     assert "javascript" in response.headers["content-type"], path
             stop(backend)
+            with socket.socket() as probe:
+                assert probe.connect_ex(('127.0.0.1', backend_port)) != 0, 'Old backend is still listening'
             launch(backend_args, "api-restarted")
-            wait(client, "http://127.0.0.1:8000/api/health")
+            wait(client, f"http://127.0.0.1:{backend_port}/api/health")
             assert get("/api/dashboard") == saved
             assert get(f"/api/runs/{attempt['id']}") == attempt
             assert get("/api/vocabulary") == vocabulary_saved
             assert get(f"/api/ielts/runs/{reading['id']}") == reading
             assert get(f"/api/ielts/runs/{writing['id']}") == writing
             assert get('/api/planner/roadmap') == horizon
+            assert post('/api/offline/attempts', offline_payload) == offline_receipt
+            assert get('/api/dashboard') == saved
             verify(database)
             assert snapshot(source) == original, "Production database changed during smoke test"
             print(json.dumps({"health": health, "lessons": len(lessons), "completed_slug": slug,
                 "score": attempt["score"], "saved_after_restart": True,
                 "static_assets_verified": len(paths), "ielts_reading_score": reading['result']['score'],
                 "writing_draft_restored": True, "roadmap_restored": True, "production_database_unchanged": True,
+                "offline_receipt_restored": True, "offline_retry_no_extra_xp": True,
                 "artifacts": str(folder)}, ensure_ascii=False, indent=2))
     finally:
         for process in reversed(processes):
@@ -180,4 +210,8 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--backend-port', type=int, default=8000)
+    parser.add_argument('--frontend-port', type=int, default=4173)
+    options = parser.parse_args()
+    run(options.backend_port, options.frontend_port)
