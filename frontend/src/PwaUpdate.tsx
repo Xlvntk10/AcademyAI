@@ -30,7 +30,7 @@ export function UpdateNotice({ route }: { route: string }) {
     }
     worker.postMessage({ type: 'ACTIVATE_UPDATE' }, [channel.port2])
   }
-  if (!ready) return route === 'settings' ? <button className="text-button" onClick={() => void checkPwaUpdate().then(() => setNotice('Проверка завершена. Доступное обновление появится здесь.')).catch(() => setNotice('Для проверки обновлений нужно соединение с сервером.'))}>Проверить обновления{notice && <span role="status"> — {notice}</span>}</button> : null
+  if (!ready) return route === 'settings' ? <button className="text-button" onClick={() => void checkPwaUpdate().then(() => setNotice('Проверка завершена. Доступное обновление появится здесь.')).catch(error => setNotice(error instanceof Error ? error.message : 'Для проверки обновлений нужно соединение с сервером.'))}>Проверить обновления{notice && <span role="status"> — {notice}</span>}</button> : null
   return <section className="update-notice" role="status"><strong>Готова новая версия Academy AI</strong><p>Сохрани текущую работу. Обновление перезагрузит приложение, локальная очередь сохранится.</p>
     {route === 'settings' ? <button className="secondary" disabled={busy} onClick={() => void activate()}>{busy ? 'Обновляем…' : 'Обновить приложение'}</button> : <a href="#settings">Перейти к обновлению</a>}{notice && <p>{notice}</p>}</section>
 }

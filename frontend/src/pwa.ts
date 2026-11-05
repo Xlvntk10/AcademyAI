@@ -14,7 +14,10 @@ window.addEventListener('appinstalled', () => {
 
 let pwaRegistration: ServiceWorkerRegistration | null = null
 export const waitingWorker = () => pwaRegistration?.waiting ?? null
-export async function checkPwaUpdate() { await pwaRegistration?.update() }
+export async function checkPwaUpdate() {
+  if (!pwaRegistration) throw new Error('Проверка обновлений доступна после регистрации PWA в production-версии по HTTPS или localhost.')
+  await pwaRegistration.update()
+}
 let shellReady = false
 export const offlineShellReady = () => shellReady
 
