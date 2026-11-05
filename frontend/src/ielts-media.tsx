@@ -1,3 +1,4 @@
+import { privateKey } from './account-context'
 import { useEffect, useRef, useState } from 'react'
 import { Mic, Play, Square, Volume2 } from 'lucide-react'
 
@@ -25,7 +26,7 @@ export function ListeningAudio({ transcript, onMode }: { transcript: string; onM
 
 function audioDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('academy-local-recordings', 1)
+    const request = indexedDB.open(privateKey('academy-local-recordings'), 1)
     request.onupgradeneeded = () => request.result.createObjectStore('clips')
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)

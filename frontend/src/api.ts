@@ -7,17 +7,34 @@ export type Run = { id: string; lesson_slug: string; started_at: string; complet
 export type Stats = { slug: string; completed_runs: number; best_score: number; max_score: number; active_run_id: string | null; last_result: Run | null }
 export type Progress = { completed_lessons: number; completed_runs: number; total_xp: number; lessons: Stats[] }
 
+import { accountUser, canConnect } from './account-context'
+
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message) }
 }
 
 export async function api<T>(path: string, body?: unknown): Promise<T> {
+  const authRequest = path.startsWith('/auth/')
+  if (!authRequest && !canConnect()) throw new Error('Офлайн-режим. Подключись и подтверди аккаунт перед отправкой ответов.')
+  const headers: Record<string, string> = { 'X-Academy-Request': '1' }
+  const owner = accountUser()?.id
+  if (owner) headers['X-Academy-Account'] = owner
+  let payload = body
+  if (body !== undefined) {
+    headers['Content-Type'] = 'application/json'
+    if (body && typeof body === 'object' && 'sync_revision' in body) {
+      const { sync_revision, ...fields } = body
+      if (typeof sync_revision === 'string') headers['If-Match'] = sync_revision
+      payload = fields
+    }
+  }
   let response: Response
   try {
     response = await fetch(`/api${path}`, {
       method: body === undefined ? 'GET' : 'POST',
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
-      body: body === undefined ? undefined : JSON.stringify(body),
+      headers,
+      credentials: 'same-origin',
+      body: body === undefined ? undefined : JSON.stringify(payload),
       signal: AbortSignal.timeout(15000),
       cache: 'no-store',
     })
@@ -25,6 +42,7 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
     throw new Error('Нет связи с Academy AI. Проверь подключение и попробуй ещё раз. Уже сохранённые ответы останутся в базе.')
   }
   if (!response.ok) {
+    if (response.status === 401 && !authRequest) window.dispatchEvent(new Event('academy-session-expired'))
     const error = await response.json().catch(() => null)
     throw new ApiError(typeof error?.detail === 'string' ? error.detail : 'Не удалось выполнить запрос. Проверь ответы и настройки времени устройства.', response.status)
   }

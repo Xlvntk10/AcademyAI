@@ -1,3 +1,4 @@
+import { privateKey } from './account-context'
 import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock3, Headphones, Mic, PenLine } from 'lucide-react'
 import { api, newRequestId } from './api'
@@ -39,7 +40,7 @@ function Practice({route,onSaved}:{route:string;onSaved:()=>void}) {
         const saved=await api<Run>(`/ielts/runs/${runId}`)
         setRun(saved);setText(saved.text);setAnswers(saved.answers);setMode(saved.mode)
         try {
-          const key=`academy-ielts-draft-${saved.id}`
+          const key=privateKey(`academy-ielts-draft-${saved.id}`)
           const draft=JSON.parse(localStorage.getItem(key)||'null')
           if(draft && typeof draft.text==='string' && draft.answers && ['text','audio'].includes(draft.mode)) {
             if(!saved.submitted_at && draft.revision===saved.revision){setText(draft.text);setAnswers(draft.answers);setMode(draft.mode)}
@@ -58,7 +59,7 @@ function Practice({route,onSaved}:{route:string;onSaved:()=>void}) {
   const dirty=!!run && !run.submitted_at && (run.text!==text || run.mode!==mode || JSON.stringify(run.answers)!==JSON.stringify(answers))
   useEffect(()=>{
     if(!run || conflict)return
-    try{if(run.submitted_at)localStorage.removeItem(`academy-ielts-draft-${run.id}`);else localStorage.setItem(`academy-ielts-draft-${run.id}`,JSON.stringify({revision:run.revision,text,answers,mode}))}catch{setNotice('Локальное сохранение недоступно. Используй кнопку сохранения перед выходом.')}
+    try{if(run.submitted_at)localStorage.removeItem(privateKey(`academy-ielts-draft-${run.id}`));else localStorage.setItem(privateKey(`academy-ielts-draft-${run.id}`),JSON.stringify({revision:run.revision,text,answers,mode}))}catch{setNotice('Локальное сохранение недоступно. Используй кнопку сохранения перед выходом.')}
   },[run,text,answers,mode,conflict])
   useEffect(()=>{if(!dirty)return; const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[dirty])
   async function save(submit=false){

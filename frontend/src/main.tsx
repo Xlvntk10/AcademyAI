@@ -4,8 +4,9 @@ import App from './App'
 import './styles.css'
 import './platform.css'
 import { registerPwa } from './pwa'
+import { AccountGate } from './Account'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode><App /></React.StrictMode>,
+  <React.StrictMode><AccountGate><App /></AccountGate></React.StrictMode>,
 )
 void registerPwa()

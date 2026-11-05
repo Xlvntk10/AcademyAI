@@ -1,4 +1,5 @@
 import { newRequestId, type LessonDetail, type Run } from './api'
+import { privateKey } from './account-context'
 
 export type OfflineBundle = {
   protocol: 1; server_id: string; content_hash: string; downloaded_at: string; lesson: LessonDetail
@@ -20,7 +21,7 @@ function changed() {
 async function openDatabase(): Promise<IDBDatabase> {
   if (!('indexedDB' in globalThis)) throw new Error('Браузер не предоставляет локальное хранилище. Открой Academy AI в обычном режиме браузера.')
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DATABASE, 1)
+    const request = indexedDB.open(privateKey(DATABASE), 1)
     request.onupgradeneeded = () => {
       request.result.createObjectStore('lessons', { keyPath: 'slug' })
       request.result.createObjectStore('attempts', { keyPath: 'id' })

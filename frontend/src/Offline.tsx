@@ -48,12 +48,14 @@ export function SyncStatus() {
     window.addEventListener(OFFLINE_CHANGED, refresh)
     window.addEventListener('academy-sync-state', refresh)
     window.addEventListener('online', online); window.addEventListener('offline', online)
+    window.addEventListener('academy-account-connected', visible)
     window.addEventListener('storage', storage); document.addEventListener('visibilitychange', visible)
     const timer = window.setInterval(visible, 60000)
     return () => {
       window.clearInterval(timer)
       window.removeEventListener(OFFLINE_CHANGED, refresh); window.removeEventListener('academy-sync-state', refresh)
       window.removeEventListener('online', online); window.removeEventListener('offline', online)
+      window.removeEventListener('academy-account-connected', visible)
       window.removeEventListener('storage', storage); document.removeEventListener('visibilitychange', visible)
     }
   }, [])

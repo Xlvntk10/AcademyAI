@@ -59,3 +59,8 @@
   .offline-question input:not([type=radio]) { font-size:16px; }
   .workspace { padding-bottom:env(safe-area-inset-bottom); }
 }
+/* Account screens share the existing panel and form styles. */
+.account-entry { width: min(560px, calc(100% - 32px)); margin: 8vh auto; }
+.account-entry form { display: grid; gap: 18px; }
+.account-entry label { display: grid; gap: 7px; }
+.account-entry input { width: 100%; box-sizing: border-box; }

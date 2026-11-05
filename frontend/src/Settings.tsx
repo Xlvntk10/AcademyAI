@@ -1,3 +1,4 @@
+import { privateKey } from './account-context'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Bell, Download, ShieldCheck, WifiOff } from 'lucide-react'
 import { api } from './api'
@@ -7,7 +8,7 @@ import { notifyStudy, getInstallPrompt, clearInstallPrompt, type InstallPrompt }
 const reminderKey = 'academy-reminder-preferences-v1'
 const reminderDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 function cacheReminder(settings: StudySettings) {
-  try { localStorage.setItem(reminderKey, JSON.stringify({ reminder_enabled: settings.reminder_enabled,
+  try { localStorage.setItem(privateKey(reminderKey), JSON.stringify({ reminder_enabled: settings.reminder_enabled,
     reminder_time: settings.reminder_time, reminder_days: settings.reminder_days ?? [0,1,2,3,4,5,6], timezone: settings.timezone })) } catch { /* Online settings remain available. */ }
 }
 
@@ -23,7 +24,7 @@ export function ReminderHost() {
   const [notice, setNotice] = useState('')
   const lastDay = useRef('')
   useEffect(() => {
-    try { const cached = localStorage.getItem(reminderKey); if (cached) setSettings(JSON.parse(cached)) } catch { /* Invalid preferences are replaced on connection. */ }
+    try { const cached = localStorage.getItem(privateKey(reminderKey)); if (cached) setSettings(JSON.parse(cached)) } catch { /* Invalid preferences are replaced on connection. */ }
     const load = () => { void api<StudySettings>('/planner/settings').then(value => { cacheReminder(value); setSettings(value) }).catch(() => {}) }
     load(); window.addEventListener('academy-settings-change', load)
     const pwaError = (event: Event) => setNotice((event as CustomEvent<string>).detail)
@@ -37,10 +38,10 @@ export function ReminderHost() {
       const now = new Date()
       const day = localDay()
       let saved = lastDay.current
-      try { saved = localStorage.getItem('academy-reminder-day') || saved } catch { /* Memory fallback. */ }
+      try { saved = localStorage.getItem(privateKey('academy-reminder-day')) || saved } catch { /* Memory fallback. */ }
       if (!reminderDue(settings, now) || saved === day) return
       lastDay.current = day
-      try { localStorage.setItem('academy-reminder-day',day) } catch { /* In-app reminder still works. */ }
+      try { localStorage.setItem(privateKey('academy-reminder-day'),day) } catch { /* In-app reminder still works. */ }
       setNotice('Время для небольшого шага. Твои задания ждут в разделе «План».')
       void notifyStudy().catch(() => {})
     }
@@ -65,7 +66,7 @@ export default function Settings() {
     if (!settings) return
     setBusy(true); setError(''); setNotice('')
     try {
-      const saved = await api<StudySettings>('/planner/reminder', { reminder_enabled:settings.reminder_enabled, reminder_time:settings.reminder_time, reminder_days: settings.reminder_days ?? [0,1,2,3,4,5,6] })
+      const saved = await api<StudySettings>('/planner/reminder', { sync_revision:settings.sync_revision, reminder_enabled:settings.reminder_enabled, reminder_time:settings.reminder_time, reminder_days: settings.reminder_days ?? [0,1,2,3,4,5,6] })
       setSettings(saved); cacheReminder(saved)
       window.dispatchEvent(new Event('academy-settings-change')); setNotice('Время занятий сохранено.')
     } catch (e) { setError(message(e)) } finally { setBusy(false) }

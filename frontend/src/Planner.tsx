@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2, Clock3, History, Settings2 } from 'lucide-react'
 import { api } from './api'
 
-export type StudySettings = { available_minutes: number[]; daily_goal_minutes: number; weekly_goal_minutes: number; reminder_enabled: boolean; reminder_time: string; reminder_days?: number[]; masters_target_date?: string | null; timezone: string; english_percent: number; monthly_goal_minutes?: number; target_month?: string | null }
-export type Task = { id: string; scheduled_date: string; original_date: string; subject: 'english' | 'python'; kind: 'lesson' | 'review' | 'practice'; title: string; instructions: string; planned_minutes: number; status: string; actual_minutes: number | null; completed_at: string | null; lesson_slug: string | null; overdue: boolean }
-export type Week = { week_start: string; today: string; generated: boolean; settings: StudySettings; tasks: Task[]; overdue: Task[]; planned_minutes: number; completed_minutes: number }
+export type StudySettings = { sync_revision?: string | null; available_minutes: number[]; daily_goal_minutes: number; weekly_goal_minutes: number; reminder_enabled: boolean; reminder_time: string; reminder_days?: number[]; masters_target_date?: string | null; timezone: string; english_percent: number; monthly_goal_minutes?: number; target_month?: string | null }
+export type Task = { sync_revision?: string | null; id: string; scheduled_date: string; original_date: string; subject: 'english' | 'python'; kind: 'lesson' | 'review' | 'practice'; title: string; instructions: string; planned_minutes: number; status: string; actual_minutes: number | null; completed_at: string | null; lesson_slug: string | null; overdue: boolean }
+export type Week = { sync_revision?: string | null; week_start: string; today: string; generated: boolean; settings: StudySettings; tasks: Task[]; overdue: Task[]; planned_minutes: number; completed_minutes: number }
 const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 export const localDay = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Almaty', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
 export const addDays = (day: string, count: number) => { const d = new Date(`${day}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + count); return d.toISOString().slice(0, 10) }
@@ -21,7 +21,7 @@ function TaskCard({ task, today, onChange }: { task: Task; today: string; onChan
   async function submit() {
     setBusy(true); setError('')
     try {
-      await api(`/planner/tasks/${task.id}/${mode === 'complete' ? 'complete' : 'reschedule'}`, mode === 'complete' ? { actual_minutes: minutes } : { scheduled_date: moveDate })
+      await api(`/planner/tasks/${task.id}/${mode === 'complete' ? 'complete' : 'reschedule'}`, mode === 'complete' ? { actual_minutes: minutes, sync_revision: task.sync_revision } : { scheduled_date: moveDate, sync_revision: task.sync_revision })
       setMode('none'); onChange()
     } catch (e) { setError(message(e)) } finally { setBusy(false) }
   }
@@ -75,7 +75,7 @@ export default function Planner({ onSaved }: { onSaved: () => void }) {
   function shift(offset: number) { const next = addDays(start, offset); setStart(next); setSelected(next); setHistory(null) }
   async function generate(replace = false) {
     setBusy(true); setError(''); setNotice('')
-    try { setWeek(await api<Week>('/planner/generate', { week_start: start, replace_pending: replace })); setNotice(replace ? 'Будущие невыполненные задания обновлены. История сохранена.' : 'Неделя готова. Начни с небольшого шага.'); onSaved() }
+    try { setWeek(await api<Week>('/planner/generate', { week_start: start, replace_pending: replace, sync_revision: week?.sync_revision })); setNotice(replace ? 'Будущие невыполненные задания обновлены. История сохранена.' : 'Неделя готова. Начни с небольшого шага.'); onSaved() }
     catch (e) { setError(message(e)) } finally { setBusy(false) }
   }
   async function saveSettings() {
@@ -88,7 +88,7 @@ export default function Planner({ onSaved }: { onSaved: () => void }) {
       await load(); onSaved()
     } catch (e) { setError(message(e)) } finally { setBusy(false) }
   }
-  async function adapt() { setBusy(true); setError(''); try { const result = await api<{week:Week;moved:number;remaining_overdue:number}>('/planner/adapt',{week_start:start}); setWeek(result.week); setNotice(`Перенесено: ${result.moved}. Осталось пропущенных: ${result.remaining_overdue}. Выполненные и начатые уроки сохранены.`); onSaved() } catch(e) { setError(message(e)) } finally { setBusy(false) } }
+  async function adapt() { setBusy(true); setError(''); try { const result = await api<{week:Week;moved:number;remaining_overdue:number}>('/planner/adapt',{week_start:start,sync_revision:week?.sync_revision}); setWeek(result.week); setNotice(`Перенесено: ${result.moved}. Осталось пропущенных: ${result.remaining_overdue}. Выполненные и начатые уроки сохранены.`); onSaved() } catch(e) { setError(message(e)) } finally { setBusy(false) } }
   async function showHistory() { try { setHistory(history ? null : await api<Task[]>('/planner/history')); setError('') } catch (e) { setError(message(e)) } }
   const changed = () => { void load(); if (history) void api<Task[]>('/planner/history').then(setHistory).catch(e => setError(message(e))); onSaved() }
   return <><div className="page-intro"><p>Твой горизонт — 2028</p><h2>Большая цель. Реальный план.</h2><span>{settings?.english_percent ?? 65}% английского · {100-(settings?.english_percent ?? 65)}% Python · время Asia/Almaty</span></div>
