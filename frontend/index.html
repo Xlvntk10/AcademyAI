@@ -19,7 +19,26 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><section class="boot-fallback" role="status">
+      <h1>Academy AI</h1><p id="boot-message">Открываем твоё учебное пространство…</p>
+      <p id="boot-help" hidden>Если запуск остановился, подключись к домашнему серверу и повтори открытие. Локальные ответы хранятся отдельно. Сохрани данные сайта при восстановлении.</p>
+      <a href="/" id="boot-retry" hidden>Повторить запуск</a>
+      <noscript>Для открытия учебной библиотеки включи JavaScript в настройках браузера.</noscript>
+    </section></div>
+    <style>
+      .boot-fallback{font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:540px;margin:12vh auto;padding:28px;border:1px solid #dbe3d7;border-radius:20px;background:#f7f8fa;color:#252c29}
+      .boot-fallback a{color:#456c43}.boot-fallback h1{font-size:28px}
+      @media(prefers-color-scheme:dark){.boot-fallback{background:#1d2420;color:#edf2e9;border-color:#303b33}.boot-fallback a{color:#b3d69b}}
+    </style>
+    <script>
+      window.setTimeout(function () {
+        const message = document.getElementById('boot-message');
+        if (!message) return;
+        message.textContent = 'Не удалось полностью загрузить приложение.';
+        document.getElementById('boot-help').hidden = false;
+        document.getElementById('boot-retry').hidden = false;
+      }, 6000);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

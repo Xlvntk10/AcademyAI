@@ -22,7 +22,9 @@ let shellReady = false
 export const offlineShellReady = () => shellReady
 
 async function inspectShell(registration: ServiceWorkerRegistration) {
-  if (!registration.active) return
+  // Check the worker controlling this document, including during an update.
+  const worker = navigator.serviceWorker.controller
+  if (!worker || !registration.active) return
   const channel = new MessageChannel()
   const timeout = window.setTimeout(() => channel.port1.close(), 5000)
   channel.port1.onmessage = event => {
@@ -30,25 +32,36 @@ async function inspectShell(registration: ServiceWorkerRegistration) {
     shellReady = event.data?.ready === true
     window.dispatchEvent(new Event('academy-shell-status'))
   }
-  registration.active.postMessage({ type: 'CHECK_OFFLINE_SHELL' }, [channel.port2])
+  worker.postMessage({ type: 'CHECK_OFFLINE_SHELL' }, [channel.port2])
 }
 
 export async function registerPwa(): Promise<void> {
   if (!import.meta.env.PROD || !('serviceWorker' in navigator) || !window.isSecureContext) return
-  try {
-    pwaRegistration = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
-    void navigator.serviceWorker.ready.then(inspectShell)
-    navigator.serviceWorker.addEventListener('controllerchange', () => { if (pwaRegistration) void inspectShell(pwaRegistration) })
-    const announce = () => { if (pwaRegistration?.waiting) window.dispatchEvent(new Event('academy-update-ready')) }
+  // An installed worker can boot offline even if fetching /sw.js fails.
+  // Bind it before attempting the network-dependent registration/update.
+  const bind = (registration: ServiceWorkerRegistration) => {
+    pwaRegistration = registration
+    void inspectShell(registration)
+    const announce = () => { if (registration.waiting) window.dispatchEvent(new Event('academy-update-ready')) }
     announce()
-    pwaRegistration.addEventListener('updatefound', () => {
-      pwaRegistration?.installing?.addEventListener('statechange', announce)
-    })
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') void checkPwaUpdate().catch(() => {})
+    registration.addEventListener('updatefound', () => {
+      registration.installing?.addEventListener('statechange', announce)
     })
   }
-  catch { window.dispatchEvent(new CustomEvent('academy-pwa-error', { detail: 'Не удалось подготовить кеш приложения. Основные функции доступны онлайн.' })) }
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (pwaRegistration) void inspectShell(pwaRegistration) })
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') void checkPwaUpdate().catch(() => {})
+  })
+  try {
+    const existing = await navigator.serviceWorker.getRegistration('/')
+    if (existing) bind(existing)
+    const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
+    if (registration !== existing) bind(registration)
+    void navigator.serviceWorker.ready.then(() => inspectShell(registration))
+  }
+  catch {
+    if (!pwaRegistration?.active) window.dispatchEvent(new CustomEvent('academy-pwa-error', { detail: 'Кеш приложения пока не подготовлен. Подключись к серверу для первого автономного запуска.' }))
+  }
 }
 
 export async function notifyStudy(): Promise<void> {

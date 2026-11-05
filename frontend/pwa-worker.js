@@ -1,6 +1,10 @@
 /* Replaced by the build plugin. No API responses or answer mutations are cached. */
 const STATIC_CACHE = 'academy-static-__VERSION__';
 const PRECACHE = __PRECACHE__;
+// These are public, build-owned files. Vite adds Vary: Origin, but a module
+// request carries different Origin headers from cache.addAll's same-origin GET.
+// Limit relaxed matching to this static allowlist, never to API/user data.
+const STATIC_MATCH = {ignoreVary: true};
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(STATIC_CACHE).then(cache => cache.addAll(PRECACHE)));
   // A new worker waits for old tabs to close; don't replace code during a lesson.
@@ -18,7 +22,7 @@ self.addEventListener('message', event => {
   if (event.data?.type === 'CHECK_OFFLINE_SHELL' && event.ports?.[0]) {
     event.waitUntil((async () => {
       const cache = await caches.open(STATIC_CACHE);
-      const entries = await Promise.all(PRECACHE.map(path => cache.match(path)));
+      const entries = await Promise.all(PRECACHE.map(path => cache.match(path, STATIC_MATCH)));
       event.ports[0].postMessage({ready:entries.every(Boolean)});
     })());
     return;
@@ -36,11 +40,29 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || url.origin !== self.location.origin || url.pathname === '/api' || url.pathname.startsWith('/api/')) return;
   if (event.request.mode === 'navigate') {
     // HTML and JS come from one build, including when the web server is returning 503.
-    event.respondWith(caches.open(STATIC_CACHE).then(async cache => (await cache.match('/index.html')) || fetch(event.request)));
+    event.respondWith((async () => {
+      const cache = await caches.open(STATIC_CACHE);
+      const shell = await cache.match('/index.html', STATIC_MATCH);
+      if (shell) return shell;
+      try {
+        const response = await fetch(event.request);
+        if (response.ok) return response;
+      } catch { /* The standalone fallback also works if React cannot load. */ }
+      return (await cache.match('/offline.html', STATIC_MATCH)) || new Response(
+        '<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Academy AI — офлайн</title><h1>Academy AI</h1><p>Для восстановления оболочки подключись к серверу и открой приложение ещё раз.</p></html>',
+        {status: 503, headers: {'Content-Type':'text/html; charset=utf-8'}});
+    })());
   } else if (PRECACHE.includes(url.pathname)) {
-    event.respondWith(caches.open(STATIC_CACHE).then(async cache => (await cache.match(event.request)) || fetch(event.request)));
+    event.respondWith(caches.open(STATIC_CACHE).then(async cache => (await cache.match(url.pathname, STATIC_MATCH)) || fetch(event.request)));
   } else if (/^\/assets\/[^/]+-[A-Za-z0-9_-]+\.(js|css)$/.test(url.pathname)) {
-    event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
+    event.respondWith((async () => {
+      // Old open tabs can still request their immutable build assets after activation.
+      for (const name of (await caches.keys()).filter(key => key.startsWith('academy-static-')).reverse()) {
+        const cached = await (await caches.open(name)).match(url.pathname, STATIC_MATCH);
+        if (cached) return cached;
+      }
+      return fetch(event.request);
+    })());
   }
 });
 self.addEventListener('notificationclick', event => {

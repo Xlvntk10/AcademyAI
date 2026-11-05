@@ -8,6 +8,19 @@ import { listBundles, listAttempts, saveBundle, startOffline, saveDraft, queueAt
 import { synchronize, syncStatus } from './offline-sync'
 import { offlineShellReady } from './pwa'
 
+export function OfflineLanding() {
+  const [bundles, setBundles] = useState<OfflineBundle[] | null>(null)
+  const [error, setError] = useState('')
+  useEffect(() => { void listBundles().then(setBundles).catch(e => setError(message(e))) }, [])
+  return <section className="panel offline-tools"><WifiOff size={24}/><h2>Учёба без подключения</h2>
+    {error ? <p role="alert">{error}</p> : bundles === null ? <p>Открываем локальную библиотеку…</p> : bundles.length ? <>
+      <p>На устройстве доступны скачанные уроки. Черновики и очередь ответов можно открыть в локальной библиотеке.</p>
+      <div className="offline-cards">{bundles.map(bundle => <a className="offline-lesson" key={bundle.lesson.slug} href="#offline"><strong>{bundle.lesson.title}</strong><span>{bundle.lesson.level} · версия {bundle.lesson.version}</span></a>)}</div>
+    </> : <p>Скачанных уроков пока нет. Подключись к домашнему серверу и нажми «Скачать урок», чтобы подготовить занятия для работы без сети.</p>}
+    <a className="secondary" href="#offline">Локальная библиотека и мои ответы</a>
+  </section>
+}
+
 export function DownloadLesson({ slug }: { slug: string }) {
   const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)

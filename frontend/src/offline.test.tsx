@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import { saveBundle, listBundles, startOffline, saveDraft, queueAttempt, listAttempts, submission, retryAttempt, type OfflineBundle } from './offline-store'
 import { synchronize, syncStatus } from './offline-sync'
 import OfflineLibrary from './Offline'
-import App from './App'
+import App, { readRoute } from './App'
 
 const bundle: OfflineBundle = {
   protocol: 1, server_id:'22222222-2222-4222-8222-222222222222', content_hash:'a'.repeat(64), downloaded_at:'2026-11-05T10:00:00Z',
@@ -15,7 +15,7 @@ const bundle: OfflineBundle = {
     exercises:[{id:1,question:'Complete the sentence',points:10,position:1,kind:'text',options:[]}] }
 }
 beforeEach(() => { vi.stubGlobal('indexedDB', new IDBFactory()); vi.stubGlobal('scrollTo', vi.fn()); localStorage.clear() })
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); window.location.hash = '' })
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); window.history.replaceState(null,'','/') })
 
 async function queuedAttempt() {
   const attempt = await startOffline(bundle)
@@ -113,4 +113,24 @@ test('the normal app entry opens the offline library when every API call fails',
   expect(await screen.findByRole('button',{name:/A saved lesson/})).toBeVisible()
   expect(screen.getByRole('heading',{name:'Уроки с собой'})).toBeVisible()
   expect(screen.getByText(/—\s*XP/)).toBeVisible()
+})
+
+test.each(['today','learn','plan','progress'])('cold /%s renders an explicit empty offline screen', async route => {
+  window.history.replaceState(null,'',`/${route}`)
+  expect(readRoute()).toBe(route)
+  vi.stubGlobal('fetch',vi.fn(async()=>{throw new TypeError('servers stopped')}))
+  render(<App/>)
+  expect(await screen.findByRole('heading',{name:'Учёба без подключения'})).toBeVisible()
+  expect(await screen.findByText(/Скачанных уроков пока нет/)).toBeVisible()
+  expect(screen.getByRole('link',{name:'Локальная библиотека и мои ответы'})).toHaveAttribute('href','#offline')
+})
+
+test('cold path routes surface IndexedDB lessons and preserve legacy hash navigation', async () => {
+  await saveBundle(bundle)
+  window.history.replaceState(null,'','/learn')
+  vi.stubGlobal('fetch',vi.fn(async()=>{throw new TypeError('servers stopped')}))
+  render(<App/>)
+  await userEvent.setup().click(await screen.findByRole('link',{name:/A saved lesson/}))
+  expect(readRoute()).toBe('offline')
+  expect(await screen.findByRole('button',{name:/A saved lesson/})).toBeVisible()
 })

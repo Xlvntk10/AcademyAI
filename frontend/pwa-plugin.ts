@@ -6,7 +6,7 @@ export function academyPwa(): Plugin {
   return {
     name: 'academy-local-pwa', apply: 'build', enforce: 'post',
     generateBundle(_options, bundle) {
-      const publicFiles = ['manifest.webmanifest', 'icons/academy.svg', 'icons/academy-monochrome.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png']
+      const publicFiles = ['manifest.webmanifest', 'offline.html', 'icons/academy.svg', 'icons/academy-monochrome.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png']
       const paths = [...Object.keys(bundle).filter(name => /\.(js|css|html)$/.test(name)), ...publicFiles]
       const fingerprint = createHash('sha256')
       for (const name of Object.keys(bundle).sort()) {
