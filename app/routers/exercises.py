@@ -16,7 +16,11 @@ router = APIRouter(prefix="/api")
 
 
 def get_session(request: Request):
-    with Session(request.app.state.engine) as session:
+    with Session(getattr(request.state, "engine", request.app.state.engine)) as session:
+        session.info["account"] = getattr(request.state, "user", None)
+        session.info["plan_revision"] = request.headers.get("if-match")
+        if session.info["account"] and request.method == "GET":
+            session.exec(text("BEGIN"))
         yield session
 
 

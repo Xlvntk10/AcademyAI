@@ -1,25 +1,25 @@
 from datetime import date
 from uuid import UUID
 from fastapi import APIRouter, Query
-from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import StudyTask
 from app.planner_schemas import SettingsInput, SettingsRead, GenerateWeek, CompleteTask, RescheduleTask, WeekRead, TaskRead, ReminderInput, AdaptWeek
 from app.routers.exercises import DB
 from app.services import planner, clock, horizon
 from fastapi import HTTPException
+from app.services.sync import plan_revision, begin_plan_write
 
 router = APIRouter(prefix="/api/planner", tags=["planner"])
 
 
 @router.get("/settings", response_model=SettingsRead)
 def read_settings(session: DB):
-    return planner.settings(session).model_dump(exclude={"id"})
+    return {**planner.settings(session).model_dump(exclude={"id"}), "sync_revision": plan_revision(session)}
 
 
 @router.post("/settings", response_model=SettingsRead)
 def save_settings(payload: SettingsInput, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     if payload.target_month and not clock.local_day().strftime('%Y-%m') <= payload.target_month <= '2028-12':
         raise HTTPException(422, "Выбери месяц от текущего до декабря 2028 года")
     settings = planner.settings(session)
@@ -28,7 +28,7 @@ def save_settings(payload: SettingsInput, session: DB):
     session.add(settings)
     session.commit()
     session.refresh(settings)
-    return settings.model_dump(exclude={"id"})
+    return {**settings.model_dump(exclude={"id"}), "sync_revision": plan_revision(session)}
 
 
 @router.get("/week", response_model=WeekRead)
@@ -38,7 +38,7 @@ def week(session: DB, start: date | None = None):
 
 @router.post("/reminder", response_model=SettingsRead)
 def save_reminder(payload: ReminderInput, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     prefs = planner.settings(session)
     prefs.reminder_enabled = payload.reminder_enabled
     prefs.reminder_time = payload.reminder_time
@@ -47,12 +47,12 @@ def save_reminder(payload: ReminderInput, session: DB):
     session.add(prefs)
     session.commit()
     session.refresh(prefs)
-    return prefs.model_dump(exclude={"id"})
+    return {**prefs.model_dump(exclude={"id"}), "sync_revision": plan_revision(session)}
 
 
 @router.post("/generate", response_model=WeekRead)
 def generate(payload: GenerateWeek, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     planner.generate(session, payload.week_start, payload.replace_pending)
     session.commit()
     return planner.week_read(session, payload.week_start)
@@ -60,7 +60,7 @@ def generate(payload: GenerateWeek, session: DB):
 
 @router.post("/tasks/{task_id}/complete", response_model=TaskRead)
 def complete(task_id: UUID, payload: CompleteTask, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     task = planner.get_task(session, task_id)
     planner.complete(session, task, payload.actual_minutes)
     session.commit()
@@ -69,7 +69,7 @@ def complete(task_id: UUID, payload: CompleteTask, session: DB):
 
 @router.post("/tasks/{task_id}/reschedule", response_model=TaskRead)
 def reschedule(task_id: UUID, payload: RescheduleTask, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     task = planner.get_task(session, task_id)
     planner.reschedule(session, task, payload.scheduled_date)
     session.commit()
@@ -90,7 +90,7 @@ def roadmap(session: DB):
 
 @router.post("/adapt")
 def adapt(payload: AdaptWeek, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_plan_write(session)
     result = planner.adapt(session, payload.week_start)
     session.commit()
     return result

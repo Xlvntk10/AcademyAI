@@ -6,6 +6,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 class SettingsInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    # Accept round-tripped read metadata, but never persist it as a setting.
+    sync_revision: str | None = Field(default=None, exclude=True)
     available_minutes: list[int] = Field(min_length=7, max_length=7)
     daily_goal_minutes: int = Field(ge=5, le=480)
     weekly_goal_minutes: int = Field(ge=5, le=3360)
@@ -27,6 +29,7 @@ class SettingsInput(BaseModel):
 
 class SettingsRead(SettingsInput):
     timezone: str
+    sync_revision: str | None = Field(default=None, exclude=False)
 
 
 class GenerateWeek(BaseModel):
@@ -58,6 +61,7 @@ class RescheduleTask(BaseModel):
 
 
 class TaskRead(BaseModel):
+    sync_revision: str | None = None
     id: str
     scheduled_date: date
     original_date: date
@@ -74,6 +78,7 @@ class TaskRead(BaseModel):
 
 
 class WeekRead(BaseModel):
+    sync_revision: str | None = None
     week_start: date
     today: date
     generated: bool

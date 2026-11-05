@@ -6,6 +6,7 @@ from sqlmodel import select
 from app.database.models import Lesson, LessonContent, LessonMeta, LessonRun, PlanWeek, StudySettings, StudyTask, TaskMove
 from app.services import clock
 from app.services.mastery import curriculum_state
+from app.services.sync import plan_revision
 
 PRACTICE = {
     "english": [
@@ -36,6 +37,7 @@ def task_read(session, task):
     content = session.get(LessonContent, task.lesson_id) if task.lesson_id else None
     return dict(**{key: getattr(task, key) for key in ("id", "scheduled_date", "original_date", "subject", "kind",
         "title", "instructions", "planned_minutes", "status", "actual_minutes")},
+        sync_revision=plan_revision(session),
         completed_at=clock.as_utc(task.completed_at) if task.completed_at else None,
         lesson_slug=content.slug if content else None,
         overdue=task.status == "pending" and task.scheduled_date < clock.local_day())
@@ -49,7 +51,8 @@ def week_read(session, start):
     overdue = session.exec(select(StudyTask).where(StudyTask.scheduled_date < clock.local_day(),
         StudyTask.status == "pending").order_by(StudyTask.scheduled_date).limit(100)).all()
     return dict(week_start=start, today=clock.local_day(), generated=session.get(PlanWeek, start) is not None,
-        settings=settings(session).model_dump(exclude={"id"}),
+        sync_revision=plan_revision(session),
+        settings={**settings(session).model_dump(exclude={"id"}), "sync_revision": plan_revision(session)},
         tasks=[task_read(session, t) for t in tasks], overdue=[task_read(session, t) for t in overdue],
         planned_minutes=sum(t.planned_minutes for t in tasks),
         completed_minutes=sum(t.actual_minutes or 0 for t in tasks if t.status == "completed"))

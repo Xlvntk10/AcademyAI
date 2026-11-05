@@ -3,6 +3,7 @@
 Run with the API stopped. Copies are never deleted automatically.
 """
 import argparse
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 import sqlite3
@@ -13,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def connect_readonly(path):
-    return sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)
+    return closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True))
 
 
 def verify(path):
@@ -49,7 +50,7 @@ def assert_preserved(before, path):
 def backup(source, destination):
     if destination.exists():
         raise FileExistsError(destination)
-    with connect_readonly(source) as src, sqlite3.connect(destination) as dest:
+    with connect_readonly(source) as src, closing(sqlite3.connect(destination)) as dest:
         src.backup(dest)
     verify(destination)
 
