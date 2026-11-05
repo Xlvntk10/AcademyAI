@@ -9,6 +9,8 @@ import Settings, { ReminderHost } from './Settings'
 import Vocabulary from './Vocabulary'
 import Ielts from './Ielts'
 import Roadmap from './Roadmap'
+import OfflineLibrary, { DownloadLesson, SyncStatus } from './Offline'
+import { UpdateNotice } from './PwaUpdate'
 
 type Section = 'today' | 'learn' | 'plan' | 'progress'
 const sections = [
@@ -130,6 +132,7 @@ export function LessonPlayer({ slug, onSaved, onExit, catalogue = [] }: { slug: 
   const feedback = run?.answers.find(a => a.exercise_id === exercise?.id)
   return <div className="lesson-player"><div className="lesson-toolbar"><button className="text-button" onClick={onExit}><ArrowLeft size={17} />К урокам</button><span className="tag">{lesson.subject === 'python' ? 'Python' : 'English'} · {lesson.level}</span></div>
     {error && <ErrorBox message={error} />}
+    {stage === 'theory' && <DownloadLesson slug={slug} />}
     {stage === 'theory' && <><div className="lesson-title"><span className="eyebrow green">МАЛЕНЬКИЕ ПРИВЫЧКИ, БОЛЬШИЕ ПЕРЕМЕНЫ</span><h2>{lesson.title}</h2><p>{lesson.summary}</p><div className="metadata"><span><Clock3 size={16} />{lesson.duration_minutes} минут</span><span><BookOpen size={16} />{lesson.exercise_count} упражнений</span><span><Zap size={16} />До {lesson.max_score} XP</span></div></div>
       <div className="theory-list">{lesson.theory.map((block, i) => <section className="theory-block" key={block.title}><span className="theory-number">{String(i + 1).padStart(2, '0')}</span><div><h3>{block.title}</h3><p>{block.body}</p>{block.code && <CodeBlock code={block.code} />}<div className="examples">{block.examples.map(example => <p key={example}>{example}</p>)}</div></div></section>)}</div>
       <div className="practice-start"><div>{lesson.unlocked === false && <p role="status">Практика откроется после освоения предыдущих тем (от 80%). Осталось: {lesson.prerequisites?.map(slug => <a className="text-button" key={slug} href={`#lesson/${slug}`}>{catalogue.find(l => l.slug === slug)?.title ?? slug}</a>)}</p>}<h3>Попробуем на практике?</h3><p>После каждого ответа — объяснение. Ошибаться можно.</p></div><button className="primary" disabled={busy || lesson.unlocked === false} onClick={begin}>{busy ? 'Открываем…' : run ? 'Продолжить практику' : 'Начать практику'}<ArrowRight size={18} /></button></div>
@@ -162,6 +165,10 @@ export default function App() {
   }, [])
   useEffect(() => { void refresh() }, [refresh])
   useEffect(() => {
+    window.addEventListener('academy-sync-complete', refresh)
+    return () => window.removeEventListener('academy-sync-complete', refresh)
+  }, [refresh])
+  useEffect(() => {
     const onChange = () => { setRoute(readRoute()); window.scrollTo({ top: 0, behavior: 'instant' }); void refresh() }
     window.addEventListener('hashchange', onChange)
     return () => window.removeEventListener('hashchange', onChange)
@@ -175,10 +182,11 @@ export default function App() {
   const section: Section | null = sections.some(s => s.id === route) ? route as Section : route === 'roadmap' ? 'plan' : route === 'settings' ? null : 'learn'
   const today = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long', timeZone: 'Asia/Almaty' })
   return <div className="app-shell"><a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus() }}>К содержимому</a><aside className="sidebar"><a className="brand" href="#today" aria-label="Academy AI — главная"><span className="brand-mark"><GraduationCap size={23} /></span><span>academy<span className="brand-ai">ai</span></span></a><span className="sidebar-label">ТВОЁ ПРОСТРАНСТВО</span><nav aria-label="Основная навигация">{sections.map(item => <a key={item.id} href={`#${item.id}`} className={section === item.id ? 'active' : ''} aria-current={section === item.id ? 'page' : undefined}><item.icon size={21} /><span>{item.label}</span>{section === item.id && <span className="nav-dot" />}</a>)}</nav><div className="sidebar-bottom"><div className="sidebar-quote"><Leaf size={23} /><p>Не спеши.<br />Просто продолжай.</p></div><div className="profile"><span>Я</span><div><strong>Моё обучение</strong><small>Личное пространство</small></div></div></div></aside>
-    <ReminderHost /><div className="workspace"><header className="topbar"><div className="breadcrumbs">Моё пространство<ChevronRight size={14} /><strong>{route === 'settings' ? 'Настройки' : route === 'vocabulary' ? 'Словарь' : route.startsWith('ielts') ? 'IELTS' : route === 'roadmap' ? 'Учебный маршрут' : lessonSlug ? 'Урок' : sections.find(s => s.id === section)?.label}</strong></div><div className="topbar-actions"><button className="theme-button" aria-label="Настройки" onClick={() => navigate('settings')}><Settings2 size={19} /></button><span className="xp-pill"><Zap size={16} />{progress?.total_xp ?? '—'} XP</span><button className="theme-button" onClick={toggleTheme} aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}>{theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}</button><span className="avatar">Я</span></div></header>
-      <main id="main-content" tabIndex={-1}><div className="page-heading"><div><p className="date-label">{today}</p><h1>{route === 'settings' ? 'Твоё пространство' : lessonSlug ? 'Время для знаний' : titles[section ?? 'learn']}</h1></div><span className="local-badge"><span />Личное обучение</span></div>
-        {error && <ErrorBox message={error} retry={refresh} />}
-        {loading ? <Loading /> : route === 'settings' ? <Settings /> : route === 'roadmap' ? <Roadmap onSaved={refresh} /> : route === 'vocabulary' ? <Vocabulary onSaved={refresh} /> : route.startsWith('ielts') ? <Ielts key={route} route={route} onSaved={refresh} /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} catalogue={lessons} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} onSaved={refresh} /> : section === 'learn' ? <Curriculum lessons={lessons} progress={progress} /> : section === 'plan' ? <Planner onSaved={refresh} /> : <Analytics lessons={lessons} progress={progress} /> : null}
+    <ReminderHost /><div className="workspace"><header className="topbar"><div className="breadcrumbs">Моё пространство<ChevronRight size={14} /><strong>{route === 'offline' ? 'Локальная библиотека' : route === 'settings' ? 'Настройки' : route === 'vocabulary' ? 'Словарь' : route.startsWith('ielts') ? 'IELTS' : route === 'roadmap' ? 'Учебный маршрут' : lessonSlug ? 'Урок' : sections.find(s => s.id === section)?.label}</strong></div><div className="topbar-actions"><button className="theme-button" aria-label="Настройки" onClick={() => navigate('settings')}><Settings2 size={19} /></button><span className="xp-pill"><Zap size={16} />{progress?.total_xp ?? '—'} XP</span><button className="theme-button" onClick={toggleTheme} aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}>{theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}</button><span className="avatar">Я</span></div></header>
+      <main id="main-content" tabIndex={-1}><div className="page-heading"><div><p className="date-label">{today}</p><h1>{route === 'offline' ? 'Уроки с собой' : route === 'settings' ? 'Твоё пространство' : lessonSlug ? 'Время для знаний' : titles[section ?? 'learn']}</h1></div><span className="local-badge"><span />Личное обучение</span></div>
+        <SyncStatus /><UpdateNotice route={route}/>
+        {error && route !== 'offline' && <div className="offline-fallback"><ErrorBox message={error} retry={refresh} /><a className="secondary" href="#offline">Открыть скачанные уроки и ответы</a></div>}
+        {route === 'offline' ? <OfflineLibrary lessons={lessons}/> : loading ? <Loading /> : route === 'settings' ? <Settings /> : route === 'roadmap' ? <Roadmap onSaved={refresh} /> : route === 'vocabulary' ? <Vocabulary onSaved={refresh} /> : route.startsWith('ielts') ? <Ielts key={route} route={route} onSaved={refresh} /> : lessonSlug ? <LessonPlayer key={lessonSlug} slug={lessonSlug} onSaved={refresh} onExit={() => navigate('learn')} catalogue={lessons} /> : progress ? section === 'today' ? <Today lessons={lessons} progress={progress} onSaved={refresh} /> : section === 'learn' ? <Curriculum lessons={lessons} progress={progress} /> : section === 'plan' ? <Planner onSaved={refresh} /> : <Analytics lessons={lessons} progress={progress} /> : null}
         <footer><span>Academy AI</span><span>Твоё пространство для роста <Leaf size={13} /></span></footer>
       </main>
     </div>

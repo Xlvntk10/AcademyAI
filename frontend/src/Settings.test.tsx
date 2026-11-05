@@ -1,9 +1,9 @@
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, test, expect, vi } from 'vitest'
-import Settings, { ReminderHost } from './Settings'
+import Settings, { ReminderHost, reminderDue } from './Settings'
 
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); vi.useRealTimers(); localStorage.removeItem('academy-reminder-day') })
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); vi.useRealTimers(); localStorage.clear() })
 test('saving reminder uses narrow fields and never requests notification permission automatically', async () => {
   const requestPermission = vi.fn()
   vi.stubGlobal('Notification', { permission:'default', requestPermission })
@@ -17,8 +17,15 @@ test('saving reminder uses narrow fields and never requests notification permiss
   await user.click(screen.getByRole('button',{name:'Сохранить'}))
   expect(await screen.findByText('Время занятий сохранено.')).toBeVisible()
   const call = fetch.mock.calls.find(args => args[0] === '/api/planner/reminder')!
-  expect(JSON.parse(call[1]!.body as string)).toEqual({reminder_enabled:true,reminder_time:'19:00'})
+  expect(JSON.parse(call[1]!.body as string)).toEqual({reminder_enabled:true,reminder_time:'19:00',reminder_days:[0,1,2,3,4,5,6]})
   expect(requestPermission).not.toHaveBeenCalled()
+})
+
+test('reminders honor selected weekdays in the configured timezone', () => {
+  const settings = { reminder_time:'19:00', reminder_days:[2], timezone:'Asia/Almaty' }
+  expect(reminderDue(settings, new Date('2026-11-04T14:00:00Z'))).toBe(true)
+  expect(reminderDue(settings, new Date('2026-11-05T14:00:00Z'))).toBe(false)
+  expect(reminderDue({...settings,reminder_days:[]}, new Date('2026-11-04T14:00:00Z'))).toBe(false)
 })
 
 test('reminder uses Almaty time, waits for a visible page and fires once per local day across remounts', async () => {

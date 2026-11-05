@@ -18,3 +18,4 @@ frontend/dist/
 .npm-cache/
 .test-artifacts/
 *.tsbuildinfo
+.local-tls/

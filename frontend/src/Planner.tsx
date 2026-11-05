@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2, Clock3, History, Settings2 } from 'lucide-react'
 import { api } from './api'
 
-export type StudySettings = { available_minutes: number[]; daily_goal_minutes: number; weekly_goal_minutes: number; reminder_enabled: boolean; reminder_time: string; timezone: string; english_percent: number; monthly_goal_minutes?: number; target_month?: string | null }
+export type StudySettings = { available_minutes: number[]; daily_goal_minutes: number; weekly_goal_minutes: number; reminder_enabled: boolean; reminder_time: string; reminder_days?: number[]; masters_target_date?: string | null; timezone: string; english_percent: number; monthly_goal_minutes?: number; target_month?: string | null }
 export type Task = { id: string; scheduled_date: string; original_date: string; subject: 'english' | 'python'; kind: 'lesson' | 'review' | 'practice'; title: string; instructions: string; planned_minutes: number; status: string; actual_minutes: number | null; completed_at: string | null; lesson_slug: string | null; overdue: boolean }
 export type Week = { week_start: string; today: string; generated: boolean; settings: StudySettings; tasks: Task[]; overdue: Task[]; planned_minutes: number; completed_minutes: number }
 const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']

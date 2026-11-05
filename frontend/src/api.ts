@@ -7,6 +7,10 @@ export type Run = { id: string; lesson_slug: string; started_at: string; complet
 export type Stats = { slug: string; completed_runs: number; best_score: number; max_score: number; active_run_id: string | null; last_result: Run | null }
 export type Progress = { completed_lessons: number; completed_runs: number; total_xp: number; lessons: Stats[] }
 
+export class ApiError extends Error {
+  constructor(message: string, readonly status: number) { super(message) }
+}
+
 export async function api<T>(path: string, body?: unknown): Promise<T> {
   let response: Response
   try {
@@ -15,13 +19,14 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
       headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: AbortSignal.timeout(15000),
+      cache: 'no-store',
     })
   } catch {
     throw new Error('Нет связи с Academy AI. Проверь подключение и попробуй ещё раз. Уже сохранённые ответы останутся в базе.')
   }
   if (!response.ok) {
     const error = await response.json().catch(() => null)
-    throw new Error(typeof error?.detail === 'string' ? error.detail : 'Не удалось выполнить запрос. Попробуй ещё раз.')
+    throw new ApiError(typeof error?.detail === 'string' ? error.detail : 'Не удалось выполнить запрос. Проверь ответы и настройки времени устройства.', response.status)
   }
   return response.json()
 }
