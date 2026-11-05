@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/sync", tags=["sync"])
 @router.get("/snapshot")
 def snapshot(request: Request, session: DB):
     # One SQLite read transaction gives the second device a consistent snapshot.
-    if not session.info.get("account"):
+    if not session.info.get("account") and session.get_bind().dialect.name == "sqlite":
         session.exec(text("BEGIN"))
     return {
         "protocol": 1,

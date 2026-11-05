@@ -1,9 +1,9 @@
 """One atomic, idempotent receipt per offline attempt. Scores stay server-owned."""
+from app.database.db import begin_write
 import hashlib
 import json
 from datetime import timedelta
 from fastapi import APIRouter, HTTPException
-from sqlalchemy import text
 from app.database.models import Attempt, LessonRun, RunAnswer, OfflineReceipt, SyncIdentity
 from app.offline_schemas import OfflineBundle, OfflineSubmission, OfflineAcknowledgement
 from app.routers.exercises import DB
@@ -36,7 +36,7 @@ def download(slug: str, session: DB):
 
 @router.post("/attempts", response_model=OfflineAcknowledgement)
 def sync_attempt(payload: OfflineSubmission, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     if str(payload.server_id) != session.get(SyncIdentity, 1).server_id:
         raise HTTPException(409, "Подключена другая база Academy AI. Вернись к исходному серверу.")
     serialized = payload.model_dump(mode="json")

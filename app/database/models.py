@@ -1,4 +1,8 @@
-"""Модели персонального IELTS-тренажёра. Аккаунты пока не нужны."""
+"""Shared learning models. PostgreSQL ownership is enforced by transaction RLS.
+
+Each ORM Session belongs to exactly one verified account. Cloud migrations add
+user_id to keys and foreign keys. SQLite retains its original per-profile schema.
+"""
 from datetime import date, datetime, timezone
 from typing import Optional
 from sqlmodel import Field, Relationship, SQLModel
@@ -33,7 +37,7 @@ class Exercise(SQLModel, table=True):
 
 
 class Attempt(SQLModel, table=True):
-    """Моя попытка выполнить упражнение: один локальный пользователь."""
+    """An exercise attempt within the current learner's profile."""
     id: Optional[int] = Field(default=None, primary_key=True)
     exercise_id: int = Field(foreign_key="exercise.id", index=True)
     answer: str

@@ -1,7 +1,7 @@
+from app.database.db import begin_write
 """A small deterministic review schedule, no AI and no farmable XP."""
 from datetime import timedelta
 from fastapi import APIRouter, HTTPException
-from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import LessonContent, LessonRun, VocabularyCard, VocabularyProgress, VocabularyReview
 from app.routers.exercises import DB
@@ -42,7 +42,7 @@ def read_vocabulary(session: DB):
 
 @router.post("/{card_id}/add", response_model=VocabularyRead)
 def add_word(card_id: int, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     card = get_card(session, card_id)
     completed = session.exec(select(LessonRun).where(LessonRun.lesson_id == card.lesson_id,
         LessonRun.completed_at.is_not(None))).first()
@@ -61,7 +61,7 @@ def review_read(card, review):
 
 @router.post("/{card_id}/review", response_model=ReviewRead)
 def review_word(card_id: int, payload: ReviewInput, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     card = get_card(session, card_id)
     previous = session.get(VocabularyReview, str(payload.request_id))
     if previous:

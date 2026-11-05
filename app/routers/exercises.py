@@ -1,4 +1,5 @@
-"""Lesson API for a single local learner. No client-provided scores accepted."""
+"""Lesson API with server grading and account-scoped storage."""
+from app.database.db import begin_write
 from datetime import datetime, timezone
 from typing import Annotated
 from uuid import UUID
@@ -20,7 +21,10 @@ def get_session(request: Request):
         session.info["account"] = getattr(request.state, "user", None)
         session.info["plan_revision"] = request.headers.get("if-match")
         if session.info["account"] and request.method == "GET":
-            session.exec(text("BEGIN"))
+            if session.get_bind().dialect.name == "postgresql":
+                session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
+            else:
+                session.exec(text("BEGIN"))
         yield session
 
 
@@ -29,11 +33,15 @@ DB = Annotated[Session, Depends(get_session)]
 
 @router.get("/health")
 def health(session: DB):
+    cloud = session.get_bind().dialect.name == "postgresql"
     try:
-        revision = session.exec(text("SELECT version_num FROM alembic_version")).scalar_one()
+        table = "academy_migrations.alembic_version" if cloud else "alembic_version"
+        revision = session.exec(text(f"SELECT version_num FROM {table}")).scalar_one()
     except Exception as exc:
-        raise HTTPException(503, "База не подготовлена. Запустите python -m scripts.prepare_db") from exc
-    if revision != "0009_offline_sync":
+        command = "scripts.migrate_cloud" if cloud else "scripts.prepare_db"
+        raise HTTPException(503, "База не подготовлена. Запустите python -m " + command) from exc
+    expected = "cloud_0001" if cloud else "0009_offline_sync"
+    if revision != expected:
         raise HTTPException(503, "Требуется миграция базы")
     return {"status": "ok", "schema": revision}
 
@@ -66,7 +74,7 @@ def stats(slug: str, session: DB):
 @router.post("/lessons/{slug}/runs", response_model=RunRead)
 def start_run(slug: str, payload: StartRun, session: DB):
     # Serialize writers before reading: retries and concurrent tabs cannot create duplicate active runs.
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     lesson, content = lesson_by_slug(session, slug)
     existing = session.get(LessonRun, str(payload.request_id))
     if existing:
@@ -92,7 +100,7 @@ def read_run(run_id: UUID, session: DB):
 
 @router.post("/runs/{run_id}/answers", response_model=RunRead)
 def submit_answer(run_id: UUID, payload: SubmitAnswer, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     run = get_run(session, run_id)
     exercise = session.get(Exercise, payload.exercise_id)
     content = session.get(ExerciseContent, payload.exercise_id)

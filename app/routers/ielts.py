@@ -1,6 +1,6 @@
+from app.database.db import begin_write
 from uuid import UUID
 from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import IeltsRun, IeltsTest
 from app.ielts_schemas import DraftInput, IeltsRunRead
@@ -24,7 +24,7 @@ def read_test(test_id: str, session: DB):
 
 @router.post("/tests/{test_id}/runs", response_model=IeltsRunRead)
 def start(test_id: str, payload: StartRun, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     ielts.get_test(session, test_id)
     existing = session.get(IeltsRun, str(payload.request_id))
     if existing:
@@ -49,11 +49,11 @@ def read_run(run_id: UUID, session: DB):
 
 @router.post("/runs/{run_id}/save", response_model=IeltsRunRead)
 def save(run_id: UUID, payload: DraftInput, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     return ielts.run_read(session, ielts.save(session, ielts.get_run(session, run_id), payload))
 
 
 @router.post("/runs/{run_id}/submit", response_model=IeltsRunRead)
 def submit(run_id: UUID, payload: DraftInput, session: DB):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     return ielts.run_read(session, ielts.save(session, ielts.get_run(session, run_id), payload, submit=True))

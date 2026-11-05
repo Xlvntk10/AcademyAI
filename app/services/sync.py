@@ -1,8 +1,8 @@
 """Content revisions protect planner edits from stale devices."""
+from app.database.db import begin_write
 import hashlib
 import json
 from fastapi import HTTPException
-from sqlalchemy import text
 from sqlmodel import select
 from app.database.models import StudySettings, PlanWeek, StudyTask, TaskMove
 
@@ -18,7 +18,7 @@ def plan_revision(session):
 
 
 def begin_plan_write(session):
-    session.exec(text("BEGIN IMMEDIATE"))
+    begin_write(session)
     if session.info.get("account"):
         expected = session.info.get("plan_revision")
         if not expected:

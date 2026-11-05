@@ -25,14 +25,14 @@ class AccountConfig:
     origin: str
     supabase_url: str
     publishable_key: str
-    directory: Path
+    directory: Path | None
 
     @property
     def secure(self):
         return self.origin.startswith("https://")
 
     @classmethod
-    def from_environment(cls):
+    def from_environment(cls, cloud=False):
         mode = os.environ.get("ACADEMY_AUTH_MODE", "local")
         if mode == "local":
             return None
@@ -49,6 +49,8 @@ class AccountConfig:
         if not url.startswith("https://") or not key.startswith("sb_publishable_"):
             raise RuntimeError("Set SUPABASE_URL and its sb_publishable_ key")
         directory = os.environ.get("ACADEMY_ACCOUNTS_DIR", "")
+        if cloud:
+            return cls(origin, url, key, None)
         if not directory or not Path(directory).is_absolute():
             raise RuntimeError("Set ACADEMY_ACCOUNTS_DIR to a private absolute directory on persistent storage")
         return cls(origin, url, key, Path(directory))
