@@ -13,7 +13,8 @@ window.addEventListener('appinstalled', () => {
 })
 
 let pwaRegistration: ServiceWorkerRegistration | null = null
-export const waitingWorker = () => pwaRegistration?.waiting ?? null
+// A first installation can briefly be waiting, but it is not an update.
+export const waitingWorker = () => pwaRegistration?.active ? pwaRegistration.waiting : null
 export async function checkPwaUpdate() {
   if (!pwaRegistration) throw new Error('Проверка обновлений доступна после регистрации PWA в production-версии по HTTPS или localhost.')
   await pwaRegistration.update()
@@ -42,7 +43,8 @@ export async function registerPwa(): Promise<void> {
   const bind = (registration: ServiceWorkerRegistration) => {
     pwaRegistration = registration
     void inspectShell(registration)
-    const announce = () => { if (registration.waiting) window.dispatchEvent(new Event('academy-update-ready')) }
+    // Notify on activation too, so the UI clears an already displayed notice.
+    const announce = () => window.dispatchEvent(new Event('academy-update-ready'))
     announce()
     registration.addEventListener('updatefound', () => {
       registration.installing?.addEventListener('statechange', announce)

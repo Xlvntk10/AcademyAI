@@ -57,3 +57,45 @@ test('an active worker does not confirm offline readiness until it controls the 
   events.dispatchEvent(new Event('controllerchange'))
   expect(pwa.offlineShellReady()).toBe(true)
 })
+
+
+test('first installation is not an update and activation clears an existing update notice', async () => {
+  const worker = Object.assign(new EventTarget(), {postMessage: vi.fn()})
+  const registration = Object.assign(new EventTarget(), {
+    active: null as typeof worker | null,
+    waiting: worker as typeof worker | null,
+    installing: worker,
+    update: vi.fn(),
+  })
+  const events = new EventTarget()
+  vi.stubGlobal('navigator', {serviceWorker: {
+    controller: null,
+    getRegistration: vi.fn(async () => undefined),
+    register: vi.fn(async () => registration),
+    ready: Promise.resolve(registration),
+    addEventListener: events.addEventListener.bind(events),
+  }})
+  const pwa = await import('./pwa')
+  const notices: boolean[] = []
+  window.addEventListener('academy-update-ready', () => notices.push(!!pwa.waitingWorker()))
+  await pwa.registerPwa()
+  expect(pwa.waitingWorker()).toBeNull()
+  registration.dispatchEvent(new Event('updatefound'))
+  worker.dispatchEvent(new Event('statechange'))
+  expect(notices.at(-1)).toBe(false)
+
+  registration.active = worker
+  const replacement = Object.assign(new EventTarget(), {postMessage: vi.fn()})
+  registration.installing = replacement
+  registration.waiting = replacement
+  registration.dispatchEvent(new Event('updatefound'))
+  replacement.dispatchEvent(new Event('statechange'))
+  expect(pwa.waitingWorker()).toBe(replacement)
+  expect(notices.at(-1)).toBe(true)
+
+  registration.active = replacement
+  registration.waiting = null
+  replacement.dispatchEvent(new Event('statechange'))
+  expect(pwa.waitingWorker()).toBeNull()
+  expect(notices.at(-1)).toBe(false)
+})
