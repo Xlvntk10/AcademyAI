@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from contextlib import contextmanager, closing
 import hashlib
+import math
 import os
 from pathlib import Path
 import secrets
@@ -46,7 +47,10 @@ class AccountConfig:
             raise RuntimeError("Account mode requires HTTPS, except loopback development")
         url = os.environ.get("SUPABASE_URL", "").rstrip("/")
         key = os.environ.get("SUPABASE_PUBLISHABLE_KEY", "")
-        if not url.startswith("https://") or not key.startswith("sb_publishable_"):
+        provider_url = urlparse(url)
+        if (provider_url.scheme != "https" or not provider_url.hostname or provider_url.username
+                or provider_url.password or provider_url.path or provider_url.query or provider_url.fragment
+                or not key.startswith("sb_publishable_")):
             raise RuntimeError("Set SUPABASE_URL and its sb_publishable_ key")
         directory = os.environ.get("ACADEMY_ACCOUNTS_DIR", "")
         if cloud:
@@ -77,7 +81,13 @@ class SupabaseAuth:
             raise HTTPException(429, "Слишком много запросов. Подожди перед повторной попыткой.")
         if not response.is_success:
             raise HTTPException(401, "Код или сессия недействительны. Запроси новый код.")
-        return response.json() if response.content else {}
+        try:
+            result = response.json() if response.content else {}
+        except ValueError as exc:
+            raise HTTPException(503, "Сервис входа вернул некорректный ответ. Повтори позже.") from exc
+        if not isinstance(result, dict):
+            raise HTTPException(503, "Сервис входа вернул некорректный ответ. Повтори позже.")
+        return result
 
     def send_code(self, email, register):
         try:
@@ -88,13 +98,22 @@ class SupabaseAuth:
         # Do not disclose whether an address already has an account.
 
     def verify(self, email, code):
-        return self.call("POST", "verify", {"email": email, "token": code, "type": "email"})
+        return self.tokens(self.call("POST", "verify", {"email": email, "token": code, "type": "email"}))
+
+    @staticmethod
+    def tokens(value):
+        expires = value.get("expires_in")
+        if (not all(isinstance(value.get(key), str) and value[key] for key in ("access_token", "refresh_token"))
+                or isinstance(expires, bool) or not isinstance(expires, (int, float))
+                or not math.isfinite(expires) or expires <= 0):
+            raise HTTPException(503, "Сервис входа вернул некорректную сессию. Повтори позже.")
+        return value
 
     def user(self, token):
         return self.call("GET", "user", token=token)
 
     def refresh(self, token):
-        return self.call("POST", "token?grant_type=refresh_token", {"refresh_token": token})
+        return self.tokens(self.call("POST", "token?grant_type=refresh_token", {"refresh_token": token}))
 
     def logout(self, token):
         self.call("POST", "logout?scope=local", token=token)

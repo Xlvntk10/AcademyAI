@@ -74,6 +74,13 @@ def create_app(database_engine=None, accounts=None):
                 tenant_engine.dispose()
         if request.url.path.startswith("/api/"):
             response.headers["Cache-Control"] = "no-store"
+            response.headers["CDN-Cache-Control"] = "no-store"
+            response.headers["Surrogate-Control"] = "no-store"
+            vary = [part.strip() for part in response.headers.get("Vary", "").split(",") if part.strip()]
+            for name in ("Cookie", "Origin", "X-Academy-Account"):
+                if name.lower() not in {part.lower() for part in vary}:
+                    vary.append(name)
+            response.headers["Vary"] = ", ".join(vary)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         return response

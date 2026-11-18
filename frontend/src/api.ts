@@ -39,14 +39,20 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
       cache: 'no-store',
     })
   } catch {
-    throw new Error('Нет связи с Academy AI. Проверь подключение и попробуй ещё раз. Уже сохранённые ответы останутся в базе.')
+    throw new Error('Нет связи с Academy AI. Сервер может запускаться. Повтори подключение через минуту. Локальные ответы сохранены.')
   }
   if (!response.ok) {
     if (response.status === 401 && !authRequest) window.dispatchEvent(new Event('academy-session-expired'))
     const error = await response.json().catch(() => null)
     throw new ApiError(typeof error?.detail === 'string' ? error.detail : 'Не удалось выполнить запрос. Проверь ответы и настройки времени устройства.', response.status)
   }
-  return response.json()
+  // A sleeping host or a misconfigured static rewrite can return HTML with 200.
+  // Preserve drafts and show a useful connection error instead of a JSON exception.
+  try {
+    return await response.json()
+  } catch {
+    throw new ApiError('Сервер ещё запускается или вернул неверный ответ. Повтори подключение через минуту. Локальные ответы сохранены.', 503)
+  }
 }
 
 // getRandomValues works on a phone over a trusted local HTTP network too.
