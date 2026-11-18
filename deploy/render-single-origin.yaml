@@ -1,0 +1,24 @@
+# Single HTTPS origin keeps HttpOnly SameSite=Strict sessions first-party on iOS.
+# Migrations are explicit and use a separate admin credential from your PC.
+services:
+  - type: web
+    name: academy-ai
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: feature/academy-ai-v2
+    autoDeployTrigger: 'off'
+    healthCheckPath: /api/health
+    envVars:
+      - key: ACADEMY_ENV
+        value: production
+      - key: ACADEMY_AUTH_MODE
+        value: supabase
+      - key: ACADEMY_PUBLIC_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false

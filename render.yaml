@@ -1,9 +1,11 @@
-# Single HTTPS origin keeps HttpOnly SameSite=Strict sessions first-party on iOS.
-# Migrations are explicit and use a separate admin credential from your PC.
+# V5: two free services; database and Auth remain in Supabase.
+# No automatic migrations, previews or paid disks. Replace the API host below.
 services:
   - type: web
-    name: academy-ai
+    name: academy-ai-api
     runtime: docker
+    dockerfilePath: ./deploy/Dockerfile.api
+    dockerContext: .
     plan: free
     region: frankfurt
     branch: feature/academy-ai-v2
@@ -14,6 +16,8 @@ services:
         value: production
       - key: ACADEMY_AUTH_MODE
         value: supabase
+      - key: ACADEMY_SERVE_FRONTEND
+        value: '0'
       - key: ACADEMY_PUBLIC_ORIGIN
         sync: false
       - key: DATABASE_URL
@@ -22,3 +26,47 @@ services:
         sync: false
       - key: SUPABASE_PUBLISHABLE_KEY
         sync: false
+  - type: web
+    name: academy-ai-web
+    runtime: static
+    branch: feature/academy-ai-v2
+    autoDeployTrigger: 'off'
+    buildCommand: npm --prefix frontend ci && npm --prefix frontend run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: VITE_ACCOUNT_MODE
+        value: supabase
+    routes:
+      # Replace this host with the actual public API URL before deploying.
+      # Do not redirect: POST, cookies and concurrency headers must be proxied.
+      - type: rewrite
+        source: /api/*
+        destination: https://REPLACE-API-HOST.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      # Conservative public caching; the service worker stores the offline shell.
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+      - path: /api/*
+        name: Cache-Control
+        value: private, no-store
+      - path: /api/*
+        name: CDN-Cache-Control
+        value: no-store
+      - path: /sw.js
+        name: Service-Worker-Allowed
+        value: /
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: no-referrer
+      - path: /*
+        name: X-Frame-Options
+        value: DENY

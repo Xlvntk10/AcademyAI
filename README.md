@@ -8,6 +8,8 @@ V4 добавляет режим аккаунтов через Supabase Email OT
 
 V4.5 добавляет общую PostgreSQL с изоляцией по владельцу, перенос SQLite, резервное копирование и конфигурацию Render. Инструкция находится в [CLOUD_DEPLOYMENT.md](CLOUD_DEPLOYMENT.md), результаты проверки — в [DEVELOPMENT_REPORT_V4_5.md](DEVELOPMENT_REPORT_V4_5.md). Облачное размещение выполняется отдельно после настройки Supabase. Для выбора PostgreSQL задайте `DATABASE_URL`, для production также `ACADEMY_ENV=production`. Переменная `ACADEMY_DATABASE_URL` имеет приоритет над `DATABASE_URL`.
 
+V5 готовит раздельное размещение React на Render Static Site и FastAPI на Render Free с Supabase PostgreSQL/Auth. Усилены обработка ошибок входа и запрет кеширования личных API-ответов, добавлена проверка опубликованного сайта. Локальная HTTPS-репетиция прошла; внешние сервисы не создавались. Итоги и границы проверки — в [отчёте V5](DEVELOPMENT_REPORT_V5.md), порядок первого размещения — в [CLOUD_DEPLOYMENT.md](CLOUD_DEPLOYMENT.md).
+
 ## Что уже работает
 
 - **Сегодня:** задания из настоящего плана, следующий урок, дневная и недельная цели.
@@ -49,6 +51,7 @@ $env:ACADEMY_DATABASE_URL = 'sqlite:///database.db'
 
 ```powershell
 Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
+$env:VITE_ACCOUNT_MODE = 'local'
 npm.cmd run dev
 ```
 
@@ -61,6 +64,7 @@ npm.cmd run dev
 Сервер FastAPI остаётся запущенным в первом терминале. Во втором, из `frontend`:
 
 ```powershell
+$env:VITE_ACCOUNT_MODE = 'local'
 npm.cmd run build
 npm.cmd run preview
 ```
@@ -117,9 +121,11 @@ Pop-Location
 git diff --check
 ```
 
-Проверено: **79 серверных тестов** (включая 15 с реальной локальной PostgreSQL), **45 frontend-тестов**, TypeScript, production build, целостность SQLite и сохранение существующих данных при миграции. Есть одно предупреждение Starlette об устаревающей поддержке `httpx` в TestClient; оно не приводит к падению тестов.
+Проверено в V5: **92 серверных теста** (включая 15 с реальной локальной PostgreSQL), **47 frontend-тестов**, TypeScript, production build, целостность SQLite и сохранение существующих данных при миграции. Есть одно предупреждение Starlette об устаревающей поддержке `httpx` в TestClient; оно не приводит к падению тестов.
 
-Для проверки настоящего HTTP-запуска, когда порты 8000 и 4173 свободны:
+Для полного набора PostgreSQL-тестов нужны отдельная база с именем, заканчивающимся на `_test`, переменные `ACADEMY_TEST_DATABASE_URL`, `ACADEMY_TEST_ADMIN_URL` и путь `ACADEMY_TEST_PG_BIN` к pg_dump/pg_restore. Без этих параметров интеграционные проверки пропускаются. Никогда не подставляйте рабочую базу.
+
+Для проверки настоящего HTTP-запуска, когда порты 8000 и 4173 свободны (frontend предварительно собран с `VITE_ACCOUNT_MODE=local`):
 
 ```powershell
 .\.venv\Scripts\python.exe -X utf8 -m scripts.smoke_http

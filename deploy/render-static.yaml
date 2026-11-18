@@ -1,9 +1,7 @@
-# Optional split hosting. Replace academy-ai.onrender.com with your actual API.
-# Verify POST forwarding, Set-Cookie, no-store and cookie replay on Render first.
-# The API's ACADEMY_PUBLIC_ORIGIN must be this static site's HTTPS origin.
+# Static-only alternative to the combined root Blueprint. Do not deploy both.
 services:
   - type: web
-    name: academy-ai-static
+    name: academy-ai-web
     runtime: static
     branch: feature/academy-ai-v2
     autoDeployTrigger: 'off'
@@ -15,25 +13,34 @@ services:
       - key: VITE_ACCOUNT_MODE
         value: supabase
     routes:
+      # Replace this host with the actual public API URL before deploying.
+      # Do not redirect: POST, cookies and concurrency headers must be proxied.
       - type: rewrite
         source: /api/*
-        destination: https://academy-ai.onrender.com/api/*
+        destination: https://REPLACE-API-HOST.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
     headers:
+      # Conservative public caching; the service worker stores the offline shell.
+      - path: /*
+        name: Cache-Control
+        value: no-cache
       - path: /api/*
         name: Cache-Control
+        value: private, no-store
+      - path: /api/*
+        name: CDN-Cache-Control
         value: no-store
       - path: /sw.js
-        name: Cache-Control
-        value: no-cache
-      - path: /index.html
-        name: Cache-Control
-        value: no-cache
-      - path: /manifest.webmanifest
-        name: Cache-Control
-        value: no-cache
+        name: Service-Worker-Allowed
+        value: /
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: no-referrer
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
