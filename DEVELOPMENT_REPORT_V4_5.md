@@ -75,7 +75,7 @@ Backend выводит одно предупреждение Starlette о буд
 В новом терминале VS Code запустите прежний локальный режим.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 $env:ACADEMY_AUTH_MODE = 'local'
 $env:ACADEMY_ENV = 'development'
 $env:ACADEMY_SERVE_FRONTEND = '0'
@@ -86,7 +86,7 @@ $env:ACADEMY_DATABASE_URL = 'sqlite:///database.db'
 В другом терминале
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run dev
 ```
 

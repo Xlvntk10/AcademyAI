@@ -42,7 +42,7 @@ Supabase предоставляет PostgreSQL и Email OTP. FastAPI прове�
 Из PowerShell в корне существующего проекта выполните подготовку окружения. `Read-Host -AsSecureString` позволяет ввести административный URL без сохранения его буквального значения в истории команд.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 $cloudSecret = Read-Host 'Административный PostgreSQL URL' -AsSecureString
 $env:MIGRATION_DATABASE_URL = [System.Net.NetworkCredential]::new('', $cloudSecret).Password
 .\.venv\Scripts\python.exe -m scripts.migrate_cloud

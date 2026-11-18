@@ -98,7 +98,7 @@ flowchart LR
 Терминал 1 в PowerShell.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 $env:ACADEMY_AUTH_MODE = 'local'
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
@@ -106,7 +106,7 @@ $env:ACADEMY_AUTH_MODE = 'local'
 Терминал 2.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run build
 npm.cmd run preview
 ```
@@ -122,7 +122,7 @@ npm.cmd run preview
 После подготовки сервиса и остановки прежнего API можно запустить локальную проверку с настоящим провайдером.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 $env:ACADEMY_AUTH_MODE = 'supabase'
 $env:ACADEMY_PUBLIC_ORIGIN = 'http://127.0.0.1:4173'
 $env:SUPABASE_URL = 'https://ВАШ-ПРОЕКТ.supabase.co'

@@ -66,14 +66,14 @@ Web App Manifest проверен: `id` и `scope` — `/`, старт — `/#to
 Терминал 1, PowerShell:
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
 Терминал 2:
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run build
 npm.cmd run preview
 ```

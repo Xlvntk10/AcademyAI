@@ -2,7 +2,7 @@
 
 **Дата:** 04.11.2026, Asia/Almaty. **Ветка:** `feature/academy-ai-v2`.
 
-Продолжена работа в `C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026`. Исходная точка этой сессии — `30b9cfa`. Репозиторий не пересоздавался, push и публикация не выполнялись. Приложение работает без платных AI API и без Ollama.
+Продолжена работа в `C:\Users\user\OneDrive\Рабочий стол\academy ai`. Исходная точка этой сессии — `30b9cfa`. Репозиторий не пересоздавался, push и публикация не выполнялись. Приложение работает без платных AI API и без Ollama.
 
 ## Что реализовано
 
@@ -172,14 +172,14 @@ HTTP-сценарий выполнен на отдельной копии, ар�
 **Терминал 1 — FastAPI:**
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 **Терминал 2 — интерфейс:**
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run dev
 ```
 
@@ -197,7 +197,7 @@ npm.cmd run preview
 Для будущего обновления базы, **при остановленном API**:
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -X utf8 -m scripts.prepare_db
 ```
 

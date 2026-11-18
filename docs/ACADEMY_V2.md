@@ -34,14 +34,14 @@
 **Терминал 1 — сервер:**
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 **Терминал 2 — интерфейс:**
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run dev
 ```
 

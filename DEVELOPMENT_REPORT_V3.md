@@ -88,14 +88,14 @@ HTTP-артефакты итоговой проверки находятся в 
 Первый терминал запускает API.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
 Второй терминал собирает и запускает production frontend.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run build
 npm.cmd run preview
 ```
@@ -116,7 +116,7 @@ npm.cmd run preview
 Для обычной проверки интерфейса подключи телефон и компьютер к одной доверенной Wi-Fi сети. При запущенном API выполни во втором терминале следующее.
 
 ```powershell
-Set-Location 'C:\Users\user\OneDrive\Рабочий стол\applied-is-project-2026\frontend'
+Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai\frontend'
 npm.cmd run preview -- --host 0.0.0.0
 ```
 
