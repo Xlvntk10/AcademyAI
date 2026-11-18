@@ -1,6 +1,7 @@
 """Read-only PostgreSQL connectivity probe. No application imports or migrations.
 
-Credentials are accepted through hidden prompts or DATABASE_URL, never CLI args.
+The URI prompt is visible and accepts only [YOUR-DATABASE-PASSWORD].
+The real password uses a hidden prompt; DATABASE_URL mode is never echoed.
 Only SELECT 1 is executed, in a read-only transaction which is rolled back.
 """
 import argparse
@@ -18,6 +19,9 @@ import warnings
 
 import psycopg
 from sqlalchemy.engine import URL, make_url
+
+
+PASSWORD_PLACEHOLDER = "[YOUR-DATABASE-PASSWORD]"
 
 
 class ConfigurationError(ValueError):
@@ -131,7 +135,7 @@ def database_url(uri: str, password: str | None, ca_file: Path | str) -> URL:
         if parsed.query.get("sslmode", "verify-full") != "verify-full":
             raise ConfigurationError("[TLS_MODE] Для проверки требуется sslmode=verify-full. Удали другой sslmode из URI или замени его на verify-full.")
         secret = password if password is not None else parsed.password
-        if not secret or secret in {"[YOUR-PASSWORD]", "[YOUR_PASSWORD]", "YOUR-PASSWORD"}:
+        if not secret or secret in {PASSWORD_PLACEHOLDER, "[YOUR-PASSWORD]", "[YOUR_PASSWORD]", "YOUR-PASSWORD"}:
             raise ConfigurationError("[PASSWORD_MISSING] Нужен настоящий пароль базы, не placeholder и не API key.")
     except ConfigurationError:
         raise
@@ -205,6 +209,20 @@ def hidden(prompt: str) -> str:
         return getpass.getpass(prompt)
 
 
+def visible_uri() -> str:
+    # Terminal echo happens while typing. Validate immediately, never repeat the
+    # line or include it in errors. Only a literal placeholder is accepted here.
+    uri = input("Session pooler URI (видимый ввод; только с [YOUR-DATABASE-PASSWORD], без настоящего пароля): ")
+    try:
+        value = unquote(uri)
+        prefix = r"^(?:postgres|postgresql|postgresql\+psycopg)://[^:/@?#\s]+:\[YOUR-DATABASE-PASSWORD\]@"
+        if not re.match(prefix, value) or make_url(value).password != PASSWORD_PLACEHOLDER:
+            raise ValueError
+        return value
+    except Exception:
+        raise ConfigurationError("[URI_PLACEHOLDER] URI не принят. В поле пароля должен быть только [YOUR-DATABASE-PASSWORD]. Настоящий пароль вводится отдельно скрыто; строка не повторяется и подключение не выполняется.") from None
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ca-file", required=True, help="Trusted Supabase CA certificate downloaded from Database Settings")
@@ -216,9 +234,9 @@ def main(argv=None) -> int:
         if args.from_env:
             uri, password = os.environ.get("DATABASE_URL", ""), None
             if not uri:
-                raise ConfigurationError("DATABASE_URL не задана. Запусти без --from-env для скрытого ввода.")
+                raise ConfigurationError("DATABASE_URL не задана. Запусти без --from-env: URI вводится с плейсхолдером, пароль отдельно скрыто.")
         else:
-            uri = hidden("Session pooler URI (ввод скрыт; пароль в URI можно оставить placeholder): ")
+            uri = visible_uri()
             password = hidden("Пароль базы PostgreSQL (ввод скрыт, без URL-кодирования): ")
         url = database_url(uri, password, args.ca_file)
         print("OK [CONFIG]: URI разобран; CA-файл найден и прочитан. Проверка TLS: verify-full.", flush=True)

@@ -6,7 +6,7 @@ from scripts import check_postgres as probe
 
 CERTIFICATE = (Path(__file__).parent / "fixtures/connection-ca.pem").read_text()
 
-URI = "postgresql://postgres.project:[YOUR-PASSWORD]@aws-0-region.pooler.supabase.com:5432/postgres"
+URI = "postgresql://postgres.project:[YOUR-DATABASE-PASSWORD]@aws-0-region.pooler.supabase.com:5432/postgres"
 
 
 def test_password_is_separate_and_url_encoding_roundtrips(tmp_path):
@@ -57,7 +57,7 @@ def test_probe_is_tls_readonly_and_rollback_only(monkeypatch, tmp_path, tls):
 
 def test_cli_hides_driver_exception_and_leaves_environment_unchanged(monkeypatch, tmp_path, capsys):
     ca = tmp_path/'ca.crt'; ca.write_text(CERTIFICATE)
-    value = URI.replace('[YOUR-PASSWORD]', 'TOP_SECRET')
+    value = URI.replace('[YOUR-DATABASE-PASSWORD]', 'TOP_SECRET')
     monkeypatch.setenv('DATABASE_URL', value)
     monkeypatch.setenv('ACADEMY_DATABASE_URL', 'sqlite:///database.db')
     monkeypatch.setattr(probe, 'check_connection', Mock(side_effect=RuntimeError(value)))
@@ -79,8 +79,8 @@ def test_hidden_prompt_does_not_allow_echoing_fallback(monkeypatch):
 
 def test_cli_success_is_readable_and_contains_no_credentials(monkeypatch, tmp_path, capsys):
     ca = tmp_path/'ca.crt'; ca.write_text(CERTIFICATE)
-    inputs = iter([URI, 'TOP_SECRET'])
-    monkeypatch.setattr(probe, 'hidden', lambda prompt: next(inputs))
+    monkeypatch.setattr('builtins.input', lambda prompt: URI)
+    monkeypatch.setattr(probe, 'hidden', lambda prompt: 'TOP_SECRET')
     monkeypatch.setattr(probe, 'check_connection', Mock())
     assert probe.main(['--ca-file', str(ca)]) == 0
     output = capsys.readouterr().out
@@ -102,8 +102,8 @@ def test_read_host_outer_quotes_and_spaces_are_removed(tmp_path, quotes):
 @pytest.mark.parametrize('content', ['<html>download failed SECRET</html>', 'not a certificate SECRET'])
 def test_existing_but_invalid_ca_fails_before_connection(tmp_path, monkeypatch, capsys, content):
     ca = tmp_path/'SECRET.pem'; ca.write_text(content)
-    inputs = iter([URI, 'TOP_SECRET'])
-    monkeypatch.setattr(probe, 'hidden', lambda prompt: next(inputs))
+    monkeypatch.setattr('builtins.input', lambda prompt: URI)
+    monkeypatch.setattr(probe, 'hidden', lambda prompt: 'TOP_SECRET')
     connect = Mock(); monkeypatch.setattr(probe.psycopg, 'connect', connect)
     assert probe.main(['--ca-file', str(ca)]) == 1
     output = capsys.readouterr()
@@ -138,7 +138,7 @@ def test_missing_ca_has_its_own_safe_message(tmp_path):
 ])
 def test_connection_errors_are_classified_without_echoing_secrets(tmp_path, monkeypatch, capsys, detail, expected):
     ca = tmp_path/'ca.pem'; ca.write_text(CERTIFICATE)
-    uri = URI.replace('[YOUR-PASSWORD]', 'TOP_SECRET')
+    uri = URI.replace('[YOUR-DATABASE-PASSWORD]', 'TOP_SECRET')
     monkeypatch.setenv('DATABASE_URL', uri)
     monkeypatch.setattr(probe.psycopg, 'connect', Mock(side_effect=probe.psycopg.OperationalError(detail + ' ' + uri + ' PRIVATE_DIAGNOSTIC')))
     assert probe.main(['--from-env', '--ca-file', str(ca)]) == 1
@@ -194,3 +194,49 @@ def test_temporary_ca_removed_on_failed_handshake(tmp_path, monkeypatch):
         probe.check_connection(probe.database_url(URI, 'SECRET', original))
     assert not Path(paths[0]).exists()
     assert original.is_file()
+
+
+@pytest.mark.parametrize('uri', [
+    URI.replace('[YOUR-DATABASE-PASSWORD]', 'TOP_SECRET'),
+    URI.replace('[YOUR-DATABASE-PASSWORD]', 'TOP%40SECRET'),
+    URI.replace('[YOUR-DATABASE-PASSWORD]', '[YOUR-PASSWORD]'),
+    URI.replace('[YOUR-DATABASE-PASSWORD]', '%5BYOUR-DATABASE-PASSWORD%5D'),
+    URI.replace(':[YOUR-DATABASE-PASSWORD]', '') + '?note=[YOUR-DATABASE-PASSWORD]',
+    'invalid-TOP_SECRET',
+])
+def test_visible_uri_rejects_real_password_or_wrong_placeholder_without_echo(monkeypatch, capsys, uri):
+    monkeypatch.setattr('builtins.input', lambda prompt: uri)
+    password_prompt = Mock(); connect = Mock()
+    monkeypatch.setattr(probe, 'hidden', password_prompt)
+    monkeypatch.setattr(probe, 'check_connection', connect)
+    assert probe.main(['--ca-file', 'unused.pem']) == 1
+    output = capsys.readouterr()
+    assert '[URI_PLACEHOLDER]' in output.err
+    assert 'TOP_SECRET' not in output.err + output.out
+    assert 'TOP%40SECRET' not in output.err + output.out
+    assert 'postgresql://' not in output.err + output.out
+    password_prompt.assert_not_called(); connect.assert_not_called()
+
+
+def test_uri_is_visible_but_password_only_uses_hidden_prompt(monkeypatch, tmp_path, capsys):
+    ca = tmp_path/'ca.pem'; ca.write_text(CERTIFICATE)
+    uri_prompt = Mock(return_value='"' + URI + '"')
+    password_prompt = Mock(return_value=' p@ss:/#% SECRET ')
+    connect = Mock()
+    monkeypatch.setattr('builtins.input', uri_prompt)
+    monkeypatch.setattr(probe, 'hidden', password_prompt)
+    monkeypatch.setattr(probe, 'check_connection', connect)
+    assert probe.main(['--ca-file', str(ca)]) == 0
+    uri_prompt.assert_called_once(); password_prompt.assert_called_once()
+    assert '[YOUR-DATABASE-PASSWORD]' in uri_prompt.call_args.args[0]
+    assert 'Пароль базы' in password_prompt.call_args.args[0]
+    assert connect.call_args.args[0].password == ' p@ss:/#% SECRET '
+    assert connect.call_args.args[0].query['sslmode'] == 'verify-full'
+    output = capsys.readouterr()
+    assert 'SECRET' not in output.err + output.out
+
+
+def test_placeholder_is_not_accepted_as_actual_hidden_password(tmp_path):
+    ca = tmp_path/'ca.pem'; ca.write_text(CERTIFICATE)
+    with pytest.raises(probe.ConfigurationError, match='PASSWORD_MISSING'):
+        probe.database_url(URI, probe.PASSWORD_PLACEHOLDER, ca)

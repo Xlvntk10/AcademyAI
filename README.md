@@ -12,7 +12,7 @@ V5 готовит раздельное размещение React на Render St
 
 Дополнение V5: вход по **Magic Link** со стандартным письмом Supabase, защита PKCE и переход в профиль. Числовой OTP сохранён как дополнительный способ. Точные настройки для `http://127.0.0.1:5173`, команды запуска и ограничения бесплатной почты — в [MAGIC_LINK_SETUP.md](MAGIC_LINK_SETUP.md).
 
-Проверка нового Supabase Session pooler **без миграций**: [POSTGRES_CONNECTION_CHECK.md](POSTGRES_CONNECTION_CHECK.md). Команда `scripts.check_postgres` запрашивает реквизиты скрыто, проверяет TLS и выполняет только `SELECT 1`; рабочая SQLite не используется.
+Проверка нового Supabase Session pooler **без миграций**: [POSTGRES_CONNECTION_CHECK.md](POSTGRES_CONNECTION_CHECK.md). Команда `scripts.check_postgres` показывает ввод URI с `[YOUR-DATABASE-PASSWORD]`, запрашивает настоящий пароль отдельно скрыто, проверяет TLS и выполняет только `SELECT 1`; рабочая SQLite не используется.
 
 ## Что уже работает
 
