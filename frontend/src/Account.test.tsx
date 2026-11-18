@@ -74,6 +74,7 @@ test('signed-out account shows login and submits registration through the provid
   await user.click(await screen.findByRole('button',{name:'Зарегистрироваться'}))
   expect(screen.getByRole('button',{name:'Проверить обновления'})).toBeVisible()
   await user.type(screen.getByLabelText('Email'),'one@example.test')
+  await user.selectOptions(screen.getByLabelText('Способ входа'), 'code')
   await user.click(screen.getByRole('button',{name:'Получить код'}))
   expect(await screen.findByLabelText('Код из письма')).toBeVisible()
   expect(fetch.mock.calls[1]).toEqual(['/api/auth/code',expect.objectContaining({body:'{"email":"one@example.test","register":true}'})])

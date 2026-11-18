@@ -9,7 +9,7 @@ import { UpdateNotice } from './PwaUpdate'
 const markerKey = 'academy-account-v4'
 const SessionContext = createContext({ session: {mode:'local', user:null} as AccountSession, offline:false, reconnect: async () => {} })
 
-function remember(session: AccountSession) {
+export function remember(session: AccountSession) {
   // Only an offline namespace hint. Authentication stays in the HttpOnly cookie.
   const hint = {...session, user: session.user ? {...session.user, email:''} : null}
   try { localStorage.setItem(markerKey, JSON.stringify(hint)) }
@@ -31,6 +31,7 @@ function remembered(): AccountSession {
 function Login({notice, reconnect}: {notice:string; reconnect: () => Promise<void>}) {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
+  const [method, setMethod] = useState<'link' | 'code'>('link')
   const [register, setRegister] = useState(false)
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -38,12 +39,12 @@ function Login({notice, reconnect}: {notice:string; reconnect: () => Promise<voi
   async function submit() {
     setBusy(true)
     try {
-      if (sent) {
+      if (sent && method === 'code') {
         const session = await api<AccountSession>('/auth/verify', {email, code})
         remember(session)
-        window.location.reload()
+        window.location.replace('/#account')
       } else {
-        const result = await api<{message:string}>('/auth/code', {email, register})
+        const result = await api<{message:string}>(`/auth/${method}`, {email, register})
         setStatus(result.message)
         setSent(true)
       }
@@ -52,16 +53,17 @@ function Login({notice, reconnect}: {notice:string; reconnect: () => Promise<voi
   }
   return <main className="account-entry"><section className="panel settings-panel">
     <h1>Academy AI</h1><h2>{register ? 'Создать аккаунт' : 'Войти в своё обучение'}</h2>
-    <p>Вход по одноразовому коду из письма Supabase. Для восстановления доступа запроси новый код на прежний email.</p>
+    <p>Вход по ссылке из письма Supabase. Для восстановления доступа используй прежний email. Ссылку нужно открыть на том же устройстве и в том же браузере, где ты её запросил.</p>
     <form onSubmit={event => { event.preventDefault(); void submit() }}>
+      <label>Способ входа<select value={method} disabled={sent || busy} onChange={event => setMethod(event.target.value as 'link' | 'code')}><option value="link">Ссылка из письма</option><option value="code">Код из письма</option></select></label>
       <label>Email<input type="email" required maxLength={254} autoComplete="email" autoCapitalize="none" spellCheck={false} value={email} disabled={sent || busy} onChange={event => setEmail(event.target.value)}/></label>
-      {sent && <label>Код из письма<input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6,10}" value={code} onChange={event => setCode(event.target.value)}/></label>}
-      <button className="primary" disabled={busy}>{busy ? 'Подожди…' : sent ? 'Подтвердить вход' : 'Получить код'}</button>
+      {sent && method === 'code' && <label>Код из письма<input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6,10}" value={code} onChange={event => setCode(event.target.value)}/></label>}
+      <button className="primary" disabled={busy || (sent && method === 'link')}>{busy ? 'Подожди…' : sent ? method === 'link' ? 'Письмо запрошено' : 'Подтвердить вход' : method === 'link' ? 'Получить ссылку' : 'Получить код'}</button>
     </form>
     {(status || notice) && <p role="status">{status || notice}</p>}
     {notice && <button className="secondary" disabled={busy} onClick={async () => { setBusy(true); try { await reconnect() } finally { setBusy(false) } }}>Повторить подключение</button>}
     <div className="button-row"><button className="text-button" disabled={busy} onClick={() => { setSent(false); setRegister(!register); setStatus('') }}>{register ? 'У меня уже есть аккаунт' : 'Зарегистрироваться'}</button>
-      {sent && <button className="text-button" disabled={busy} onClick={() => { setSent(false); setCode('') }}>Другой адрес или новый код</button>}</div>
+      {sent && <button className="text-button" disabled={busy} onClick={() => { setSent(false); setCode('') }}>Другой адрес или новое письмо</button>}</div>
     <UpdateNotice route="settings"/>
   </section></main>
 }
@@ -168,7 +170,7 @@ export function AccountProfile() {
   }
   return <section className="panel settings-panel">
     <h2>Мой аккаунт</h2>
-    {session.mode === 'local' ? <p>Локальный профиль. Для входа с разных устройств настрой Supabase Auth на сервере по инструкции V4.</p> : <><p>{session.user?.email || 'Сохранённый профиль на устройстве'}</p><p className="small-note">ID аккаунта {session.user?.id}</p><p>Для восстановления доступа на новом устройстве запроси код на этот же email.</p></>}
+    {session.mode === 'local' ? <p>Локальный профиль. Для входа с разных устройств настрой Supabase Auth на сервере по инструкции V4.</p> : <><p>{session.user?.email || 'Сохранённый профиль на устройстве'}</p><p className="small-note">ID аккаунта {session.user?.id}</p><p>Для восстановления доступа на новом устройстве запроси ссылку на этот же email.</p></>}
     <p role="status">{offline ? 'Офлайн. Ответы сохраняются на устройстве.' : 'Подключение к серверу подтверждено.'}</p>
     {offline && <button className="secondary" disabled={busy} onClick={async () => { setBusy(true); try { await reconnect() } finally { setBusy(false) } }}>Повторить подключение</button>}
     <p>Черновики и неотправленные результаты — {pending}</p>

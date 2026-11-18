@@ -64,8 +64,7 @@ class CloudAccounts(Accounts):
                     {"key": bucket, "started": row["started"] if count else now, "count": count + 1})
             connection.execute(text("DELETE FROM academy_auth.auth_limits WHERE started < :old"), {"old": now - 1200})
 
-    def create_session(self, email, code):
-        tokens = self.provider.verify(email, code)
+    def session_from_tokens(self, tokens):
         identity = self.identity(self.provider.user(tokens["access_token"]))
         self.provision(identity["id"])
         cookie = secrets.token_urlsafe(32)

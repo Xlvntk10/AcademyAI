@@ -258,3 +258,24 @@ def test_backup_and_restore_into_separate_database(cloud_engines, tmp_path):
     finally:
         restored.dispose()
     # Keep the restored test database for inspection. No DROP is needed.
+
+
+def test_magic_link_postgresql_devices_and_isolation(cloud_app):
+    from tests.test_magic_link import install, request_link
+    _, manager, _, (desktop, phone, other) = cloud_app
+    provider = install(manager)
+    for client, email in [(desktop, 'one@example.test'), (phone, 'one@example.test'), (other, 'two@example.test')]:
+        code = request_link(client, provider, email)
+        result = client.post('/api/auth/exchange', json={'code': code})
+        assert result.status_code == 200
+        client.headers['X-Academy-Account'] = result.json()['user']['id']
+    payload = submission(desktop)
+    assert desktop.post('/api/offline/attempts', json=payload).status_code == 200
+    assert phone.get('/api/progress').json()['total_xp'] == 60
+    assert phone.post('/api/offline/attempts', json=payload).status_code == 200
+    assert desktop.get('/api/progress').json()['total_xp'] == 60
+    assert other.get('/api/progress').json()['total_xp'] == 0
+    assert other.get('/api/runs/' + payload['attempt_id']).status_code == 404
+    assert desktop.post('/api/auth/logout', json={}).status_code == 200
+    assert desktop.get('/api/progress').status_code == 401
+    assert phone.get('/api/progress').status_code == 200

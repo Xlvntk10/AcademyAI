@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse
 
 DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
-ROUTES = {"", "today", "learn", "plan", "progress"}
+ROUTES = {"", "today", "learn", "plan", "progress", "auth/callback"}
 
 
 def mount_frontend(application, directory=DIST):
@@ -25,7 +25,7 @@ def mount_frontend(application, directory=DIST):
             raise HTTPException(404)
         # Revalidate shell/worker every time. Vite assets carry content hashes.
         cache = "public, max-age=31536000, immutable" if path.startswith("assets/") else "no-cache"
-        headers = {"Cache-Control": cache}
+        headers = {"Cache-Control": "no-store" if path.strip("/") == "auth/callback" else cache}
         if path == "sw.js":
             headers["Service-Worker-Allowed"] = "/"
         return FileResponse(candidate, headers=headers)

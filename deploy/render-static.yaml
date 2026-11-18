@@ -32,6 +32,12 @@ services:
       - path: /api/*
         name: CDN-Cache-Control
         value: no-store
+      - path: /auth/callback
+        name: Cache-Control
+        value: no-store
+      - path: /auth/callback
+        name: CDN-Cache-Control
+        value: no-store
       - path: /sw.js
         name: Service-Worker-Allowed
         value: /

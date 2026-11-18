@@ -33,6 +33,9 @@ def test_shell_routes_worker_cache_and_private_paths(tmp_path):
     app = FastAPI()
     mount_frontend(app, directory)
     with TestClient(app) as client:
+        callback = client.get('/auth/callback?code=short-lived-test-code')
+        assert callback.status_code == 200
+        assert callback.headers['cache-control'] == 'no-store'
         for route in ('/', '/today', '/learn', '/plan', '/progress'):
             response = client.get(route)
             assert response.status_code == 200

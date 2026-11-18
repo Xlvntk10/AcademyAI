@@ -1,6 +1,7 @@
-"""Supabase email OTP and opaque server sessions for the single-host pilot."""
+"""Supabase email OTP/Magic Link and opaque server sessions for the single-host pilot."""
 from dataclasses import dataclass
 from contextlib import contextmanager, closing
+import base64
 import hashlib
 import math
 import os
@@ -9,7 +10,7 @@ import secrets
 import sqlite3
 import threading
 import time
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 from uuid import UUID
 
 import httpx
@@ -17,6 +18,8 @@ from fastapi import HTTPException
 from app.database.db import make_engine
 
 COOKIE = "academy_session"
+PKCE_COOKIE = "academy_login_verifier"
+PKCE_SECONDS = 600
 SESSION_SECONDS = 30 * 24 * 3600
 _migration_lock = threading.Lock()
 
@@ -80,7 +83,7 @@ class SupabaseAuth:
         if response.status_code == 429:
             raise HTTPException(429, "Слишком много запросов. Подожди перед повторной попыткой.")
         if not response.is_success:
-            raise HTTPException(401, "Код или сессия недействительны. Запроси новый код.")
+            raise HTTPException(401, "Ссылка, код или сессия недействительны. Запроси новое письмо.")
         try:
             result = response.json() if response.content else {}
         except ValueError as exc:
@@ -96,6 +99,22 @@ class SupabaseAuth:
             if exc.status_code != 401:
                 raise
         # Do not disclose whether an address already has an account.
+
+    def send_link(self, email, register, verifier):
+        # RFC 7636 S256, matching Supabase Auth's PKCE HTTP contract.
+        challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode("ascii")).digest()).rstrip(b"=").decode("ascii")
+        query = urlencode({"redirect_to": self.config.origin + "/auth/callback"})
+        try:
+            self.call("POST", "otp?" + query, {"email": email, "create_user": register,
+                "code_challenge": challenge, "code_challenge_method": "s256"})
+        except HTTPException as exc:
+            if exc.status_code != 401:
+                raise
+        # Same response for unknown addresses: no account enumeration.
+
+    def exchange(self, code, verifier):
+        return self.tokens(self.call("POST", "token?grant_type=pkce",
+            {"auth_code": code, "code_verifier": verifier}))
 
     def verify(self, email, code):
         return self.tokens(self.call("POST", "verify", {"email": email, "token": code, "type": "email"}))
@@ -198,7 +217,10 @@ class Accounts:
                 db.execute("INSERT INTO auth_limits VALUES (?, ?, 1) ON CONFLICT(bucket) DO UPDATE SET count=count+1", (bucket, now))
 
     def create_session(self, email, code):
-        tokens = self.provider.verify(email, code)
+        return self.session_from_tokens(self.provider.verify(email, code))
+
+    def session_from_tokens(self, tokens):
+        # Identity always comes from the provider, never from the browser or JWT decoding.
         identity = self.identity(self.provider.user(tokens["access_token"]))
         engine = self.tenant_engine(identity["id"])
         engine.dispose()
