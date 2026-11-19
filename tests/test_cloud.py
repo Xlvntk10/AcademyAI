@@ -279,3 +279,58 @@ def test_magic_link_postgresql_devices_and_isolation(cloud_app):
     assert desktop.post('/api/auth/logout', json={}).status_code == 200
     assert desktop.get('/api/progress').status_code == 401
     assert phone.get('/api/progress').status_code == 200
+
+
+def test_import_synthetic_40_xp_vocabulary_plan_settings_and_receipt(cloud_app, database, tmp_path):
+    """A fixture with 40 XP, never the user's real SQLite or Supabase account."""
+    _, _, _, (desktop, phone, outsider) = cloud_app
+    engine = make_engine('sqlite:///' + database.as_posix())
+    with TestClient(create_app(engine)) as source:
+        payload = submission(source)
+        payload['answers'][0]['answer'] = 'study'
+        payload['answers'][1]['answer'] = "don't drink"
+        accepted = source.post('/api/offline/attempts', json=payload)
+        assert accepted.status_code == 200
+        assert source.get('/api/progress').json()['total_xp'] == 40
+        word = next(w for w in source.get('/api/vocabulary').json()['words'] if w['unlocked'])
+        assert source.post(f"/api/vocabulary/{word['id']}/add").status_code == 200
+        review = {'request_id':str(uuid4()), 'answer':word['term']}
+        assert source.post(f"/api/vocabulary/{word['id']}/review", json=review).status_code == 200
+        prefs = source.get('/api/planner/settings').json()
+        prefs.pop('timezone'); prefs.pop('english_percent')
+        prefs['available_minutes'] = [30, 45, 60, 30, 45, 90, 60]
+        assert source.post('/api/planner/settings', json=prefs).status_code == 200
+        week = source.get('/api/planner/week').json()
+        assert source.post('/api/planner/generate', json={'week_start':week['week_start']}).status_code == 200
+        routes = ['/api/progress', '/api/dashboard', '/api/vocabulary', '/api/planner/settings', '/api/planner/week']
+        expected = {route:source.get(route).json() for route in routes}
+    engine.dispose()
+    before = snapshot(database)
+    saved = import_cloud(database, local.USERS['one@example.test'], os.environ['ACADEMY_TEST_ADMIN_URL'], tmp_path/'saved')
+    assert snapshot(saved) == before == snapshot(database)
+    local.login(desktop); local.login(phone); local.login(outsider, 'two@example.test')
+    def without_revision(value):
+        if isinstance(value, dict):
+            return {k:without_revision(v) for k,v in value.items() if k != 'sync_revision'}
+        if isinstance(value, list):
+            return [without_revision(v) for v in value]
+        return value
+    # Authenticated sync adds revision tokens; stored settings themselves must match.
+    for client in (desktop, phone):
+        for route, value in expected.items():
+            assert without_revision(client.get(route).json()) == without_revision(value), route
+        assert client.get('/api/planner/settings').json()['sync_revision']
+        assert client.post('/api/offline/attempts', json=payload).json() == accepted.json()
+        assert client.get('/api/progress').json()['total_xp'] == 40
+    assert outsider.get('/api/progress').json()['total_xp'] == 0
+    assert outsider.get('/api/runs/' + payload['attempt_id']).status_code == 404
+    assert snapshot(database) == before
+
+
+def test_production_accepts_verified_tls_runtime(cloud_app, cloud_engines, monkeypatch):
+    _, manager, _, _ = cloud_app
+    runtime, _ = cloud_engines
+    assert runtime.url.query['sslmode'] == 'verify-full'
+    monkeypatch.setenv('ACADEMY_ENV', 'production')
+    with TestClient(create_app(runtime, accounts=manager)) as client:
+        assert client.get('/api/health').status_code == 200

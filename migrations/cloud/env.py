@@ -1,12 +1,23 @@
 from alembic import context
 from app.database.db import make_engine
 
-engine = make_engine(context.config.attributes["database_url"])
-with engine.begin() as connection:
-    # Keep the cloud revision outside the tenant tables and outside PostgREST.
-    connection.exec_driver_sql("CREATE SCHEMA IF NOT EXISTS academy_migrations")
-    connection.exec_driver_sql("REVOKE ALL ON SCHEMA academy_migrations FROM PUBLIC")
-    context.configure(connection=connection, version_table_schema="academy_migrations", transactional_ddl=True)
+
+def run(connection=None):
+    context.configure(connection=connection, dialect_name="postgresql",
+                      version_table_schema="academy_migrations", transactional_ddl=True)
     with context.begin_transaction():
+        # Keep the revision outside tenant tables and outside PostgREST.
+        context.execute("CREATE SCHEMA IF NOT EXISTS academy_migrations")
+        context.execute("REVOKE ALL ON SCHEMA academy_migrations FROM PUBLIC")
         context.run_migrations()
-engine.dispose()
+
+
+if context.is_offline_mode():
+    run()
+else:
+    engine = make_engine(context.config.attributes["database_url"])
+    try:
+        with engine.begin() as connection:
+            run(connection)
+    finally:
+        engine.dispose()

@@ -1,5 +1,6 @@
 """Shared PostgreSQL tables, owner-scoped keys and enforced row policies."""
 from pathlib import Path
+import re
 from alembic import op
 
 revision = "cloud_0001"
@@ -23,8 +24,9 @@ def upgrade():
     op.execute("""CREATE TABLE academy_auth.auth_limits (
         bucket text PRIMARY KEY, started double precision NOT NULL, count integer NOT NULL)""")
     # Every tenant row belongs to a registered owner, including legacy imports.
-    from sqlalchemy import inspect
-    for table in inspect(op.get_bind()).get_table_names(schema="academy"):
+    # The frozen revision must also render offline, without connecting to a DB.
+    # Only tables created by this revision receive its constraints.
+    for table in re.findall(r"CREATE TABLE academy\.([a-z_]+) ", sql):
         op.execute(f'ALTER TABLE academy."{table}" ADD CONSTRAINT owner_fk FOREIGN KEY (user_id) REFERENCES academy_auth.users(user_id)')
 
 

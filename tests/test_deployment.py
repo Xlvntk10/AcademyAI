@@ -14,9 +14,10 @@ def test_production_refuses_ephemeral_sqlite(monkeypatch):
     engine.dispose()
 
 
-def test_production_requires_database_tls(monkeypatch):
+@pytest.mark.parametrize("query", ["", "?sslmode=disable", "?sslmode=prefer", "?sslmode=require", "?sslmode=verify-ca"])
+def test_production_requires_database_tls(monkeypatch, query):
     monkeypatch.setenv('ACADEMY_ENV', 'production')
-    engine = make_engine('postgresql://runtime:unused@127.0.0.1/test')
+    engine = make_engine('postgresql://runtime:unused@127.0.0.1/test' + query)
     with pytest.raises(RuntimeError, match='TLS'):
         create_app(engine)
     engine.dispose()

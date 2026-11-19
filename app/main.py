@@ -27,8 +27,8 @@ def create_app(database_engine=None, accounts=None):
     if os.environ.get("ACADEMY_ENV") == "production":
         if not cloud:
             raise RuntimeError("Production requires PostgreSQL persistent storage")
-        if application.state.engine.url.query.get("sslmode") not in {"require", "verify-ca", "verify-full"}:
-            raise RuntimeError("Production PostgreSQL requires TLS sslmode")
+        if application.state.engine.url.query.get("sslmode") != "verify-full":
+            raise RuntimeError("Production PostgreSQL requires TLS sslmode=verify-full")
     config = AccountConfig.from_environment(cloud=cloud) if accounts is None else None
     if cloud and accounts is None and config is None:
         raise RuntimeError("PostgreSQL requires Supabase account mode")
