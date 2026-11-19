@@ -59,6 +59,22 @@ def copy_profile(connection, user_id, profile, fresh=False):
             rows = [{"id": 1, "server_id": str(uuid4()), "user_id": user_id}]
         if rows:
             connection.execute(table.insert(), rows)
+    _verify_rows(connection, user_id, profile, tables, fresh)
+
+
+def verify_profile(connection, user_id, profile):
+    """Read-only typed comparison, also usable in a transaction after COMMIT."""
+    user_id = str(UUID(user_id))
+    metadata = sa.MetaData(schema=SCHEMA)
+    metadata.reflect(connection, schema=SCHEMA)
+    tables = [table for table in metadata.sorted_tables if table.schema == SCHEMA and table.name != 'alembic_version']
+    if set(profile) != {table.name for table in tables}:
+        raise ValueError('Profile schema does not match the cloud schema')
+    _verify_rows(connection, user_id, profile, tables, False)
+    return {name: len(rows) for name, rows in sorted(profile.items())}
+
+
+def _verify_rows(connection, user_id, profile, tables, fresh):
     # Compare typed values, not just counts, before the transaction can commit.
     for table in tables:
         if fresh and table.name == "syncidentity":

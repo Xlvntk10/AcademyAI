@@ -29,14 +29,21 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--allow-creator-set', action='store_true', help='Previously approved narrow SET grant and stage creation.')
     args = parser.parse_args(argv)
+    show_form(execute, allow_create=args.allow_creator_set)
+
+
+def show_form(executor, *, allow_create=False,
+              title='Academy AI — безопасная настройка Supabase',
+              heading='Подключение к тестовой среде Supabase',
+              create_label='Создать stage и проверить', with_progress=False):
     window = tk.Tk()
-    window.title('Academy AI — безопасная настройка Supabase')
+    window.title(title)
     window.geometry('800x440')
     window.minsize(680, 420)
     frame = ttk.Frame(window, padding=20)
     frame.pack(fill='both', expand=True)
     frame.columnconfigure(0, weight=1)
-    ttk.Label(frame, text='Подключение к тестовой среде Supabase', font=('Segoe UI', 14, 'bold')).grid(row=0, column=0, columnspan=2, sticky='w', pady=(0, 10))
+    ttk.Label(frame, text=heading, font=('Segoe UI', 14, 'bold')).grid(row=0, column=0, columnspan=2, sticky='w', pady=(0, 10))
     ttk.Label(frame, text='Вставка: Ctrl+V или кнопка «Вставить». Пароль скрыт и хранится только в памяти.').grid(row=1, column=0, columnspan=2, sticky='w')
     ttk.Label(frame, text='CA-сертификат Supabase').grid(row=2, column=0, sticky='w', pady=(12, 3))
     ca = ttk.Entry(frame)
@@ -61,7 +68,7 @@ def main(argv=None):
     password.grid(row=7, column=0, sticky='ew')
     password_paste = ttk.Button(frame, text='Вставить', command=lambda: password.event_generate('<<Paste>>'))
     password_paste.grid(row=7, column=1, padx=(10, 0))
-    status = tk.StringVar(value='Сначала выполняется чтение. Создание stage возможно только после успешной проверки.')
+    status = tk.StringVar(value='Сначала выполняется чтение. Изменения возможны только после успешной проверки.')
     ttk.Label(frame, textvariable=status, wraplength=730).grid(row=9, column=0, columnspan=2, sticky='w', pady=15)
     messages = queue.Queue()
     running = False
@@ -79,35 +86,50 @@ def main(argv=None):
         def worker():
             nonlocal credentials
             try:
-                message = execute(ca_file, credentials, create=create)
+                kwargs = {'create':create}
+                if with_progress:
+                    kwargs['progress'] = lambda phase: messages.put(('progress', phase))
+                message = executor(ca_file, credentials, **kwargs)
             except Exception:
                 message = 'Локальная ошибка. Подробности скрыты для защиты реквизитов. Не повторяйте создание без проверки отчёта.'
             finally:
                 credentials = None
-            messages.put(message)
+            messages.put(('done', message))
         threading.Thread(target=worker, daemon=False).start()
     buttons = ttk.Frame(frame)
     buttons.grid(row=8, column=0, columnspan=2, sticky='w', pady=(18, 0))
     inspect_button = ttk.Button(buttons, text='Только проверить', command=lambda: start(False))
     inspect_button.pack(side='left')
-    create_button = ttk.Button(buttons, text='Создать stage и проверить', command=lambda: start(True))
+    create_button = ttk.Button(buttons, text=create_label, command=lambda: start(True))
     create_button.pack(side='left', padx=10)
-    if not args.allow_creator_set:
+    if not allow_create:
         create_button.configure(state='disabled')
     controls = [ca, uri, password, browse, uri_paste, password_paste, inspect_button, create_button]
     def poll():
         nonlocal running
         try:
-            message = messages.get_nowait()
+            kind, message = messages.get_nowait()
         except queue.Empty:
             pass
         else:
-            running = False
-            status.set(message)
-            for widget in controls:
-                widget.configure(state='normal')
-            if not args.allow_creator_set:
-                create_button.configure(state='disabled')
+            if kind == 'progress':
+                labels = {'LOCAL_BACKUP':'Создание и сверка резервной копии…',
+                    'CONFIGURATION':'Проверка подключения и проекта…',
+                    'READ_ONLY_PREFLIGHT':'Проверка аккаунта и пустой рабочей базы…',
+                    'IDENTITY_AND_DESTINATION':'Повторная проверка перед записью…',
+                    'CREATE_PRODUCTION_SCHEMAS':'Создание рабочих таблиц…',
+                    'IMPORT_PROFILE_COPY':'Перенос копии профиля…',
+                    'VERIFY_IMPORTED_VALUES':'Сверка всех записей и 40 XP…',
+                    'COMMIT':'Фиксация проверенного переноса…',
+                    'VERIFY_AFTER_COMMIT':'Проверка сохранённых данных после фиксации…'}
+                status.set(labels.get(message, 'Проверка…'))
+            else:
+                running = False
+                status.set(message)
+                for widget in controls:
+                    widget.configure(state='normal')
+                if not allow_create:
+                    create_button.configure(state='disabled')
         window.after(200, poll)
     def close():
         if running:
