@@ -48,7 +48,9 @@ def stage(request):
                 connection.exec_driver_sql('CREATE ROLE academy_stage_migrator_test NOLOGIN CREATEROLE')
                 database = connection.dialect.identifier_preparer.quote(parsed.database)
                 connection.exec_driver_sql(f'GRANT CREATE ON DATABASE {database} TO academy_stage_migrator_test')
-                connection.exec_driver_sql('SET LOCAL ROLE academy_stage_migrator_test')
+                connection.exec_driver_sql('SET LOCAL SESSION AUTHORIZATION academy_stage_migrator_test')
+                connection.exec_driver_sql("SET LOCAL createrole_self_grant = 'set'")
+                assert connection.exec_driver_sql('SELECT current_user=session_user').scalar_one()
             # Emulate provider-wide default grants; the stage must remove them.
             for api_role in ('anon', 'authenticated', 'service_role'):
                 if not connection.execute(sa.text('SELECT 1 FROM pg_roles WHERE rolname=:name'), {'name':api_role}).first():

@@ -15,6 +15,7 @@ import psycopg
 from scripts.check_postgres import (visible_uri, hidden, database_url, driver_certificate,
                                     ConfigurationError)
 from scripts.stage_diagnostics import safe_diagnostic
+from scripts.stage_role_checks import creation_capabilities, restricted_role_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ('academy_stage', 'academy_stage_auth', 'academy_stage_migrations')
@@ -61,16 +62,25 @@ def apply_and_test(connection, plans, progress=None):
     role = connection.exec_driver_sql("SELECT 1 FROM pg_roles WHERE rolname='academy_stage_runtime'").first()
     if occupied or role:
         raise StageFailure('STAGE_ALREADY_EXISTS')
+    progress('ROLE_CAPABILITY_PREFLIGHT')
+    capabilities = creation_capabilities(connection)
+    if not capabilities['can_create_schema'] or not capabilities['can_create_role']:
+        raise StageFailure('STAGE_CREATION_PRIVILEGES_MISSING')
+    if capabilities['server_version_num'] < 160000:
+        raise StageFailure('ROLE_MEMBERSHIP_VERSION_REVIEW_REQUIRED')
+    if not capabilities['new_role_set_expected']:
+        raise StageFailure('STAGE_SET_ROLE_APPROVAL_REQUIRED')
     progress('STAGE_DDL')
     connection.exec_driver_sql(transaction_body(plans['01_schema.sql'], 'COMMIT;'), execution_options={'no_parameters':True})
     progress('RLS_SMOKE')
     with connection.begin_nested() as smoke:
+        smoke_role = restricted_role_evidence(connection)
         connection.exec_driver_sql(transaction_body(plans['02_smoke_rollback.sql'], 'ROLLBACK;'), execution_options={'no_parameters':True})
         smoke.rollback()
     progress('LEARNING_SAVEPOINT')
     with connection.begin_nested() as learning:
         progress('SET_STAGE_ROLE')
-        connection.exec_driver_sql('SET LOCAL ROLE academy_stage_runtime')
+        learning_role = restricted_role_evidence(connection)
         connection.exec_driver_sql('SET LOCAL search_path TO academy_stage, pg_catalog')
         progress('LEARNING_TRIAL')
         details = learning_trial(connection)
@@ -96,7 +106,7 @@ def apply_and_test(connection, plans, progress=None):
     if catalog_outside_stage(connection) != outside:
         raise StageFailure('OUTSIDE_CATALOG_CHANGED')
     return {'objects':tables, 'role':'academy_stage_runtime', 'role_login':False,
-            'rls_and_foreign_keys':True, 'learning_trial':details,
+            'rls_and_foreign_keys':True, 'rls_test_roles':{'smoke':smoke_role,'learning':learning_role}, 'learning_trial':details,
             'test_rows_after_rollback':0, 'outside_catalog_unchanged':True,
             'remaining_data':'only cloud_0001 in alembic_version; sequences may have advanced'}
 

@@ -1,5 +1,6 @@
-﻿"""Read-only PostgreSQL catalog inspection; never imports or invokes migrations."""
+"""Read-only PostgreSQL catalog inspection; never imports or invokes migrations."""
 import sqlalchemy as sa
+from scripts.stage_role_checks import creation_capabilities
 
 SCHEMAS = ('academy_stage', 'academy_stage_auth', 'academy_stage_migrations')
 
@@ -30,5 +31,6 @@ def inspect_stage(connection):
               'connected_role_privileges':dict(own), 'transaction_read_only':True,
               'personal_rows_read':False, 'data_rows':'not_inspected',
               'state':'absent' if not schema_rows and role is None else 'objects_present_review_required'}
+    result['creation_capabilities'] = creation_capabilities(connection)
     result['previous_attempt_origin'] = 'cannot_determine_from_catalog'
     return result

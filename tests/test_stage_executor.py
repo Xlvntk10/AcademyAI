@@ -24,7 +24,9 @@ def admin_connection(request):
                 connection.exec_driver_sql('CREATE ROLE academy_stage_runner_test NOLOGIN CREATEROLE')
                 name = connection.dialect.identifier_preparer.quote(parsed.database)
                 connection.exec_driver_sql(f'GRANT CREATE ON DATABASE {name} TO academy_stage_runner_test')
-                connection.exec_driver_sql('SET LOCAL ROLE academy_stage_runner_test')
+                connection.exec_driver_sql('SET LOCAL SESSION AUTHORIZATION academy_stage_runner_test')
+                connection.exec_driver_sql("SET LOCAL createrole_self_grant = 'set'")
+                assert connection.exec_driver_sql('SELECT current_user=session_user').scalar_one()
             yield connection
         finally:
             transaction.rollback()

@@ -84,7 +84,7 @@ def safe_diagnostic(error, phase):
         except KeyError:
             result['postgres_condition'] = 'UnlistedSQLSTATE'
     # Only known project filenames and numeric line numbers; no locals/source lines.
-    allowed = {'run_stage.py', 'stage_learning_trial.py', 'stage_diagnostics.py', 'stage_state.py', 'check_postgres.py'}
+    allowed = {'run_stage.py', 'stage_learning_trial.py', 'stage_diagnostics.py', 'stage_state.py', 'stage_role_checks.py', 'check_postgres.py'}
     locations = []
     for item in chain:
         for frame in traceback.extract_tb(item.__traceback__):
