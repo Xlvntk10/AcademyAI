@@ -59,10 +59,10 @@ Render документирует внешние адреса назначени
 Пример runtime URL:
 
 ```text
-postgresql+psycopg://academy_runtime.PROJECT_REF:URL_ENCODED_PASSWORD@POOLER_HOST:5432/postgres?sslmode=require
+postgresql+psycopg://academy_runtime.PROJECT_REF:URL_ENCODED_PASSWORD@POOLER_HOST:5432/postgres?sslmode=verify-full&sslrootcert=/etc/secrets/supabase-ca.pem
 ```
 
-Пароль обязательно percent-encode. Production отклоняет SQLite и подключение без TLS. Предпочитайте `sslmode=verify-full` с доверенным `sslrootcert`, подходящим для вашего Supabase/pooler: это дополнительно проверяет сервер. Для Linux можно использовать доверенный системный CA bundle, если цепочка pooler им подписана; для Windows задайте проверенный CA-файл. Локальная репетиция V5 использует `verify-full`; при ошибке сертификата исправьте цепочку/hostname, не отключайте проверку. [Подключения Supabase](https://supabase.com/docs/guides/database/connecting-to-postgres)
+Пароль обязательно percent-encode. Production отклоняет SQLite и любой sslmode кроме verify-full. Используйте `sslmode=verify-full` с доверенным `sslrootcert`, подходящим для вашего Supabase/pooler: это дополнительно проверяет сервер. Для Linux можно использовать доверенный системный CA bundle, если цепочка pooler им подписана; для Windows задайте проверенный CA-файл. Локальная репетиция V5 использует `verify-full`; при ошибке сертификата исправьте цепочку/hostname, не отключайте проверку. [Подключения Supabase](https://supabase.com/docs/guides/database/connecting-to-postgres)
 
 Supabase `service_role`, секрет подписи JWT и пароль администратора не требуются runtime-приложению и не должны попадать во frontend.
 
@@ -77,6 +77,12 @@ Supabase `service_role`, секрет подписи JWT и пароль адм�
 7. Проверьте первый вход и повторный вход на том же email: это механизм восстановления доступа без собственного пароля приложения.
 
 Backend проверяет токен запросом `/auth/v1/user` к выбранному Supabase, а не доверяет декодированному JWT с клиента. Клиент получает только непрозрачную cookie; её хеш и серверные токены хранятся в закрытой PostgreSQL-схеме. Обновление сессии сериализовано, аккаунт ответа проверяется. [Email OTP](https://supabase.com/docs/guides/auth/auth-email-passwordless)
+
+## V6: сначала изолированная репетиция
+
+Текущий безопасный этап описан в [V6_CLOUD_DATABASE.md](V6_CLOUD_DATABASE.md). SQL для `academy_stage` только подготовлен; выполнение в настоящем Supabase требует отдельного разрешения. Рабочие схемы, Auth и личный профиль пока не переносим.
+
+Для Render добавьте в API → Environment → Secret Files файл `supabase-ca.pem` с доверенным публичным CA, которым успешно проверялся ваш pooler. Runtime-путь — `/etc/secrets/supabase-ca.pem`. Это сертификат CA, **не приватный ключ**. Его нельзя заменять случайным сертификатом или отключать verify-full. [Secret Files в Render](https://render.com/docs/configure-environment-variables#secret-files).
 
 ## Миграция PostgreSQL и права
 
@@ -112,11 +118,12 @@ FROM pg_roles WHERE rolname = 'academy_runtime';
 2. Сохраните исходные SQLite и проверенные backup; не удаляйте их после переноса.
 3. Получите подтверждённый UUID пользователя из Supabase Authentication → Users. Подготовьте профиль до первого входа этого пользователя в облачное приложение, иначе там уже будет создан пустой профиль и импорт откажется перезаписывать его.
 4. Проведите импорт копии в отдельную тестовую PostgreSQL. Сверьте данные и API-статистику.
-5. После разрешения повторите процедуру в целевой базе при остановленном API:
+5. После разрешения повторите процедуру в целевой базе при остановленном API. Важно: у текущего пользователя 40 XP в отдельном файле `%LOCALAPPDATA%\AcademyAI\accounts\<UUID>.db`. Корневая `database.db` содержит другой профиль с 50 XP. Не подставляйте её вместо аккаунтного файла. В `$profileCopy` укажите проверенную копию именно нужного профиля:
 
 ```powershell
+$profileCopy = Read-Host 'Полный путь к проверенной копии профиля с 40 XP (без внешних кавычек)'
 .\.venv\Scripts\python.exe -m scripts.import_cloud `
-  --source '.\database.db' `
+  --source $profileCopy `
   --user-id 'ПРОВЕРЕННЫЙ-UUID-ВЛАДЕЛЬЦА' `
   --backup-dir '.\backups\cloud-import'
 ```

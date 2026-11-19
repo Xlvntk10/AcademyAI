@@ -14,6 +14,8 @@ V5 готовит раздельное размещение React на Render St
 
 Проверка нового Supabase Session pooler **без миграций**: [POSTGRES_CONNECTION_CHECK.md](POSTGRES_CONNECTION_CHECK.md). Команда `scripts.check_postgres` показывает ввод URI с `[YOUR-DATABASE-PASSWORD]`, запрашивает настоящий пароль отдельно скрыто, проверяет TLS и выполняет только `SELECT 1`; рабочая SQLite не используется.
 
+V6: подготовлены SQL-план отдельной схемы `academy_stage`, её проверка без личных данных и обязательный TLS `verify-full` для production. Настоящий Supabase на этом этапе не изменён. [План, сохранение 40 XP и откат](V6_CLOUD_DATABASE.md), [отчёт проверок](DEVELOPMENT_REPORT_V6.md).
+
 ## Что уже работает
 
 - **Сегодня:** задания из настоящего плана, следующий урок, дневная и недельная цели.
