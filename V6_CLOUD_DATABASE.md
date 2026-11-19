@@ -1,4 +1,4 @@
-﻿# Academy AI V6: план PostgreSQL перед разрешением на запись
+# Academy AI V6: план PostgreSQL перед разрешением на запись
 
 Состояние: 19 ноября 2026 года. Папка `C:\Users\user\OneDrive\Рабочий стол\academy ai`, ветка `feature/academy-ai-v2`.
 
@@ -102,7 +102,8 @@ npm.cmd --prefix frontend run build
 Для повторной проверки **настоящего** Session pooler без записи используйте существующую команду:
 
 ```powershell
-.\.venv\Scripts\python.exe -m scripts.check_postgres
+$probeCa = Read-Host 'Полный путь к CA-сертификату Supabase'
+.\.venv\Scripts\python.exe -m scripts.check_postgres --ca-file $probeCa
 ```
 
 URI виден только с `[YOUR-DATABASE-PASSWORD]`, настоящий пароль вводится отдельно скрыто. Выбирайте порт 5432 и доверенный CA. Команда выполняет только `SELECT 1`, не запускает миграции. Не передавайте URI/пароль в чат, аргументы команд, отчёты или Git. Для прочих инструментов пароль хранится только в памяти процесса/переменной окружения; не запускайте `Get-ChildItem Env:` и транскрипцию терминала с реквизитами.
@@ -163,3 +164,6 @@ Supabase Free включает 500 MB базы; проект может прио
 «Разрешаю выполнить только read-only preflight, создание трёх схем `academy_stage`, `academy_stage_auth`, `academy_stage_migrations` и роли `academy_stage_runtime NOLOGIN` по `deploy/stage/01_schema.sql`, затем тест `02_smoke_rollback.sql` с откатом. Не разрешаю перенос личного прогресса, изменение рабочих схем/Auth, LOGIN тестовой роли, публикацию и push».
 
 До такого подтверждения файлы остаются локальным проверенным планом. Даже после подтверждения реквизиты вводятся только в локальном защищённом терминале, не в чат.
+
+
+Обновление: ограниченный stage-этап разрешён пользователем. Исполнитель, безопасный ввод реквизитов и фактическое состояние запуска описаны в [SUPABASE_STAGE_EXECUTION.md](SUPABASE_STAGE_EXECUTION.md).

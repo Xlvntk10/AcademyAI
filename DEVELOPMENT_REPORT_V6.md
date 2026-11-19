@@ -1,4 +1,4 @@
-﻿# Отчёт Academy AI V6 — подготовка PostgreSQL
+# Отчёт Academy AI V6 — подготовка PostgreSQL
 
 Дата: 19 ноября 2026 года. Ветка: `feature/academy-ai-v2`. Рабочая папка: `C:\Users\user\OneDrive\Рабочий стол\academy ai`.
 
@@ -110,7 +110,8 @@ Stage предназначена для SQL-репетиции. Нынешний
 ```powershell
 Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 .\.venv\Scripts\python.exe -m scripts.stage_plan --check
-.\.venv\Scripts\python.exe -m scripts.check_postgres
+$probeCa = Read-Host 'Полный путь к CA-сертификату Supabase'
+.\.venv\Scripts\python.exe -m scripts.check_postgres --ca-file $probeCa
 ```
 
 Эти команды не создают таблицы. Пароль вводится только скрыто в локальном терминале. Запуск самого приложения с настоящим локальным аккаунтом описан в [MAGIC_LINK_SETUP.md](MAGIC_LINK_SETUP.md); не переключайте его на корневой local-профиль, если хотите видеть свои 40 XP.
@@ -118,3 +119,6 @@ Set-Location 'C:\Users\user\OneDrive\Рабочий стол\academy ai'
 Для следующего шага нужно подтвердить **только stage SQL и откатываемую синтетическую проверку**. Реальные 40 XP пока остаются в SQLite и резервной копии. Последующий перенос личных данных, выдача runtime LOGIN, рабочие миграции, push и публикация — отдельные решения.
 
 Настройки Render, переменные окружения, CA, безопасный импорт и откат изложены в [V6_CLOUD_DATABASE.md](V6_CLOUD_DATABASE.md) и [CLOUD_DEPLOYMENT.md](CLOUD_DEPLOYMENT.md). Бесплатный вариант подходит для личной платформы в пределах квот; ограничения сна/почты/объёма и ссылки на актуальные официальные условия приведены там.
+
+
+Обновление: ограниченный stage-этап разрешён пользователем. Исполнитель, безопасный ввод реквизитов и фактическое состояние запуска описаны в [SUPABASE_STAGE_EXECUTION.md](SUPABASE_STAGE_EXECUTION.md).
