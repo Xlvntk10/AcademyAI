@@ -94,3 +94,44 @@ def test_proposed_set_grant_locally_fixes_rls_and_xp_without_bypass(strict_creat
                 assert result['other_account_xp'] == 0
             test_data.rollback()
     assert connection.exec_driver_sql('SELECT count(*) FROM academy_stage_auth.users').scalar_one() == 0
+
+
+def test_opt_in_executor_grants_only_creator_set_and_runs_full_trial(strict_creator):
+    from scripts.run_stage import apply_and_test
+    result = apply_and_test(strict_creator, reviewed_sql(), allow_creator_set=True)
+    assert result['creator_set_granted'] is True
+    assert result['learning_trial']['synthetic_xp'] == result['learning_trial']['replayed_xp'] == 60
+    assert result['learning_trial']['other_account_xp'] == 0
+    assert result['test_rows_after_rollback'] == 0
+    assert result['outside_catalog_unchanged'] is True
+    flags = strict_creator.exec_driver_sql("""SELECT bool_or(m.set_option),bool_or(m.inherit_option)
+        FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid
+        JOIN pg_roles u ON u.oid=m.member
+        WHERE r.rolname='academy_stage_runtime' AND u.rolname=session_user""").one()
+    assert flags == (True, False)
+    assert not strict_creator.exec_driver_sql("""SELECT 1 FROM pg_auth_members m
+        JOIN pg_roles u ON u.oid=m.member WHERE u.rolname='academy_stage_runtime'""").first()
+
+
+def test_opt_in_failure_rolls_back_grant_role_and_schemas(strict_creator, monkeypatch):
+    from scripts.run_stage import apply_and_test
+    before = strict_creator.exec_driver_sql('SELECT * FROM pg_auth_members ORDER BY oid').fetchall()
+    def fail(connection):
+        assert connection.exec_driver_sql("SELECT current_user='academy_stage_runtime'").scalar_one()
+        raise RuntimeError('synthetic trial failure')
+    monkeypatch.setattr('scripts.stage_learning_trial.learning_trial', fail)
+    with pytest.raises(RuntimeError, match='synthetic trial failure'), strict_creator.begin_nested():
+        apply_and_test(strict_creator, reviewed_sql(), allow_creator_set=True)
+    assert strict_creator.exec_driver_sql('SELECT * FROM pg_auth_members ORDER BY oid').fetchall() == before
+    assert not strict_creator.exec_driver_sql("SELECT 1 FROM pg_roles WHERE rolname='academy_stage_runtime'").first()
+    assert strict_creator.exec_driver_sql("SELECT count(*) FROM pg_namespace WHERE nspname IN ('academy_stage','academy_stage_auth','academy_stage_migrations')").scalar_one() == 0
+
+
+def test_opt_in_refuses_other_session_identity_before_ddl(strict_creator):
+    from scripts.run_stage import apply_and_test, StageFailure
+    strict_creator.exec_driver_sql('CREATE ROLE academy_other_creator_test NOLOGIN CREATEROLE')
+    strict_creator.exec_driver_sql('GRANT academy_other_creator_test TO CURRENT_USER WITH SET TRUE')
+    strict_creator.exec_driver_sql('SET LOCAL ROLE academy_other_creator_test')
+    with pytest.raises(StageFailure, match='STAGE_CREATOR_IDENTITY_MISMATCH'):
+        apply_and_test(strict_creator, reviewed_sql(), allow_creator_set=True)
+    assert not strict_creator.exec_driver_sql("SELECT 1 FROM pg_roles WHERE rolname='academy_stage_runtime'").first()

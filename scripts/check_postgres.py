@@ -213,6 +213,11 @@ def visible_uri() -> str:
     # Terminal echo happens while typing. Validate immediately, never repeat the
     # line or include it in errors. Only a literal placeholder is accepted here.
     uri = input("Session pooler URI (видимый ввод; только с [YOUR-DATABASE-PASSWORD], без настоящего пароля): ")
+    return validate_visible_uri(uri)
+
+
+def validate_visible_uri(uri: str) -> str:
+    """Shared validation for terminal and local desktop input; never echo input."""
     try:
         value = unquote(uri)
         prefix = r"^(?:postgres|postgresql|postgresql\+psycopg)://[^:/@?#\s]+:\[YOUR-DATABASE-PASSWORD\]@"

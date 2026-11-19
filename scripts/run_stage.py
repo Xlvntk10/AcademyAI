@@ -19,6 +19,7 @@ from scripts.stage_role_checks import creation_capabilities, restricted_role_evi
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ('academy_stage', 'academy_stage_auth', 'academy_stage_migrations')
+CREATOR_SET_SQL = 'GRANT academy_stage_runtime TO CURRENT_USER WITH SET TRUE, INHERIT FALSE;'
 PINNED = {'00_preflight_readonly.sql': '90f4cab0540cde3c982d9f68b2000de1516f1d08cb94121c1350675434ce710c', '01_schema.sql': 'e7a3255440f2e5171a4e3b13a09be7c8c103ce20ee8ced57730161de22b598dc', '02_smoke_rollback.sql': '80a7bbb660b8b17171e45ae11714937adfa7b1b11b67747a355728100a3e72c8'}  # Filled from reviewed SQL; changed SQL fails closed.
 
 
@@ -52,7 +53,7 @@ def catalog_outside_stage(connection):
         ORDER BY n.nspname,c.relname,c.oid""").fetchall()
 
 
-def apply_and_test(connection, plans, progress=None):
+def apply_and_test(connection, plans, progress=None, *, allow_creator_set=False):
     """Caller owns the transaction; function never commits schemas itself."""
     from scripts.stage_learning_trial import learning_trial
     progress = progress or (lambda phase: None)
@@ -64,14 +65,30 @@ def apply_and_test(connection, plans, progress=None):
         raise StageFailure('STAGE_ALREADY_EXISTS')
     progress('ROLE_CAPABILITY_PREFLIGHT')
     capabilities = creation_capabilities(connection)
+    if allow_creator_set and not capabilities['same_session_and_current_role']:
+        raise StageFailure('STAGE_CREATOR_IDENTITY_MISMATCH')
     if not capabilities['can_create_schema'] or not capabilities['can_create_role']:
         raise StageFailure('STAGE_CREATION_PRIVILEGES_MISSING')
     if capabilities['server_version_num'] < 160000:
         raise StageFailure('ROLE_MEMBERSHIP_VERSION_REVIEW_REQUIRED')
-    if not capabilities['new_role_set_expected']:
+    needs_creator_set = not capabilities['new_role_set_expected']
+    if needs_creator_set and not allow_creator_set:
         raise StageFailure('STAGE_SET_ROLE_APPROVAL_REQUIRED')
     progress('STAGE_DDL')
     connection.exec_driver_sql(transaction_body(plans['01_schema.sql'], 'COMMIT;'), execution_options={'no_parameters':True})
+    if needs_creator_set:
+        progress('GRANT_STAGE_CREATOR_SET')
+        # Only the newly created role, only its creator, in the caller's DDL
+        # transaction. Never change server defaults or grant an admin role.
+        connection.exec_driver_sql(CREATOR_SET_SQL)
+        membership = connection.exec_driver_sql("""SELECT bool_or(m.set_option), bool_or(m.inherit_option)
+            FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid
+            JOIN pg_roles u ON u.oid=m.member
+            WHERE r.rolname='academy_stage_runtime' AND u.rolname=session_user""").one()
+        if membership != (True, False):
+            raise StageFailure('STAGE_CREATOR_MEMBERSHIP_UNSAFE')
+    if not connection.exec_driver_sql("SELECT pg_has_role(session_user,'academy_stage_runtime','SET')").scalar_one():
+        raise StageFailure('STAGE_SET_ROLE_NOT_CONFIRMED')
     progress('RLS_SMOKE')
     with connection.begin_nested() as smoke:
         smoke_role = restricted_role_evidence(connection)
@@ -106,16 +123,21 @@ def apply_and_test(connection, plans, progress=None):
     if catalog_outside_stage(connection) != outside:
         raise StageFailure('OUTSIDE_CATALOG_CHANGED')
     return {'objects':tables, 'role':'academy_stage_runtime', 'role_login':False,
+            'creator_set_granted':needs_creator_set,
             'rls_and_foreign_keys':True, 'rls_test_roles':{'smoke':smoke_role,'learning':learning_role}, 'learning_trial':details,
             'test_rows_after_rollback':0, 'outside_catalog_unchanged':True,
             'remaining_data':'only cloud_0001 in alembic_version; sequences may have advanced'}
 
 
-def main(argv=None):
+def main(argv=None, *, credential_provider=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--ca-file', required=True)
     parser.add_argument('--inspect', action='store_true', help='Read-only catalog diagnostics. Never runs migrations or learning tests.')
+    parser.add_argument('--allow-creator-set', action='store_true',
+        help='Explicit approval: grant SET, INHERIT FALSE on the new stage role to its creator, only if needed.')
     args = parser.parse_args(argv)
+    if args.inspect and args.allow_creator_set:
+        parser.error('--inspect cannot be combined with --allow-creator-set')
     logging.disable(logging.CRITICAL)
     report = {'status':'not_started', 'supabase_confirmed':False}
     commit_started = False
@@ -127,8 +149,13 @@ def main(argv=None):
     try:
         plans = None if args.inspect else reviewed_sql()  # Inspect works even if migration files are broken.
         progress('CREDENTIAL_INPUT')
-        uri = visible_uri()
-        password = hidden('Пароль PostgreSQL (скрытый ввод): ')
+        if credential_provider is None:
+            uri = visible_uri()
+            password = hidden('Пароль PostgreSQL (скрытый ввод): ')
+        else:
+            from scripts.check_postgres import validate_visible_uri
+            uri, password = credential_provider()
+            uri = validate_visible_uri(uri)
         progress('CONFIGURATION')
         url = database_url(uri, password, args.ca_file)
         if not url.host.endswith('.pooler.supabase.com'):
@@ -168,7 +195,7 @@ def main(argv=None):
                               'inspection_confirmed':True, 'mode':'read_only', 'tls':'verify-full', **details}
                 else:
                     with connection.begin() as transaction:
-                        details = apply_and_test(connection, plans, progress)
+                        details = apply_and_test(connection, plans, progress, allow_creator_set=args.allow_creator_set)
                         progress('COMMIT')
                         commit_started = True
                         transaction.commit()

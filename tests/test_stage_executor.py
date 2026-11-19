@@ -88,3 +88,10 @@ def test_raw_connection_error_is_never_reported(tmp_path, monkeypatch, capsys):
     for secret in ('REAL_SECRET', 'private-host', 'postgresql://'):
         assert secret not in output.out + output.err + report
     assert json.loads(report)['supabase_confirmed'] is False
+
+
+def test_inspect_cannot_request_grant(monkeypatch):
+    monkeypatch.setattr(run_stage, 'visible_uri', lambda: pytest.fail('No input for invalid mode'))
+    with pytest.raises(SystemExit) as failure:
+        run_stage.main(['--inspect', '--allow-creator-set', '--ca-file', 'not-used'])
+    assert failure.value.code == 2
