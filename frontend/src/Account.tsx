@@ -1,3 +1,4 @@
+import { AuthorSignature } from './About'
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { api, ApiError } from './api'
 import { accountUser, setAccountContext, type AccountSession } from './account-context'
@@ -65,7 +66,7 @@ function Login({notice, reconnect}: {notice:string; reconnect: () => Promise<voi
     <div className="button-row"><button className="text-button" disabled={busy} onClick={() => { setSent(false); setRegister(!register); setStatus('') }}>{register ? 'У меня уже есть аккаунт' : 'Зарегистрироваться'}</button>
       {sent && <button className="text-button" disabled={busy} onClick={() => { setSent(false); setCode('') }}>Другой адрес или новое письмо</button>}</div>
     <UpdateNotice route="settings"/>
-  </section></main>
+  </section><AuthorSignature /></main>
 }
 
 export function AccountGate({children}: {children: ReactNode}) {

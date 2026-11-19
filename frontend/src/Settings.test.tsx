@@ -1,6 +1,7 @@
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, test, expect, vi } from 'vitest'
+import { version } from '../package.json'
 import Settings, { ReminderHost, reminderDue } from './Settings'
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); vi.useRealTimers(); localStorage.clear() })
@@ -52,4 +53,18 @@ test('reminder uses Almaty time, waits for a visible page and fires once per loc
   vi.setSystemTime(new Date('2026-11-05T14:00:00Z'))
   await act(async () => { await vi.advanceTimersByTimeAsync(30000) })
   expect(notification).toHaveBeenCalledTimes(2)
+})
+
+
+test('about section remains available offline and displays the package version and author', async () => {
+  vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('offline') }))
+  render(<Settings />)
+  expect(screen.getByRole('region', {name:'О приложении'})).toBeVisible()
+  expect(screen.getByText('Kusymbaev Alan')).toBeVisible()
+  expect(screen.getByText('Персональная образовательная платформа')).toBeVisible()
+  expect(screen.getByText(version)).toBeVisible()
+  expect(screen.getByText('Made by Kusymbaev Alan')).toBeVisible()
+  expect(screen.getByRole('list', {name:'Основные технологии'})).toHaveTextContent('React · TypeScript · Vite')
+  expect(screen.getByRole('list', {name:'Основные технологии'})).toHaveTextContent('FastAPI · SQLModel')
+  await screen.findByRole('alert')
 })

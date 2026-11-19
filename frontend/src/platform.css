@@ -70,3 +70,18 @@
 :root { background: var(--bg); }
 body { min-height: 100dvh; }
 .account-entry > section { display: grid; gap: 16px; }
+
+/* Author credit follows the existing theme colors and stays readable on mobile. */
+.author-signature { margin: 0; color: var(--muted); font-size: 11px; font-weight: 400; line-height: 1.6; letter-spacing: .01em; }
+.sidebar-bottom > .author-signature { margin-top: 20px; padding: 0 3px; }
+.account-entry > .author-signature { margin: 22px 0 0; text-align: center; }
+.workspace footer { flex-wrap: wrap; gap: 12px; }
+.about-panel { grid-column: 1 / -1; }
+.about-details { margin: 0; display: grid; gap: 0; }
+.about-details > div { display: grid; grid-template-columns: minmax(120px, 180px) minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.about-details dt { color: var(--muted); font-size: 13px; }
+.about-details dd { margin: 0; color: var(--text); font-size: 14px; overflow-wrap: anywhere; }
+.about-panel h4 { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.about-technologies { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.about-technologies li { padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 12px; line-height: 1.6; max-width: 100%; overflow-wrap: anywhere; }
+@media (max-width: 420px) { .about-details > div { grid-template-columns: 1fr; gap: 4px; } }
