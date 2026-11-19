@@ -13,7 +13,8 @@ import getpass
 import sqlalchemy as sa
 import psycopg
 from scripts.check_postgres import (visible_uri, hidden, database_url, driver_certificate,
-                                    ConfigurationError, diagnose)
+                                    ConfigurationError)
+from scripts.stage_diagnostics import safe_diagnostic
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ('academy_stage', 'academy_stage_auth', 'academy_stage_migrations')
@@ -50,23 +51,31 @@ def catalog_outside_stage(connection):
         ORDER BY n.nspname,c.relname,c.oid""").fetchall()
 
 
-def apply_and_test(connection, plans):
+def apply_and_test(connection, plans, progress=None):
     """Caller owns the transaction; function never commits schemas itself."""
     from scripts.stage_learning_trial import learning_trial
+    progress = progress or (lambda phase: None)
+    progress('PREFLIGHT')
     outside = catalog_outside_stage(connection)
     occupied = connection.execute(sa.text("SELECT count(*) FROM pg_namespace WHERE nspname = ANY(:names)"), {'names':list(SCHEMAS)}).scalar_one()
     role = connection.exec_driver_sql("SELECT 1 FROM pg_roles WHERE rolname='academy_stage_runtime'").first()
     if occupied or role:
         raise StageFailure('STAGE_ALREADY_EXISTS')
+    progress('STAGE_DDL')
     connection.exec_driver_sql(transaction_body(plans['01_schema.sql'], 'COMMIT;'), execution_options={'no_parameters':True})
+    progress('RLS_SMOKE')
     with connection.begin_nested() as smoke:
         connection.exec_driver_sql(transaction_body(plans['02_smoke_rollback.sql'], 'ROLLBACK;'), execution_options={'no_parameters':True})
         smoke.rollback()
+    progress('LEARNING_SAVEPOINT')
     with connection.begin_nested() as learning:
+        progress('SET_STAGE_ROLE')
         connection.exec_driver_sql('SET LOCAL ROLE academy_stage_runtime')
         connection.exec_driver_sql('SET LOCAL search_path TO academy_stage, pg_catalog')
+        progress('LEARNING_TRIAL')
         details = learning_trial(connection)
         learning.rollback()
+    progress('VERIFY_ROLLBACK_AND_OBJECTS')
     # Registry has no RLS: zero owners plus enforced owner FKs prove that no
     # tenant rows can remain, even when FORCE RLS hides rows from the DDL owner.
     if connection.exec_driver_sql('SELECT count(*) FROM academy_stage_auth.users').scalar_one() != 0:
@@ -95,63 +104,97 @@ def apply_and_test(connection, plans):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--ca-file', required=True)
+    parser.add_argument('--inspect', action='store_true', help='Read-only catalog diagnostics. Never runs migrations or learning tests.')
     args = parser.parse_args(argv)
     logging.disable(logging.CRITICAL)
     report = {'status':'not_started', 'supabase_confirmed':False}
     commit_started = False
+    phase = 'PLAN_CHECK'
+    def progress(value):
+        nonlocal phase
+        phase = value
     engine = None
     try:
-        plans = reviewed_sql()  # Check the plan BEFORE asking for credentials.
+        plans = None if args.inspect else reviewed_sql()  # Inspect works even if migration files are broken.
+        progress('CREDENTIAL_INPUT')
         uri = visible_uri()
         password = hidden('Пароль PostgreSQL (скрытый ввод): ')
+        progress('CONFIGURATION')
         url = database_url(uri, password, args.ca_file)
         if not url.host.endswith('.pooler.supabase.com'):
             raise StageFailure('SUPABASE_SESSION_POOLER_REQUIRED')
         with ExitStack() as resources:
+            progress('CA_PREPARATION')
             ca = resources.enter_context(driver_certificate(url.query['sslrootcert']))
             def connect():
+                progress('DBAPI_CONNECT')
                 conn = psycopg.connect(host=url.host, port=5432, dbname=url.database,
                     user=url.username, password=url.password, sslmode='verify-full', sslrootcert=ca,
                     ssl_min_protocol_version='TLSv1.2', gssencmode='disable', options='',
                     application_name='academy-stage-approved', connect_timeout=15, prepare_threshold=None)
+                progress('TLS_CHECK')
                 if not conn.pgconn.ssl_in_use:
                     conn.close()
                     raise StageFailure('TLS_REQUIRED')
+                # Applies before SQLAlchemy initializes the dialect: even its first
+                # transaction cannot write in --inspect mode.
+                if args.inspect:
+                    conn.read_only = True
+                progress('SQLALCHEMY_INITIALIZE')
                 return conn
             # No URL with a secret is passed to SQLAlchemy/logging.
             engine = sa.create_engine('postgresql+psycopg://', creator=connect,
                                       poolclass=sa.pool.NullPool, hide_parameters=True)
+            progress('ENGINE_CONNECT')
             with engine.connect() as connection:
-                with connection.begin() as transaction:
-                    details = apply_and_test(connection, plans)
-                    commit_started = True
-                    transaction.commit()
-                # Confirm the committed result using a new transaction.
-                with connection.begin():
-                    if connection.exec_driver_sql('SELECT version_num FROM academy_stage_migrations.alembic_version').scalar_one() != 'cloud_0001':
-                        raise StageFailure('COMMIT_NOT_CONFIRMED')
-            report = {'status':'passed', 'supabase_confirmed':True, 'tls':'verify-full', **details}
+                if args.inspect:
+                    from scripts.stage_state import inspect_stage
+                    progress('READ_ONLY_CATALOG')
+                    with connection.begin() as transaction:
+                        details = inspect_stage(connection)
+                        progress('READ_ONLY_ROLLBACK')
+                        transaction.rollback()
+                    report = {'status':'inspection_passed', 'supabase_confirmed':False,
+                              'inspection_confirmed':True, 'mode':'read_only', 'tls':'verify-full', **details}
+                else:
+                    with connection.begin() as transaction:
+                        details = apply_and_test(connection, plans, progress)
+                        progress('COMMIT')
+                        commit_started = True
+                        transaction.commit()
+                    progress('VERIFY_COMMIT')
+                    with connection.begin():
+                        if connection.exec_driver_sql('SELECT version_num FROM academy_stage_migrations.alembic_version').scalar_one() != 'cloud_0001':
+                            raise StageFailure('COMMIT_NOT_CONFIRMED')
+                    report = {'status':'passed', 'supabase_confirmed':True, 'tls':'verify-full', **details}
             engine.dispose()
             engine = None
     except ConfigurationError as error:
         print(str(error), file=sys.stderr)
         report['error'] = 'CONFIGURATION'
+        report['diagnostic'] = {'phase':phase, 'code':'CONFIGURATION', 'message':str(error)}
     except StageFailure as error:
-        report['error'] = str(error)  # All messages above are fixed, no driver text.
+        report['error'] = str(error)  # Fixed internal codes only.
+        report['diagnostic'] = {'phase':phase, 'code':str(error)}
     except (KeyboardInterrupt, EOFError, getpass.GetPassWarning):
         report['error'] = 'INTERACTIVE_INPUT_CANCELLED'
     except Exception as error:
-        report['error'] = diagnose(error)  # Only a safe category, never raw exception/URI.
+        report['diagnostic'] = safe_diagnostic(error, phase)
+        report['error'] = report['diagnostic']['code']
     finally:
         if engine is not None:
             engine.dispose()
-    if report['status'] != 'passed':
-        report['status'] = 'commit_unconfirmed_do_not_retry_blindly' if commit_started else 'failed_no_commit_requested'
+    if report['status'] not in {'passed','inspection_passed'}:
+        report['status'] = ('inspection_failed_no_writes' if args.inspect else
+                            'commit_unconfirmed_do_not_retry_blindly' if commit_started else 'failed_no_commit_requested')
+        report['cloud_state'] = 'not_confirmed_by_this_run'
+        report['phase'] = phase
     folder = ROOT/'.test-artifacts'
     folder.mkdir(exist_ok=True)
-    (folder/'supabase-stage-result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
+    report_name = 'supabase-stage-inspection.json' if args.inspect else 'supabase-stage-result.json'
+    (folder/report_name).write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps(report,ensure_ascii=False,indent=2))
-    return 0 if report['status'] == 'passed' else 1
+    return 0 if report['status'] in {'passed','inspection_passed'} else 1
 
 
 if __name__ == '__main__':
