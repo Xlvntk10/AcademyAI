@@ -7,6 +7,7 @@ import threading
 import tkinter as tk
 from tkinter import filedialog, ttk
 from scripts import run_stage
+from scripts.desktop_clipboard import bind_paste
 
 
 def execute(ca_file, credentials, *, create=False):
@@ -43,10 +44,12 @@ def show_form(executor, *, allow_create=False,
     frame = ttk.Frame(window, padding=20)
     frame.pack(fill='both', expand=True)
     frame.columnconfigure(0, weight=1)
+    status = tk.StringVar(value='Сначала выполняется чтение. Изменения возможны только после успешной проверки.')
     ttk.Label(frame, text=heading, font=('Segoe UI', 14, 'bold')).grid(row=0, column=0, columnspan=2, sticky='w', pady=(0, 10))
     ttk.Label(frame, text='Вставка: Ctrl+V или кнопка «Вставить». Пароль скрыт и хранится только в памяти.').grid(row=1, column=0, columnspan=2, sticky='w')
     ttk.Label(frame, text='CA-сертификат Supabase').grid(row=2, column=0, sticky='w', pady=(12, 3))
     ca = ttk.Entry(frame)
+    bind_paste(ca,status)
     ca.grid(row=3, column=0, sticky='ew')
     default_ca = Path.home()/'Downloads/prod-ca-2021.crt'
     if default_ca.is_file():
@@ -60,15 +63,16 @@ def show_form(executor, *, allow_create=False,
     browse.grid(row=3, column=1, padx=(10, 0))
     ttk.Label(frame, text='Session pooler URI — оставьте [YOUR-DATABASE-PASSWORD] вместо пароля').grid(row=4, column=0, columnspan=2, sticky='w', pady=(12, 3))
     uri = ttk.Entry(frame)
+    paste_uri = bind_paste(uri,status)
     uri.grid(row=5, column=0, sticky='ew')
-    uri_paste = ttk.Button(frame, text='Вставить', command=lambda: uri.event_generate('<<Paste>>'))
+    uri_paste = ttk.Button(frame, text='Вставить', command=paste_uri)
     uri_paste.grid(row=5, column=1, padx=(10, 0))
     ttk.Label(frame, text='Пароль базы PostgreSQL — вставьте отдельно').grid(row=6, column=0, sticky='w', pady=(12, 3))
     password = ttk.Entry(frame, show='●')
+    paste_password = bind_paste(password,status)
     password.grid(row=7, column=0, sticky='ew')
-    password_paste = ttk.Button(frame, text='Вставить', command=lambda: password.event_generate('<<Paste>>'))
+    password_paste = ttk.Button(frame, text='Вставить', command=paste_password)
     password_paste.grid(row=7, column=1, padx=(10, 0))
-    status = tk.StringVar(value='Сначала выполняется чтение. Изменения возможны только после успешной проверки.')
     ttk.Label(frame, textvariable=status, wraplength=730).grid(row=9, column=0, columnspan=2, sticky='w', pady=15)
     messages = queue.Queue()
     running = False
