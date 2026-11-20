@@ -10,6 +10,8 @@ import { UpdateNotice } from './PwaUpdate'
 const markerKey = 'academy-account-v4'
 const SessionContext = createContext({ session: {mode:'local', user:null} as AccountSession, offline:false, reconnect: async () => {} })
 
+export const useAccountSession = () => useContext(SessionContext)
+
 export function remember(session: AccountSession) {
   // Only an offline namespace hint. Authentication stays in the HttpOnly cookie.
   const hint = {...session, user: session.user ? {...session.user, email:''} : null}

@@ -13,11 +13,11 @@ services:
       - key: VITE_ACCOUNT_MODE
         value: supabase
     routes:
-      # Replace this host with the actual public API URL before deploying.
+      # Public API of the existing production service.
       # Do not redirect: POST, cookies and concurrency headers must be proxied.
       - type: rewrite
         source: /api/*
-        destination: https://REPLACE-API-HOST.onrender.com/api/*
+        destination: https://academy-ai-api.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
